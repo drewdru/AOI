@@ -1,22 +1,39 @@
 // include script.js
 // Qt.include("test.js")
 
-function replaced(str, p1, p2) {
-    var res = encodeURI(str);
+/**
+ * Replace qml file url to path or another url
+ * 
+ * @param url: The file url
+ * @param p1: The old prefix
+ * @param p2: The new prefix
+ */
+function replaceUrlToPath(url, p1, p2) {
+    var res = encodeURI(url);
     res = res.replace(p1,p2);
     res = decodeURI(res);
     return res;
 }
 
+/**
+ * Replace processingImage.png
+ */
 function loadProcessingImage() {
     mainController.loadProcessingImage();
 }
 
-// function queueMe(response) {
-//     console.log('!!!!Defined Function Called: ' + response + "\n");
-// }
+/**
+ * The callback function
+ */
+function queueMe(response) {
+    console.log('!!!!Defined Function Called: ' + response + "\n");
+}
 
+/**
+ * The load data
+ */
 function onLoad() {
+    // Example callback with controller
     // console.log("onLoad start==================");
     // // console.log('!!!! testGetData PASS DATA:    ' + mainController + "\n")
     // mainController.enqueue('#version 1', queueMe);
@@ -28,12 +45,22 @@ function onLoad() {
     loadProcessingImage();
 }
 
+/**
+ * Copy image to inImage.png
+ * 
+ * @param fileUrl: The qml file url
+ */
 function openFile(fileUrl) {
-    var filePath = replaced(fileUrl, "file://", "");
+    var filePath = replaceUrlToPath(fileUrl, "file://", "");
     mainController.openFile(filePath);
 }
 
+/**
+ * Copy processingImage.png to file
+ * 
+ * @param fileUrl: The qml file url
+ */
 function saveFile(fileUrl) {
-    var filePath = replaced(fileUrl, "file://", "");
+    var filePath = replaceUrlToPath(fileUrl, "file://", "");
     mainController.saveFile(filePath);
 }

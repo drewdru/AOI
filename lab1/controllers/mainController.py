@@ -7,54 +7,41 @@ import os
 import numpy
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
-
 from imageProcessor import colorModel
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
 from PIL import Image
 
-
 class MainController(QObject):
+    """ Controller for main view """
     def __init__(self):
         QObject.__init__(self)
         self.callback = []
 
     def dump(self):
+        """ Return to callbacks """
         print('Dump was called')
-        #print('Callback is %s' % self.callback)
-        #print(dir(self.callback))
-        #print('Callback is callable %s' % self.callback.isCallable)
-        #print('Callback is callable %s' % self.callback.isCallable())
         for c in self.callback:
             c.call([QJSValue('IT IS A TEST RESPONSE')])
         self.callback = []
 
-    def openImage(self, isOriginalImage):
-        try:
-            if isOriginalImage:
-                img = Image.open('inImage.png')
-            else:
-                img = Image.open('processingImage.png')
-            return img.convert(mode='RGB')
-        except:
-            return None
-
     @pyqtSlot(str, 'QJSValue')
     def enqueue(self, command, callback):
-        print('Enqueuing function of %s' % command)
-        #print('Test callback is %s' % callback)
-        #print('Callback is callable?:  %s' % callback.isCallable())
+        """ Add an item of data awaiting processing to a queue of such items
+
+            @param command: The tag of command
+            @param callback: The callback function
+        """
         self.callback.append(QJSValue(callback))
-        #self.callback = callback
-        #self.dump()
 
     @pyqtSlot()
     def processResponses(self):
-        print('processing responses')
+        """ Processing responses """
         self.dump()
 
     @pyqtSlot()
     def loadProcessingImage(self):
+        """ Replace processingImage.png """
         try:
             img = Image.open('inImage.png')
             img.save('processingImage.png')
@@ -63,6 +50,10 @@ class MainController(QObject):
 
     @pyqtSlot(str)
     def openFile(self, file):
+        """ Copy image to inImage.png
+
+            @param file: The path to file
+        """
         try:
             img = Image.open(file)
             img.save('inImage.png')
@@ -71,6 +62,10 @@ class MainController(QObject):
 
     @pyqtSlot(str)
     def saveFile(self, file):
+        """ Copy processingImage.png to file
+
+            @param file: The path to file
+        """
         try:
             img = Image.open('processingImage.png')
             img.save(file)
@@ -79,4 +74,8 @@ class MainController(QObject):
 
     @pyqtSlot(str)
     def log(self, s):
+        """ PyConsole
+
+            @param s: The string
+        """
         print(s)

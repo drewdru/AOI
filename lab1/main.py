@@ -1,13 +1,19 @@
+"""
+    @package main
+    Run PyQt app
+"""
+
 import sys
+
 from PyQt5.QtQml import QQmlEngine
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView
 from PyQt5.QtGui import QIcon
+
 from controllers.mainController import MainController
 from controllers.colorCorrectorController import ColorCorrectorController
 
-# Main Function
 if __name__ == '__main__':
     # Create main app
     myApp = QApplication(sys.argv)
@@ -23,6 +29,7 @@ if __name__ == '__main__':
     engine.quit.connect(myApp.quit)
     context = engine.rootContext()
 
+    # add controllers
     mainController = MainController()
     context.setContextProperty('PyConsole', mainController)
     context.setContextProperty('mainController', mainController)
