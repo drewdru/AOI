@@ -4,7 +4,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 // import QtQuick.Controls.Styles 1.4
 // import QtQuick.Controls 2.1
-import "../JS/application.js" as App
+import "../JS/main.js" as App
 // import QtQuick.Dialogs 1.0
 // ColorDialog {
 //     id: colorDialog

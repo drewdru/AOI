@@ -2,7 +2,8 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.2
-import "../JS/application.js" as App
+import "../JS/main.js" as App
+import "../JS/colorCorrector.js" as ColorCorrector
 
 Item {
 
@@ -28,11 +29,6 @@ Item {
             App.openFile(fileOpenDialog.fileUrls)
             menuWrapper.updateImages()
         }
-        // onRejected: {
-        //     console.log("Canceled")
-        //     // Qt.quit()
-        // }
-        // Component.onCompleted: visible = true
     }
     FileDialog {
         id: fileSaveDialog
@@ -100,39 +96,4 @@ Item {
             }
         }
     }
-    // MenuBar {
-    //     id: myTopMenu
-    //     Menu {
-    //         title: "&File"
-    //         MenuItem {
-    //             text: "Open"
-    //             shortcut: "Ctrl+o"
-    //         }
-    //         MenuItem {
-    //             text: "Save As..."
-    //             shortcut: "Ctrl+s"
-    //         }
-    //         MenuItem {
-    //             text: "Exit"
-    //             shortcut: "Ctrl+q"
-    //             onTriggered: Qt.quit()
-    //         }
-    //     }
-    // }
-    // states: State {
-    //     name: "hasMenuBar"
-    //     when: myTopMenu && !myTopMenu.__isNative
-
-    //     ParentChange {
-    //         // target: myTopMenu.__contentItem
-    //         parent: rootWindow
-    //     }
-
-    //     // PropertyChanges {
-    //     //     // target: myTopMenu.__contentItem
-    //     //     x: 10
-    //     //     y: 0
-    //     //     width: menuWrapper.width
-    //     // }
-    // }
 }

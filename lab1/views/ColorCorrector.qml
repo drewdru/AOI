@@ -2,7 +2,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
-import "../JS/application.js" as App
+import "../JS/colorCorrector.js" as ColorCorrector
 
 Item {
     Material.theme: Material.Dark
@@ -25,7 +25,7 @@ Item {
             text: qsTr("Grayscale")
             onClicked: {
                 preferenceColorPanel.enabled = false
-                App.toGrayscale(isOriginalImage.checked)
+                ColorCorrector.toGrayscale(isOriginalImage.checked)
                 drawer.updateProcessingImage()
                 preferenceColorPanel.enabled = true
             }
@@ -40,7 +40,7 @@ Item {
             onValueChanged: {
                 Slider.running = true
                 preferenceColorPanel.enabled = false
-                App.changeHue(value, isOriginalImage.checked)
+                ColorCorrector.changeHue(value, isOriginalImage.checked)
                 preferenceColorPanel.enabled = true
                 Slider.running = false
                 drawer.updateProcessingImage()

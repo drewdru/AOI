@@ -1,3 +1,8 @@
+"""
+    @package colorModel
+    Change color model
+"""
+
 from PIL import Image
 import threading
 import multiprocessing
