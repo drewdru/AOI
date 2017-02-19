@@ -28,11 +28,14 @@ class IceController(QObject):
         self.callback = []
 
     def openImage(self, isOriginalImage):
-        if isOriginalImage:
-            img = Image.open('inImage.png')
-        else:
-            img = Image.open('processingImage.png')
-        return img.convert(mode='RGB')
+        try:
+            if isOriginalImage:
+                img = Image.open('inImage.png')
+            else:
+                img = Image.open('processingImage.png')
+            return img.convert(mode='RGB')
+        except:
+            return None
 
     @pyqtSlot(str, 'QJSValue')
     def enqueue(self, command, callback):
@@ -50,22 +53,33 @@ class IceController(QObject):
 
     @pyqtSlot()
     def loadProcessingImage(self):
-        img = Image.open('inImage.png')
-        img.save('processingImage.png')
+        try:
+            img = Image.open('inImage.png')
+            img.save('processingImage.png')
+        except:
+            pass
 
     @pyqtSlot(str)
     def openFile(self, file):
-        img = Image.open(file)
-        img.save('inImage.png')
+        try:
+            img = Image.open(file)
+            img.save('inImage.png')
+        except:
+            pass
 
     @pyqtSlot(str)
     def saveFile(self, file):
-        img = Image.open('processingImage.png')
-        img.save(str)
+        try:
+            img = Image.open('processingImage.png')
+            img.save(str)
+        except:
+            pass
 
     @pyqtSlot(int, bool)
     def changeHue(self, value, isOriginalImage):
         img = self.openImage(isOriginalImage)
+        if img is None:
+            return
         data = numpy.asarray(img, dtype="float")
         data = colorModel.rgbToHsl(data, value)
         data = colorModel.hslToRgb(data)
@@ -75,12 +89,11 @@ class IceController(QObject):
     @pyqtSlot(bool)
     def toGrayscale(self, isOriginalImage):
         img = self.openImage(isOriginalImage)
-        img = Image.open('inImage.png')
-        img = img.convert(mode='RGB')
+        if img is None:
+            return
         colorModel.rgbToYuv(img.load(), img.size)
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
         img.save('processingImage.png')
-
 
     @pyqtSlot(str)
     def log(self, s):

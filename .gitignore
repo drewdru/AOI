@@ -17,3 +17,6 @@ qt_temp.*
 testPyQt/
 Tasks/
 
+inImage (copy).png
+inImage.png
+processingImage.png
