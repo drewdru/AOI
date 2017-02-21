@@ -5,30 +5,47 @@ import QtQuick.Controls.Material 2.1
 import "../JS/colorCorrector.js" as ColorCorrector
 
 Item {
+    id: firstPage
+
     Material.theme: Material.Dark
     Material.accent: Material.Red
+    
+    signal updateProcessingImage()
 
-    id: firstPage
+    anchors.fill: parent        
+    // anchors.margins: 10
+
     ColumnLayout {
         id: preferenceColorPanel
-
         anchors.fill: parent
         
-        anchors.margins: 10
         CheckBox {
             id: isOriginalImage
             checked: true
             text: qsTr("Use original image")
         }
+        ColorModelGroupBox {
+            onUpdateProcessingImage: firstPage.updateProcessingImage()
+        }
+        
+        // GroupBox {
+        //     title: "Use color model"
+
+            
+
+        // }
         Button {
             id: grayscaleButton
             text: qsTr("Grayscale")
             onClicked: {
                 preferenceColorPanel.enabled = false
                 ColorCorrector.toGrayscale(isOriginalImage.checked)
-                drawer.updateProcessingImage()
+                firstPage.updateProcessingImage()
                 preferenceColorPanel.enabled = true
             }
+        }
+        Label {
+            text: "1232"
         }
         Slider {
             id: hueSlider
@@ -43,17 +60,17 @@ Item {
                 ColorCorrector.changeHue(value, isOriginalImage.checked)
                 preferenceColorPanel.enabled = true
                 Slider.running = false
-                drawer.updateProcessingImage()
+                firstPage.updateProcessingImage()
             }
             background: Rectangle {
                 Image {
                     width: parent.width
                     height: parent.height
-                    source: "file:./image/slider.png"
+                    source: "file:../image/slider.png"
                 }
             }
             handle: Rectangle {
-                x: parent.visualPosition * (parent.availableWidth + 10) - 10
+                x: parent.visualPosition * (parent.availableWidth - 5)
                 y: parent.topPadding + parent.availableHeight / 2 - height / 2
                 implicitWidth: 20
                 implicitHeight: 20

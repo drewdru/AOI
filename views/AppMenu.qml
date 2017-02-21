@@ -6,8 +6,8 @@ import "../JS/main.js" as App
 import "../JS/colorCorrector.js" as ColorCorrector
 
 Item {
-
     id: menuWrapper
+    
     property bool isDrawerVisible: false
     signal showDrawer()
     signal hideDrawer()
@@ -69,7 +69,7 @@ Item {
                         id: photoPreview                        
                         anchors.fill: parent
                         fillMode : "PreserveAspectFit"
-                        source: "file:./image/burger.png"
+                        source: "file:../image/burger.png"
                     }
                 }
             }

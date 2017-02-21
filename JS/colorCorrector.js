@@ -16,3 +16,13 @@ function changeHue(value, isOriginalImage) {
 function toGrayscale(isOriginalImage) {
     colorCorrectorController.toGrayscale(isOriginalImage);
 }
+
+/**
+ * Change color model and channels
+ * 
+ * @param colorModelTag: The color model tag
+ * @param currentImageChannelIndex: The index of current image channel
+ */
+function changeColorModel(colorModelTag, currentImageChannelIndex) {
+    colorCorrectorController.changeColorModel(colorModelTag, currentImageChannelIndex);
+}

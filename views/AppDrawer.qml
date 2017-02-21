@@ -20,7 +20,7 @@ Drawer {
         width: parent.width
         // currentIndex: view.currentIndex
         TabButton {
-            text: qsTr("ColorCorrector")
+            text: qsTr("Color corrector")
             onClicked: {tabBar.currentIndex = 0}
         }
         TabButton {
@@ -35,13 +35,16 @@ Drawer {
 
     StackLayout {
         id: view
-        anchors.fill: parent
-        y: parent.height
+        Layout.fillWidth: true
+        y: tabBar.height + tabBar.y
         height: parent.height - y
+        width: parent.width
 
         currentIndex: tabBar.currentIndex
 
-        ColorCorrector {}
+        ColorCorrector {
+            onUpdateProcessingImage: drawer.updateProcessingImage()
+        }
         Item {
             id: discoverTab
         }
@@ -49,6 +52,15 @@ Drawer {
             id: activityTab
         }
     }
+    // PageIndicator {
+    //     id: indicator
+
+    //     count: view.count
+    //     currentIndex: view.currentIndex
+
+    //     anchors.bottom: view.bottom
+    //     anchors.horizontalCenter: parent.horizontalCenter
+    // }
 
     // IS MOBILE:
     // SwipeView {
@@ -67,16 +79,6 @@ Drawer {
     //         id: thirdPage
     //     }
     // }
-
-    PageIndicator {
-        id: indicator
-
-        count: view.count
-        currentIndex: view.currentIndex
-
-        anchors.bottom: view.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
 
     
 }
