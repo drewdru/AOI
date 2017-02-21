@@ -14,23 +14,48 @@ Drawer {
     height: parent.height
 
     signal updateProcessingImage()
+
+    
     
     TabBar {
         id: tabBar
         width: parent.width
-        // currentIndex: view.currentIndex
-        TabButton {
-            text: qsTr("Color corrector")
-            onClicked: {tabBar.currentIndex = 0}
-        }
-        TabButton {
-            text: qsTr("Discover")
-            onClicked: {tabBar.currentIndex = 1}
-        }
-        TabButton {
-            text: qsTr("Activity")
-            onClicked:{tabBar.currentIndex = 2}
-        }
+            // currentIndex: view.currentIndex
+
+        // TODO: Fix scrollable or better use burger for chose tab!
+        // Flickable {
+        //     focus: true
+        //     anchors.fill: parent
+        //     contentWidth: tabBar.width
+        //     contentHeight: tabBar.height
+        //     // contentY : 20
+        //     boundsBehavior: Flickable.StopAtBounds
+            
+
+        //     // Keys.onUpPressed: verticalScrollBar.decrease()
+        //     // Keys.onDownPressed: verticalScrollBar.increase()
+
+        //     ScrollBar.horizontal: ScrollBar {
+        //         id: verticalScrollBar
+        //         Binding {
+        //             target: verticalScrollBar
+        //             property: "active"
+        //             value: verticalScrollBar.hovered
+        //         }
+        //     }
+            TabButton {
+                text: qsTr("Color corrector")
+                onClicked: {tabBar.currentIndex = 0}
+            }
+            TabButton {
+                text: qsTr("Discover")
+                onClicked: {tabBar.currentIndex = 1}
+            }
+            TabButton {
+                text: qsTr("Activity")
+                onClicked:{tabBar.currentIndex = 2}
+            }
+        // }
     }
 
     StackLayout {
@@ -43,6 +68,8 @@ Drawer {
         currentIndex: tabBar.currentIndex
 
         ColorCorrector {
+            width: drawer.width
+            height: drawer.height
             onUpdateProcessingImage: drawer.updateProcessingImage()
         }
         Item {
