@@ -78,3 +78,4 @@ class ColorCorrectorController(QObject):
             colorModel.viewChannelByID(img.load(), img.size, currentImageChannelIndex-1)
 
         img.save('processingImage.png')
+
