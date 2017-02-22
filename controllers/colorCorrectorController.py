@@ -81,3 +81,4 @@ class ColorCorrectorController(QObject):
 
         img.save('processingImage.png')
 
+
