@@ -48,18 +48,6 @@ Item {
             ColorModelGroupBox {
                 onUpdateProcessingImage: firstPage.updateProcessingImage()
             }
-            ColorModelGroupBox {
-                onUpdateProcessingImage: firstPage.updateProcessingImage()
-            }
-            ColorModelGroupBox {
-                onUpdateProcessingImage: firstPage.updateProcessingImage()
-            }
-            ColorModelGroupBox {
-                onUpdateProcessingImage: firstPage.updateProcessingImage()
-            }
-            ColorModelGroupBox {
-                onUpdateProcessingImage: firstPage.updateProcessingImage()
-            }
             
             // GroupBox {
             //     title: "Use color model"

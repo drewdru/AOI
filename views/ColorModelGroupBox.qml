@@ -22,18 +22,12 @@ ColumnLayout {
                     id: isRgbModel
                     checked: true
                     text: qsTr("RGB")
-                    onClicked: {
-                        colorModelSelector.colorModelTag = text
-                        colorModelSelector.onColororModelorChannelChange()
-                    }
+                    onClicked: onUpdateColorModel(text, "R", "G", "B")
                 }
                 RadioButton {
                     id: isYuvModel
                     text: qsTr("YUV")
-                    onClicked: {
-                        colorModelSelector.colorModelTag = text
-                        colorModelSelector.onColororModelorChannelChange()
-                    }
+                    onClicked: onUpdateColorModel(text, "Y", "U", "V")
                 }
             }
         }
@@ -42,49 +36,52 @@ ColumnLayout {
             title: qsTr("Choose color channel")
             ColumnLayout {
                 RadioButton {
-                    id: isFirstImageChannel
+                    id: isAllImageChannel
                     checked: true
-                    text: {
-                        if (isRgbModel.checked)
-                            qsTr("R")
-                        else if (isYuvModel.checked)
-                            qsTr("Y")
-                    }
+                    text: qsTr("RGB")
                     onClicked: {
                         colorModelSelector.currentImageChannelIndex = 0
-                        colorModelSelector.onColororModelorChannelChange()
+                        colorModelSelector.onAllUpdate()
+                    }
+                }
+                RadioButton {
+                    id: isFirstImageChannel
+                    text: qsTr("R")
+                    onClicked: {
+                        colorModelSelector.currentImageChannelIndex = 1
+                        colorModelSelector.onAllUpdate()
                     }
                 }
                 RadioButton {
                     id: isSecondImageChannel
-                    text: {
-                        if (isRgbModel.checked)
-                            qsTr("G")
-                        else if (isYuvModel.checked)
-                            qsTr("U")
-                    }
+                    text: qsTr("G")
                     onClicked: {
-                        colorModelSelector.currentImageChannelIndex = 1
-                        colorModelSelector.onColororModelorChannelChange()
+                        colorModelSelector.currentImageChannelIndex = 2
+                        colorModelSelector.onAllUpdate()
                     }
                 }
                 RadioButton {
                     id: isThirdImageChannel
-                    text: {
-                        if (isRgbModel.checked)
-                            qsTr("B")
-                        else if (isYuvModel.checked)
-                            qsTr("V")
-                    }
+                    text: qsTr("B")
                     onClicked: {
-                        colorModelSelector.currentImageChannelIndex = 2
-                        colorModelSelector.onColororModelorChannelChange()
+                        colorModelSelector.currentImageChannelIndex = 3
+                        colorModelSelector.onAllUpdate()
                     }
                 }
             }
         }
     }
-    function onColororModelorChannelChange() {
+    function onUpdateColorModel(text, firstChannel, secondChannel, thirdChannel) {
+        colorModelSelector.colorModelTag = text
+        isAllImageChannel.text = text
+        isAllImageChannel.checked = true
+        isFirstImageChannel.text = firstChannel
+        isSecondImageChannel.text = secondChannel
+        isThirdImageChannel.text = thirdChannel
+        colorModelSelector.onAllUpdate()
+        isAllImageChannel.checked = true
+    }
+    function onAllUpdate() {
         ColorCorrector.changeColorModel(
             colorModelSelector.colorModelTag,
             colorModelSelector.currentImageChannelIndex

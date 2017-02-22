@@ -60,16 +60,22 @@ class ColorCorrectorController(QObject):
         img.save('processingImage.png')
 
     @pyqtSlot(str, int)
-    def toGrayscale(self, colorModelTag, currentImageChannelIndex):
+    def changeColorModel(self, colorModelTag, currentImageChannelIndex):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
             @param currentImageChannelIndex: The index of current image channel
         """
-        # TODO: CHANGE COLOR model AND if currentImageChannelIndex != -1 view one of color channel
-        # img = self.openImage(isOriginalImage)
-        # if img is None:
-        #     return
-        # colorModel.rgbToYuv(img.load(), img.size)
+        img = Image.open('inImage.png')
+        img = img.convert(mode='RGB')
+        if img is None:
+            return
+        if colorModelTag == 'RGB':
+            pass
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+        if currentImageChannelIndex > 0:
+            colorModel.viewChannelByID(img.load(), img.size, currentImageChannelIndex-1)
+            print('AWEDSD')
         # colorModel.yuvToGrayscaleRgb(img.load(), img.size)
         # img.save('processingImage.png')

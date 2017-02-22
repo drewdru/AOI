@@ -22,7 +22,13 @@ Drawer {
         width: parent.width
             // currentIndex: view.currentIndex
 
+
+            
+
         // TODO: Fix scrollable or better use burger for chose tab!
+
+
+
         // Flickable {
         //     focus: true
         //     anchors.fill: parent

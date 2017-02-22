@@ -10,6 +10,19 @@ import math
 import numpy
 from PyQt5.QtCore import QCoreApplication
 
+def viewChannelByID(pixels, size, channelID):
+    for i in range(size[0]):
+        QCoreApplication.processEvents()
+        for j in range(size[1]):
+            channelsList = []
+            for indx, channel in enumerate(pixels[i, j]):
+                if indx == channelID:
+                    channelsList.append(255)
+                else:
+                    channelsList.append(0)
+            pixels[i, j] = tuple(channelsList)
+
+
 def rgbToYuv(pixels, size):
     """
         Change color model from RGB to YUV
