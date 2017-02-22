@@ -80,5 +80,3 @@ class ColorCorrectorController(QObject):
                 colorModel.yuvToRgb(img.load(), img.size)
 
         img.save('processingImage.png')
-
-
