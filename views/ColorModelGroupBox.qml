@@ -75,6 +75,7 @@ ColumnLayout {
         colorModelSelector.colorModelTag = text
         isAllImageChannel.text = text
         isAllImageChannel.checked = true
+        colorModelSelector.currentImageChannelIndex = 0
         isFirstImageChannel.text = firstChannel
         isSecondImageChannel.text = secondChannel
         isThirdImageChannel.text = thirdChannel
@@ -82,11 +83,13 @@ ColumnLayout {
         isAllImageChannel.checked = true
     }
     function onAllUpdate() {
+        colorModelSelector.enabled = false
         ColorCorrector.changeColorModel(
             colorModelSelector.colorModelTag,
             colorModelSelector.currentImageChannelIndex
         )
         colorModelSelector.updateProcessingImage()
+        colorModelSelector.enabled = true
     }
 }
 

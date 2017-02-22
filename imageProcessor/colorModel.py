@@ -17,7 +17,7 @@ def viewChannelByID(pixels, size, channelID):
             channelsList = []
             for indx, channel in enumerate(pixels[i, j]):
                 if indx == channelID:
-                    channelsList.append(255)
+                    channelsList.append(channel)
                 else:
                     channelsList.append(0)
             pixels[i, j] = tuple(channelsList)

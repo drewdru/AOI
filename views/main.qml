@@ -61,9 +61,6 @@ Rectangle {
         y: 40
         height: parent.height - y
         onUpdateProcessingImage: {
-            photoPreview.source = "file:processingImage.png"
-            photoPreview.source = "file:inImage.png"
-            App.loadProcessingImage()
             photoPreview2.source = "file:inImage.png"
             photoPreview2.source = "file:processingImage.png"
         }

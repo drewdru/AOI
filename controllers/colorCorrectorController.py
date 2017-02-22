@@ -76,6 +76,5 @@ class ColorCorrectorController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
         if currentImageChannelIndex > 0:
             colorModel.viewChannelByID(img.load(), img.size, currentImageChannelIndex-1)
-            print('AWEDSD')
-        # colorModel.yuvToGrayscaleRgb(img.load(), img.size)
-        # img.save('processingImage.png')
+
+        img.save('processingImage.png')
