@@ -72,11 +72,13 @@ class ColorCorrectorController(QObject):
             return
         if colorModelTag == 'RGB':
             if currentImageChannelIndex > 0:
-                colorModel.viewChannelByID(img.load(), img.size, currentImageChannelIndex-1)
+                colorModel.viewRGBChannelByID(img.load(), img.size, currentImageChannelIndex-1)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
             if currentImageChannelIndex > 0:
-                colorModel.viewChannelByID(img.load(), img.size, currentImageChannelIndex-1)
+                colorModel.viewYUVChannelByID(img.load(), img.size, currentImageChannelIndex-1)
                 colorModel.yuvToRgb(img.load(), img.size)
 
         img.save('processingImage.png')
+
+
