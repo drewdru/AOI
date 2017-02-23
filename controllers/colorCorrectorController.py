@@ -79,6 +79,7 @@ class ColorCorrectorController(QObject):
         if img is None:
             return
         if colorModelTag == 'RGB':
+            colorModel.changeRgbBalance(img.load(), img.size, firstChannel, secondChannel, thirdChannel)
             if currentImageChannelIndex > 0:
                 colorModel.viewRGBChannelByID(img.load(), img.size, currentImageChannelIndex-1)
         if colorModelTag == 'YUV':

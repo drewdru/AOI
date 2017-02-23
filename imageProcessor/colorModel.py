@@ -34,6 +34,16 @@ def viewRGBChannelByID(pixels, size, channelID):
                     channelsList.append(0)
             pixels[i, j] = tuple(channelsList)
 
+def changeRgbBalance(pixels, size, rValue, gValue, bValue):
+    for i in range(size[0]):
+        QCoreApplication.processEvents()
+        for j in range(size[1]):
+            r, g, b = pixels[i, j]
+            pixels[i, j] = (
+                int(r + rValue),
+                int(g + gValue),
+                int(b + bValue)
+            )
 
 def rgbToYuv(pixels, size, yValue, uValue, vValue):
     """
