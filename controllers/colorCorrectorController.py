@@ -5,7 +5,7 @@
 import sys
 import os
 import numpy
-
+import random
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel
@@ -59,22 +59,30 @@ class ColorCorrectorController(QObject):
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
         img.save('processingImage.png')
 
-    @pyqtSlot(str, int)
-    def changeColorModel(self, colorModelTag, currentImageChannelIndex):
+    @pyqtSlot(str, int, bool, int, int, int)
+    def changeColorModel(self, colorModelTag,
+            currentImageChannelIndex,
+            isOriginalImage,
+            firstChannel,
+            secondChannel,
+            thirdChannel):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
             @param currentImageChannelIndex: The index of current image channel
         """
-        img = Image.open('inImage.png')
-        img = img.convert(mode='RGB')
+        # img = Image.open('inImage.png')
+        # img = img.convert(mode='RGB')
+        # if img is None:
+        #     return
+        img = self.openImage(isOriginalImage)
         if img is None:
             return
         if colorModelTag == 'RGB':
             if currentImageChannelIndex > 0:
                 colorModel.viewRGBChannelByID(img.load(), img.size, currentImageChannelIndex-1)
         if colorModelTag == 'YUV':
-            colorModel.rgbToYuv(img.load(), img.size)
+            colorModel.rgbToYuv(img.load(), img.size, firstChannel, secondChannel, thirdChannel)
             if currentImageChannelIndex > 0:
                 colorModel.viewYUVChannelByID(img.load(), img.size, currentImageChannelIndex-1)
                 colorModel.yuvToRgb(img.load(), img.size)

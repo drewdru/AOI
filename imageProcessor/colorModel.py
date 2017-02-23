@@ -35,7 +35,7 @@ def viewRGBChannelByID(pixels, size, channelID):
             pixels[i, j] = tuple(channelsList)
 
 
-def rgbToYuv(pixels, size):
+def rgbToYuv(pixels, size, yValue, uValue, vValue):
     """
         Change color model from RGB to YUV
 
@@ -53,19 +53,35 @@ def rgbToYuv(pixels, size):
             U = -0.14713*r - 0.28886*g + 0.436*b + 128
             V = 0.615*r - 0.51499*g - 0.10001*b + 128
 
-            if Y >= 0 and Y <= 255: r = Y
-            elif Y < 0: r = 0
-            else: r = 255
+            if Y >= 0 and Y <= 255: pass
+            elif Y < 0: Y = 0
+            else: Y = 255
 
-            if U >= 0 and U <= 255: g = U
-            elif U < 0: g = 0
-            else: g = 255
+            if U >= 0 and U <= 255: pass
+            elif U < 0: U = 0
+            else: U = 255
 
-            if V >= 0 and V <= 255: b = V
-            elif V < 0: b = 0
-            else: b = 255
+            if V >= 0 and V <= 255: pass
+            elif V < 0: V = 0
+            else: V = 255
 
-            pixels[i, j] = (int(r), int(g), int(b))
+            Y = Y + yValue
+            U = (U + uValue)/2
+            V = (V + vValue)/2
+
+            # if uValue > 0:
+            #     U = U * 2.56 * uValue - 128
+            # if vValue > 0:
+            #     V = V * 2.56 * vValue - 128
+
+            # if yValue < 0:
+            #     Y = Y * 2.56 / abs(yValue) + 128
+            # if uValue < 0:
+            #     U = U * 2.56 / abs(uValue) + 128
+            # if vValue < 0:
+            #     V = V * 2.56 / abs(vValue) + 128
+
+            pixels[i, j] = (int(Y), int(U), int(V))
 
 def yuvToRgb(pixels, size):
     """

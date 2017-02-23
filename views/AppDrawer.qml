@@ -3,6 +3,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 
+import QtQuick.Dialogs 1.0
+
 Drawer {
     id: drawer
 
@@ -15,54 +17,20 @@ Drawer {
 
     signal updateProcessingImage()
 
+    // ColorDialog {
+    //     id: colorDialog
+    //     title: "Please choose a color"
+    //     onAccepted: {
+    //         console.log("You chose: " + colorDialog.color)
+    //         // Qt.quit()
+    //     }
+    //     onRejected: {
+    //         console.log("Canceled")
+    //         // Qt.quit()
+    //     }
+    //     Component.onCompleted: visible = true
+    // }
     
-    
-    TabBar {
-        id: tabBar
-        width: parent.width
-            // currentIndex: view.currentIndex
-
-
-            
-
-        // TODO: Fix scrollable or better use burger for chose tab!
-
-
-
-        // Flickable {
-        //     focus: true
-        //     anchors.fill: parent
-        //     contentWidth: tabBar.width
-        //     contentHeight: tabBar.height
-        //     // contentY : 20
-        //     boundsBehavior: Flickable.StopAtBounds
-            
-
-        //     // Keys.onUpPressed: verticalScrollBar.decrease()
-        //     // Keys.onDownPressed: verticalScrollBar.increase()
-
-        //     ScrollBar.horizontal: ScrollBar {
-        //         id: verticalScrollBar
-        //         Binding {
-        //             target: verticalScrollBar
-        //             property: "active"
-        //             value: verticalScrollBar.hovered
-        //         }
-        //     }
-            TabButton {
-                text: qsTr("Color corrector")
-                onClicked: {tabBar.currentIndex = 0}
-            }
-            TabButton {
-                text: qsTr("Discover")
-                onClicked: {tabBar.currentIndex = 1}
-            }
-            TabButton {
-                text: qsTr("Activity")
-                onClicked:{tabBar.currentIndex = 2}
-            }
-        // }
-    }
 
     StackLayout {
         id: view
@@ -84,6 +52,22 @@ Drawer {
         Item {
             id: activityTab
         }
+    }
+    TabBar {
+        id: tabBar
+        width: parent.width
+            TabButton {
+                text: qsTr("Color corrector")
+                onClicked: {tabBar.currentIndex = 0}
+            }
+            TabButton {
+                text: qsTr("Discover")
+                onClicked: {tabBar.currentIndex = 1}
+            }
+            TabButton {
+                text: qsTr("Activity")
+                onClicked:{tabBar.currentIndex = 2}
+            }
     }
     // PageIndicator {
     //     id: indicator
