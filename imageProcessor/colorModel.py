@@ -45,7 +45,7 @@ def changeRgbBalance(pixels, size, rValue, gValue, bValue):
                 int(b + bValue)
             )
 
-def rgbToYuv(pixels, size, yValue, uValue, vValue):
+def rgbToYuv(pixels, size, yValue=0, uValue=0, vValue=0):
     """
         Change color model from RGB to YUV
 

@@ -8,6 +8,8 @@ __pycache__/
 env/
 
 .vscode/
+*.npy
+hist?.png
 qt_temp.*
 *.qmlc
 *.jsc
