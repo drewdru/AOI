@@ -79,18 +79,6 @@ def rgbToYuv(pixels, size, yValue, uValue, vValue):
             U = (U + uValue)/2
             V = (V + vValue)/2
 
-            # if uValue > 0:
-            #     U = U * 2.56 * uValue - 128
-            # if vValue > 0:
-            #     V = V * 2.56 * vValue - 128
-
-            # if yValue < 0:
-            #     Y = Y * 2.56 / abs(yValue) + 128
-            # if uValue < 0:
-            #     U = U * 2.56 / abs(uValue) + 128
-            # if vValue < 0:
-            #     V = V * 2.56 / abs(vValue) + 128
-
             pixels[i, j] = (int(Y), int(U), int(V))
 
 def yuvToRgb(pixels, size):
@@ -159,7 +147,7 @@ def yuvToGrayscaleRgb(pixels, size):
             pixels[i, j] = (int(y), int(u), int(v))
 
 
-def rgbToHsl(pixelsArray, value):
+def rgbToHsl(pixelsArray, value=None):
     """
         Change color model from RGB to HSL
 
@@ -172,7 +160,7 @@ def rgbToHsl(pixelsArray, value):
             pixelsArray[i, j] = colorRgbToHsl(r, g, b, value) # (H, S, L)
     return pixelsArray
 
-def colorRgbToHsl(r, g, b, value):
+def colorRgbToHsl(r, g, b, value=None):
     r /= 255
     g /= 255
     b /= 255

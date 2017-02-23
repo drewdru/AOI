@@ -24,14 +24,40 @@ Rectangle {
     }
 
     Shortcut {
-        sequence: "Ctrl+W"
-        onActivated: appMenu.showDrawer()
+        sequence: "Ctrl+D"
+        onActivated: drawerMethod.open()
     }
 
-    AppDrawer {
-        id: drawer
-        y: 40
-        height: parent.height - y
+    MethodDrawer {
+        id: drawerMethod
+        // y: 40
+        height: parent.height
+        onUpdateProcessingImage: {
+            photoPreview2.source = "file:inImage.png"
+            photoPreview2.source = "file:processingImage.png"
+        }
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: drawerMethod.close()
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: {drawerMethod.close(); drawerHistogram.open()}
+        }
+    }
+
+    Shortcut {
+        sequence: "Ctrl+W"
+        onActivated: drawerHistogram.open()
+    }
+    MethodDrawer {
+        id: drawerHistogram
+        // y: 40
+        height: parent.height / 3
+        width: parent.width
+        edge:Qt.BottomEdge
         onUpdateProcessingImage: {
             photoPreview2.source = "file:inImage.png"
             photoPreview2.source = "file:processingImage.png"
@@ -40,7 +66,11 @@ Rectangle {
         onClosed: appMenu.isDrawerVisible = false
         Shortcut {
             sequence: "Ctrl+W"
-            onActivated: appMenu.hideDrawer()
+            onActivated: drawerHistogram.close()
+        }
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: {drawerMethod.open();drawerHistogram.close()}
         }
     }
 
@@ -49,7 +79,7 @@ Rectangle {
         id:grid
         anchors.fill: parent
         columns: 3
-        anchors.margins: 10
+        anchors.margins: 40
 
         RowLayout {
             Layout.columnSpan: 2
@@ -77,8 +107,9 @@ Rectangle {
         id: appMenu
         width: parent.width
         height: 20
-        onShowDrawer: drawer.open()
-        onHideDrawer: drawer.close()
+        
+        onShowDrawer: drawerMethod.open()
+        onHideDrawer: drawerMethod.close()
         onUpdateImages: {
             photoPreview.source = "file:processingImage.png"
             photoPreview.source = "file:inImage.png"

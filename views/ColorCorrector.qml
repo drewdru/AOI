@@ -2,6 +2,8 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
+import QtQuick.Dialogs 1.0
+
 Item {
     id: firstPage
 
@@ -12,6 +14,23 @@ Item {
 
     anchors.fill: parent        
     anchors.margins: 10
+
+    ColorDialog {
+        id: colorDialog
+        title: "Please choose a color"
+        onAccepted: {
+            firstPage.enabled = false
+            colorCorrectorController.getHlsFromHex(colorDialog.color,
+                function test(hue, saturation, lightness) {
+                    console.log(hue)
+                    console.log(saturation)
+                    console.log(lightness)
+                    hueSlider.value = hue[0]
+            });
+            // firstPage.updateProcessingImage()
+            firstPage.enabled = true
+        }
+    }
 
     Flickable {
         focus: true
@@ -58,9 +77,14 @@ Item {
                     text: qsTr("Hue:")
                 }
                 HueSlider {
+                    id: hueSlider
                     isOriginalImage: isOriginalImage.checked
                     onUpdateProcessingImage: firstPage.updateProcessingImage()
-                }    
+                }
+                Button {
+                    text: qsTr("Palette")
+                    onClicked: colorDialog.open()
+                }
             }
             
             ColorModelGroupBox {

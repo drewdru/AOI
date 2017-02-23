@@ -16,6 +16,7 @@ from PIL import Image
 
 class ColorCorrectorController(QObject):
     """ Controller for color corrector view """
+
     def openImage(self, isOriginalImage):
         """ Open image for processing
 
@@ -29,6 +30,23 @@ class ColorCorrectorController(QObject):
             return img.convert(mode='RGB')
         except Exception:
             return None
+
+    def hexToRgb(self, value):
+        """Return (red, green, blue) for the color given as #rrggbb."""
+        value = value.lstrip('#')
+        lv = len(value)
+        return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+
+    def rgbToHex(self, red, green, blue):
+        """Return color as #rrggbb for the given color values."""
+        return '#%02x%02x%02x' % (red, green, blue)
+
+    @pyqtSlot(str, 'QJSValue')
+    def getHlsFromHex(self, hexColor, callback):
+        color = self.hexToRgb(hexColor)
+        color = colorModel.colorRgbToHsl(color[0], color[1], color[2])
+        if callback.isCallable():
+            callback.call([QJSValue(color[0]), QJSValue(color[1]), QJSValue(color[2])])
 
     @pyqtSlot(int, bool)
     def changeHue(self, value, isOriginalImage):
@@ -58,6 +76,7 @@ class ColorCorrectorController(QObject):
         colorModel.rgbToYuv(img.load(), img.size)
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
         img.save('processingImage.png')
+
 
     @pyqtSlot(str, int, bool, int, int, int)
     def changeColorModel(self, colorModelTag,
