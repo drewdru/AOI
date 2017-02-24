@@ -22,12 +22,9 @@ Item {
             firstPage.enabled = false
             colorCorrectorController.getHlsFromHex(colorDialog.color,
                 function test(hue, saturation, lightness) {
-                    console.log(hue)
-                    console.log(saturation)
-                    console.log(lightness)
-                    hueSlider.value = hue[0]
+                    colorCorrectorController.changeHue(hue, isOriginalImage.checked)
             });
-            // firstPage.updateProcessingImage()
+            firstPage.updateProcessingImage()
             firstPage.enabled = true
         }
     }
@@ -79,7 +76,16 @@ Item {
                 HueSlider {
                     id: hueSlider
                     isOriginalImage: isOriginalImage.checked
-                    onUpdateProcessingImage: firstPage.updateProcessingImage()
+                    // onUpdateProcessingImage: firstPage.updateProcessingImage()
+
+                    onValueChanged: {
+                        Slider.running = true
+                        preferenceColorPanel.enabled = false
+                        colorCorrectorController.changeHue(value, isOriginalImage.checked)
+                        preferenceColorPanel.enabled = true
+                        Slider.running = false
+                        firstPage.updateProcessingImage()
+                    }
                 }
                 Button {
                     text: qsTr("Palette")

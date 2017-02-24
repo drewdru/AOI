@@ -52,7 +52,7 @@ Rectangle {
         sequence: "Ctrl+W"
         onActivated: drawerHistogram.open()
     }
-    MethodDrawer {
+    HistDrawer {
         id: drawerHistogram
         // y: 40
         height: parent.height / 3
@@ -74,12 +74,13 @@ Rectangle {
         }
     }
 
-    GridLayout
-    {
+    GridLayout {
         id:grid
         anchors.fill: parent
         columns: 3
-        anchors.margins: 40
+        y: 40
+        height: parent.height - y
+        anchors.margins: 10
 
         RowLayout {
             Layout.columnSpan: 2

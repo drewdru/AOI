@@ -13,14 +13,6 @@ Slider {
     value: 0
     to: 360
     stepSize: 1.0
-    onValueChanged: {
-        Slider.running = true
-        preferenceColorPanel.enabled = false
-        colorCorrectorController.changeHue(value, isOriginalImage.checked)
-        preferenceColorPanel.enabled = true
-        Slider.running = false
-        updateProcessingImage()
-    }
     background: Rectangle {
         Image {
             width: parent.width

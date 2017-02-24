@@ -83,6 +83,18 @@ class ColorCorrectorController(QObject):
         img.save('processingImage.png')
         self.saveHistogram(img=img, model='YUV')
 
+    def savePltHist(self, histogram, title, name, color):
+        QCoreApplication.processEvents()
+        fig, ax = plt.subplots()
+        ax.set_xlabel('Color')
+        ax.set_ylabel('Frequency')
+        ax.grid(True)
+        ax.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=color, alpha=0.5)
+        ax.set_title('Histogram {}'.format(title))
+        plt.savefig('{}.png'.format(name))
+        np.save(name, histogram)
+        plt.close('all')
+    
     def saveHistogram(self, img=None, data=None, model='RGB'):
         if not img is None:
             histogram1, histogram2, histogram3 = colorHistogram.getHistogramImage(
@@ -92,61 +104,72 @@ class ColorCorrectorController(QObject):
                 data)
         else: return
 
-        QCoreApplication.processEvents()
-        # print(histogram1.shape)
-        plt.hist(np.arange(histogram1.shape[0]), weights=histogram1, facecolor='r', alpha=0.75)
-        plt.title('Histogram {}'.format(model[0]))
-        plt.savefig('hist1.png')
-        np.save('hist1', histogram1)
-        plt.close('all')
+        self.savePltHist(histogram1, model[0], 'hist1', 'r')
+        self.savePltHist(histogram2, model[1], 'hist2', 'g')
+        self.savePltHist(histogram3, model[2], 'hist3', 'b')
 
         QCoreApplication.processEvents()
-        plt.hist(np.arange(histogram2.shape[0]), weights=histogram2, facecolor='g', alpha=0.75)
-        plt.title('Histogram {}'.format(model[1]))
-        plt.savefig('hist2.png')
-        np.save('hist2', histogram2)
+        plt.xlabel('Color')
+        plt.ylabel('Frequency')
+        plt.grid(True)
+        plt.title('Histogram {}'.format(model))
+        colors = 'rgb'
+        for indx, histogram in enumerate([histogram1, histogram2, histogram3]):
+            plt.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=colors[indx], alpha=0.5)
+        plt.savefig('{}.png'.format('hist0'))
         plt.close('all')
 
-        QCoreApplication.processEvents()
-        plt.hist(np.arange(histogram3.shape[0]), weights=histogram3, facecolor='b', alpha=0.75)
-        plt.title('Histogram {}'.format(model[2]))
-        plt.savefig('hist3.png')
-        np.save('hist3', histogram3)
-        plt.close('all')
-
-        self.showHistogram(1, model='HSL')
+        self.showHistogram(0, model='HSL')
 
     def pltProcessEvents(self):
         QCoreApplication.processEvents()
-
+    
+    @pyqtSlot(int, str)
     def showHistogram(self, channelId, model='RGB'):
         try:
             if channelId == 0:
+                histogram = []
+                histogram.append(np.load('hist1.npy'))
+                histogram.append(np.load('hist2.npy'))
+                histogram.append(np.load('hist3.npy'))
+                facecolor = 'rgb'
+            elif channelId == 1:
                 histogram = np.load('hist1.npy')
                 facecolor = 'r'
-            elif channelId == 1:
+            elif channelId == 2:
                 histogram = np.load('hist2.npy')
                 facecolor = 'g'
-            elif channelId == 2:
+            elif channelId == 3:
                 histogram = np.load('hist3.npy')
                 facecolor = 'b'
             else: return
         except FileNotFoundError:
             return
-
+        QCoreApplication.processEvents()
         plt.close('all')
-
-        fig, ax = plt.subplots()
-        ax.set_xlabel('Color')
-        ax.set_ylabel('Frequency')
-        ax.grid(True)
-        ax.set_title('Histogram {}'.format(model[channelId]))
-        ax.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=facecolor, alpha=0.75)
-        timer = fig.canvas.new_timer(interval=3)
-        timer.add_callback(self.pltProcessEvents)
-
-        timer.start()
-        plt.show(fig)
+        if channelId == 0:
+            plt.xlabel('Color')
+            plt.ylabel('Frequency')
+            plt.grid(True)
+            plt.title('Histogram {}'.format(model))
+            for indx, hist in enumerate(histogram):
+                plt.hist(np.arange(hist.shape[0]), weights=hist, facecolor=facecolor[indx], alpha=0.5)
+            fig = plt.figure(1)
+            timer = fig.canvas.new_timer(interval=3)
+            timer.add_callback(self.pltProcessEvents)
+            timer.start()
+            plt.show()
+        else:
+            fig, ax = plt.subplots()
+            ax.set_xlabel('Color')
+            ax.set_ylabel('Frequency')
+            ax.grid(True)
+            ax.set_title('Histogram {}'.format(model[channelId-1]))
+            ax.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=facecolor, alpha=0.5)
+            timer = fig.canvas.new_timer(interval=3)
+            timer.add_callback(self.pltProcessEvents)
+            timer.start()
+            plt.show(fig)
 
 
     @pyqtSlot(str, int, bool, int, int, int)
