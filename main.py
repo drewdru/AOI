@@ -4,6 +4,7 @@
 """
 
 import sys
+import os
 
 from PyQt5.QtQml import QQmlEngine
 from PyQt5.QtCore import QUrl
@@ -17,7 +18,7 @@ from controllers.colorCorrectorController import ColorCorrectorController
 if __name__ == '__main__':
     # Create main app
     myApp = QApplication(sys.argv)
-    myApp.setWindowIcon(QIcon('icon.png'))
+    myApp.setWindowIcon(QIcon('./image/icon.png'))
 
     # Create a View and set its properties
     appView = QQuickView()
@@ -33,6 +34,8 @@ if __name__ == '__main__':
     mainController = MainController()
     context.setContextProperty('PyConsole', mainController)
     context.setContextProperty('mainController', mainController)
+    appDir = os.getcwd()
+    context.setContextProperty('appDir', appDir)
 
     colorCorrectorController = ColorCorrectorController()
     context.setContextProperty('colorCorrectorController', colorCorrectorController)

@@ -19,6 +19,7 @@ class ColorCorrectorController(QObject):
     """ Controller for color corrector view """
     def __init__(self):
         QObject.__init__(self)
+        self.appDir = os.getcwd()
 
     def openImage(self, isOriginalImage):
         """ Open image for processing
@@ -27,9 +28,9 @@ class ColorCorrectorController(QObject):
         """
         try:
             if isOriginalImage:
-                img = Image.open('inImage.png')
+                img = Image.open('{}/temp/inImage.png'.format(self.appDir))
             else:
-                img = Image.open('processingImage.png')
+                img = Image.open('{}/temp/processingImage.png'.format(self.appDir))
             return img.convert(mode='RGB')
         except Exception:
             return None
@@ -66,7 +67,7 @@ class ColorCorrectorController(QObject):
         self.saveHistogram(data=data, model='HSL')
         data = colorModel.hslToRgb(data)
         img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
-        img.save('processingImage.png')
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(bool)
     def toGrayscale(self, isOriginalImage):
@@ -80,8 +81,8 @@ class ColorCorrectorController(QObject):
 
         colorModel.rgbToYuv(img.load(), img.size)
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
-        img.save('processingImage.png')
-        self.saveHistogram(img=img, model='YUV')
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        self.saveHistogram(img=img, model='RGB')
 
     def savePltHist(self, histogram, title, name, color):
         QCoreApplication.processEvents()
@@ -89,12 +90,15 @@ class ColorCorrectorController(QObject):
         ax.set_xlabel('Color')
         ax.set_ylabel('Frequency')
         ax.grid(True)
-        ax.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=color, alpha=0.5)
+        ax.hist(np.arange(histogram.shape[0]),
+            weights=histogram,
+            facecolor=color,
+            alpha=0.5)
         ax.set_title('Histogram {}'.format(title))
-        plt.savefig('{}.png'.format(name))
-        np.save(name, histogram)
+        plt.savefig('{}/temp/{}.png'.format(self.appDir, name))
+        np.save('{}/temp/{}'.format(self.appDir, name), histogram)
         plt.close('all')
-    
+
     def saveHistogram(self, img=None, data=None, model='RGB'):
         if not img is None:
             histogram1, histogram2, histogram3 = colorHistogram.getHistogramImage(
@@ -115,34 +119,45 @@ class ColorCorrectorController(QObject):
         plt.title('Histogram {}'.format(model))
         colors = 'rgb'
         for indx, histogram in enumerate([histogram1, histogram2, histogram3]):
-            plt.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=colors[indx], alpha=0.5)
-        plt.savefig('{}.png'.format('hist0'))
+            plt.hist(np.arange(histogram.shape[0]),
+                weights=histogram,
+                facecolor=colors[indx],
+                alpha=0.5)
+        plt.savefig('{}/temp/{}.png'.format(self.appDir, 'hist0'))
         plt.close('all')
+
+        with open('{}/temp/temp.config'.format(self.appDir), "w") as text_file:
+            text_file.write(model)
 
     def pltProcessEvents(self):
         QCoreApplication.processEvents()
-    
-    @pyqtSlot(int, str)
-    def showHistogram(self, channelId, model='RGB'):
+
+    @pyqtSlot(int)
+    def showHistogram(self, channelId):
         try:
             if channelId == 0:
-                histogram = []
-                histogram.append(np.load('hist1.npy'))
-                histogram.append(np.load('hist2.npy'))
-                histogram.append(np.load('hist3.npy'))
+                histograms = []
+                histograms.append(np.load('{}/temp/hist1.npy'.format(self.appDir)))
+                histograms.append(np.load('{}/temp/hist2.npy'.format(self.appDir)))
+                histograms.append(np.load('{}/temp/hist3.npy'.format(self.appDir)))
                 facecolor = 'rgb'
             elif channelId == 1:
-                histogram = np.load('hist1.npy')
+                histogram = np.load('{}/temp/hist1.npy'.format(self.appDir))
                 facecolor = 'r'
             elif channelId == 2:
-                histogram = np.load('hist2.npy')
+                histogram = np.load('{}/temp/hist2.npy'.format(self.appDir))
                 facecolor = 'g'
             elif channelId == 3:
-                histogram = np.load('hist3.npy')
+                histogram = np.load('{}/temp/hist3.npy'.format(self.appDir))
                 facecolor = 'b'
             else: return
         except FileNotFoundError:
             return
+        try:
+            with open('{}/temp/temp.config'.format(self.appDir), "r") as text_file:
+                model = text_file.read()
+        except FileNotFoundError:
+            model = "RGB"
         QCoreApplication.processEvents()
         plt.close('all')
         if channelId == 0:
@@ -150,8 +165,11 @@ class ColorCorrectorController(QObject):
             plt.ylabel('Frequency')
             plt.grid(True)
             plt.title('Histogram {}'.format(model))
-            for indx, hist in enumerate(histogram):
-                plt.hist(np.arange(hist.shape[0]), weights=hist, facecolor=facecolor[indx], alpha=0.5)
+            for indx, hist in enumerate(histograms):
+                plt.hist(np.arange(hist.shape[0]),
+                    weights=hist,
+                    facecolor=facecolor[indx],
+                    alpha=0.5)
             fig = plt.figure(1)
             timer = fig.canvas.new_timer(interval=3)
             timer.add_callback(self.pltProcessEvents)
@@ -162,8 +180,11 @@ class ColorCorrectorController(QObject):
             ax.set_xlabel('Color')
             ax.set_ylabel('Frequency')
             ax.grid(True)
-            ax.set_title('Histogram {}'.format(model[channelId-1]))
-            ax.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=facecolor, alpha=0.5)
+            ax.set_title('Histogram {}'.format(model[channelId - 1]))
+            ax.hist(np.arange(histogram.shape[0]),
+                weights=histogram,
+                facecolor=facecolor,
+                alpha=0.5)
             timer = fig.canvas.new_timer(interval=3)
             timer.add_callback(self.pltProcessEvents)
             timer.start()
@@ -190,17 +211,29 @@ class ColorCorrectorController(QObject):
         if img is None:
             return
         if colorModelTag == 'RGB':
-            colorModel.changeRgbBalance(img.load(), img.size, firstChannel, secondChannel, thirdChannel)
+            colorModel.changeRgbBalance(img.load(),
+                img.size,
+                firstChannel,
+                secondChannel,
+                thirdChannel)
             self.saveHistogram(img=img)
             if currentImageChannelIndex > 0:
-                colorModel.viewRGBChannelByID(img.load(), img.size, currentImageChannelIndex-1)
+                colorModel.viewRGBChannelByID(img.load(),
+                    img.size,
+                    currentImageChannelIndex - 1)
         if colorModelTag == 'YUV':
-            colorModel.rgbToYuv(img.load(), img.size, firstChannel, secondChannel, thirdChannel)
+            colorModel.rgbToYuv(img.load(),
+                img.size,
+                firstChannel,
+                secondChannel,
+                thirdChannel)
             self.saveHistogram(img=img, model='YUV')
             if currentImageChannelIndex > 0:
-                colorModel.viewYUVChannelByID(img.load(), img.size, currentImageChannelIndex-1)
+                colorModel.viewYUVChannelByID(img.load(),
+                    img.size,
+                    currentImageChannelIndex - 1)
                 colorModel.yuvToRgb(img.load(), img.size)
 
-        img.save('processingImage.png')
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
 
 

@@ -19,8 +19,9 @@ Rectangle {
 
     Component.onCompleted: {
         App.onLoad()
-        photoPreview2.source = "file:inImage.png"
-        photoPreview2.source = "file:processingImage.png"
+        photoPreview2.source = appDir + "/temp/inImage.png"
+        photoPreview2.source = appDir + "/temp/processingImage.png"
+        drawerHistogram.updateHistograms()
     }
 
     Shortcut {
@@ -33,8 +34,8 @@ Rectangle {
         // y: 40
         height: parent.height
         onUpdateProcessingImage: {
-            photoPreview2.source = "file:inImage.png"
-            photoPreview2.source = "file:processingImage.png"
+            photoPreview2.source = appDir + "/temp/inImage.png"
+            photoPreview2.source = appDir + "/temp/processingImage.png"
             drawerHistogram.updateHistograms()
         }
         onOpened: appMenu.isDrawerVisible = true
@@ -55,14 +56,9 @@ Rectangle {
     }
     HistDrawer {
         id: drawerHistogram
-        // y: 40
         height: parent.height / 3
         width: parent.width
         edge:Qt.BottomEdge
-        // onUpdateProcessingImage: {
-        //     photoPreview2.source = "file:inImage.png"
-        //     photoPreview2.source = "file:processingImage.png"
-        // }
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         Shortcut {
@@ -91,7 +87,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 fillMode : "PreserveAspectFit"
-                source: "file:../inImage.png"
+                source: appDir + "/temp/inImage.png"
             }
             Image {
                 id: photoPreview2
@@ -100,7 +96,7 @@ Rectangle {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 fillMode : "PreserveAspectFit"
-                source: "file:../processingImage.png"
+                source: appDir + "/temp/processingImage.png"
             }
         }
     }
@@ -113,11 +109,12 @@ Rectangle {
         onShowDrawer: drawerMethod.open()
         onHideDrawer: drawerMethod.close()
         onUpdateImages: {
-            photoPreview.source = "file:processingImage.png"
-            photoPreview.source = "file:inImage.png"
+            photoPreview.source = appDir + "/temp/processingImage.png"
+            photoPreview.source = appDir + "/temp/inImage.png"
             App.loadProcessingImage()
-            photoPreview2.source = "file:inImage.png"
-            photoPreview2.source = "file:processingImage.png"
+            photoPreview2.source = appDir + "/temp/inImage.png"
+            photoPreview2.source = appDir + "/temp/processingImage.png"
+            drawerHistogram.updateHistograms()
         }
     }
 }

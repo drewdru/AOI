@@ -17,6 +17,7 @@ class MainController(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.callback = []
+        self.appDir = os.getcwd()
 
     def dump(self):
         """ Return to callbacks """
@@ -43,8 +44,8 @@ class MainController(QObject):
     def loadProcessingImage(self):
         """ Replace processingImage.png """
         try:
-            img = Image.open('inImage.png')
-            img.save('processingImage.png')
+            img = Image.open('{}/temp/inImage.png'.format(self.appDir))
+            img.save('{}/temp/processingImage.png'.format(self.appDir))
         except:
             pass
 
@@ -56,7 +57,7 @@ class MainController(QObject):
         """
         try:
             img = Image.open(file)
-            img.save('inImage.png')
+            img.save('{}/temp/inImage.png'.format(self.appDir))
         except:
             pass
 
@@ -67,7 +68,7 @@ class MainController(QObject):
             @param file: The path to file
         """
         try:
-            img = Image.open('processingImage.png')
+            img = Image.open('{}/temp/processingImage.png'.format(self.appDir))
             img.save(file)
         except:
             pass

@@ -15,9 +15,10 @@ qt_temp.*
 *.jsc
 *.png-autosave.kra
 *.png~
+*.kra~
 
-testPyQt/
 Tasks/
+temp/
 
 inImage (copy).png
 inImage.png

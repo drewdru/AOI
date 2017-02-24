@@ -68,7 +68,7 @@ Item {
                         id: photoPreview                        
                         anchors.fill: parent
                         fillMode : "PreserveAspectFit"
-                        source: "file:../image/burger.png"
+                        source: appDir + "/image/burger.png"
                     }
                 }
             }
