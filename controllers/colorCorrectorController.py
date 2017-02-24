@@ -19,9 +19,6 @@ class ColorCorrectorController(QObject):
     """ Controller for color corrector view """
     def __init__(self):
         QObject.__init__(self)
-        plt.xlabel('Color')
-        plt.ylabel('Frequency')
-        plt.grid(True)
 
     def openImage(self, isOriginalImage):
         """ Open image for processing
@@ -101,18 +98,21 @@ class ColorCorrectorController(QObject):
         plt.title('Histogram {}'.format(model[0]))
         plt.savefig('hist1.png')
         np.save('hist1', histogram1)
+        plt.close('all')
 
         QCoreApplication.processEvents()
         plt.hist(np.arange(histogram2.shape[0]), weights=histogram2, facecolor='g', alpha=0.75)
         plt.title('Histogram {}'.format(model[1]))
         plt.savefig('hist2.png')
         np.save('hist2', histogram2)
+        plt.close('all')
 
         QCoreApplication.processEvents()
         plt.hist(np.arange(histogram3.shape[0]), weights=histogram3, facecolor='b', alpha=0.75)
         plt.title('Histogram {}'.format(model[2]))
         plt.savefig('hist3.png')
         np.save('hist3', histogram3)
+        plt.close('all')
 
         self.showHistogram(1, model='HSL')
 
@@ -134,14 +134,16 @@ class ColorCorrectorController(QObject):
         except FileNotFoundError:
             return
 
+        plt.close('all')
+
         fig, ax = plt.subplots()
+        ax.set_xlabel('Color')
+        ax.set_ylabel('Frequency')
+        ax.grid(True)
         ax.set_title('Histogram {}'.format(model[channelId]))
         ax.hist(np.arange(histogram.shape[0]), weights=histogram, facecolor=facecolor, alpha=0.75)
         timer = fig.canvas.new_timer(interval=3)
         timer.add_callback(self.pltProcessEvents)
-
-        # plt.plot([1,2,3,4])
-        # plt.ylabel('some numbers')
 
         timer.start()
         plt.show(fig)
