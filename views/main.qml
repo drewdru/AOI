@@ -35,6 +35,7 @@ Rectangle {
         onUpdateProcessingImage: {
             photoPreview2.source = "file:inImage.png"
             photoPreview2.source = "file:processingImage.png"
+            drawerHistogram.updateHistograms()
         }
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
@@ -58,10 +59,10 @@ Rectangle {
         height: parent.height / 3
         width: parent.width
         edge:Qt.BottomEdge
-        onUpdateProcessingImage: {
-            photoPreview2.source = "file:inImage.png"
-            photoPreview2.source = "file:processingImage.png"
-        }
+        // onUpdateProcessingImage: {
+        //     photoPreview2.source = "file:inImage.png"
+        //     photoPreview2.source = "file:processingImage.png"
+        // }
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         Shortcut {

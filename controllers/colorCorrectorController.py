@@ -119,8 +119,6 @@ class ColorCorrectorController(QObject):
         plt.savefig('{}.png'.format('hist0'))
         plt.close('all')
 
-        self.showHistogram(0, model='HSL')
-
     def pltProcessEvents(self):
         QCoreApplication.processEvents()
     
