@@ -187,7 +187,14 @@ def colorRgbToHsl(r, g, b, value=None, hValue=0, sValue=0, lValue=0):
         h /= 6
     if value:
         return (_rod2(value), _rod2(s*100), _rod2(l*100))
-    return (_rod2((h*360+hValue)/2), _rod2((s*100+sValue)/2), _rod2((l*100+lValue)/2))
+
+    s = s*100+sValue
+    l = l*100+lValue
+    if s < 0: s = 0
+    if s > 100: s = 100
+    if l < 0: l = 0
+    if l > 100: l = 100
+    return (_rod2(abs(hValue)), _rod2(s), _rod2(l))
 
 def hslToRgb(pixelsArray):
     """
