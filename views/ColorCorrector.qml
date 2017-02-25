@@ -15,6 +15,8 @@ Item {
     anchors.fill: parent        
     anchors.margins: 10
 
+    // property string colorModelTag: "RGB"
+
     ColorDialog {
         id: colorDialog
         title: "Please choose a color"
@@ -93,9 +95,13 @@ Item {
                 }
             }
             
-            ColorModelGroupBox {
+            ColorModelSelector {
+                id: colorModelSelector
                 isOriginalImage: isOriginalImage.checked
                 onUpdateProcessingImage: firstPage.updateProcessingImage()
+                // onColorModelTagChanged: {
+                //     firstPage.colorModelTag = colorModelSelector.colorModelTag
+                // }
             }        
         }
     }

@@ -216,7 +216,7 @@ class ColorCorrectorController(QObject):
                 firstChannel,
                 secondChannel,
                 thirdChannel)
-            self.saveHistogram(img=img)
+            self.saveHistogram(img=img, model=colorModelTag)
             if currentImageChannelIndex > 0:
                 colorModel.viewRGBChannelByID(img.load(),
                     img.size,
@@ -227,12 +227,34 @@ class ColorCorrectorController(QObject):
                 firstChannel,
                 secondChannel,
                 thirdChannel)
-            self.saveHistogram(img=img, model='YUV')
+            self.saveHistogram(img=img, model=colorModelTag)
             if currentImageChannelIndex > 0:
                 colorModel.viewYUVChannelByID(img.load(),
                     img.size,
                     currentImageChannelIndex - 1)
                 colorModel.yuvToRgb(img.load(), img.size)
+        if colorModelTag == 'HSL':
+            # colorModel.rgbToHsl(img.load(),
+            #     img.size,
+            #     firstChannel,
+            #     secondChannel,
+            #     thirdChannel)
+
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data,
+                None,
+                firstChannel,
+                secondChannel,
+                thirdChannel)
+            self.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
+            # img.save('{}/temp/processingImage.png'.format(self.appDir))
+            # if currentImageChannelIndex > 0:
+            #     colorModel.viewYUVChannelByID(img.load(),
+            #         img.size,
+            #         currentImageChannelIndex - 1)
+            #     colorModel.yuvToRgb(img.load(), img.size)
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 

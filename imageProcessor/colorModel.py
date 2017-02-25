@@ -147,7 +147,7 @@ def yuvToGrayscaleRgb(pixels, size):
             pixels[i, j] = (int(y), int(u), int(v))
 
 
-def rgbToHsl(pixelsArray, value=None):
+def rgbToHsl(pixelsArray, value=None, hValue=0, sValue=0, lValue=0):
     """
         Change color model from RGB to HSL
 
@@ -157,10 +157,10 @@ def rgbToHsl(pixelsArray, value=None):
         QCoreApplication.processEvents()
         for j, pixel in enumerate(pixels):
             r, g, b = pixelsArray[i, j]
-            pixelsArray[i, j] = colorRgbToHsl(r, g, b, value) # (H, S, L)
+            pixelsArray[i, j] = colorRgbToHsl(r, g, b, value, hValue, sValue, lValue) # (H, S, L)
     return pixelsArray
 
-def colorRgbToHsl(r, g, b, value=None):
+def colorRgbToHsl(r, g, b, value=None, hValue=0, sValue=0, lValue=0):
     r /= 255
     g /= 255
     b /= 255
@@ -187,7 +187,7 @@ def colorRgbToHsl(r, g, b, value=None):
         h /= 6
     if value:
         return (_rod2(value), _rod2(s*100), _rod2(l*100))
-    return (_rod2(h*360), _rod2(s*100), _rod2(l*100))
+    return (_rod2((h*360+hValue)/2), _rod2((s*100+sValue)/2), _rod2((l*100+lValue)/2))
 
 def hslToRgb(pixelsArray):
     """

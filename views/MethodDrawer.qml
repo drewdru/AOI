@@ -26,12 +26,20 @@ Drawer {
         currentIndex: tabBar.currentIndex
 
         ColorCorrector {
+            id: colorCorrectorId
             width: drawer.width
             height: drawer.height
             onUpdateProcessingImage: drawer.updateProcessingImage()
+            // onColorModelTagChanged: {
+            //     imageNoiseId.colorModelTag = colorCorrectorId.colorModelTag
+            // }
         }
-        Item {
-            id: discoverTab
+        ImageNoise {
+            id: imageNoiseId
+            // colorModelTag: colorCorrectorId.colorModelTag
+            width: drawer.width
+            height: drawer.height
+            onUpdateProcessingImage: drawer.updateProcessingImage()
         }
         Item {
             id: activityTab
@@ -45,7 +53,7 @@ Drawer {
                 onClicked: {tabBar.currentIndex = 0}
             }
             TabButton {
-                text: qsTr("Discover")
+                text: qsTr("Image noise")
                 onClicked: {tabBar.currentIndex = 1}
             }
             TabButton {
