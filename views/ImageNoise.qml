@@ -26,9 +26,9 @@ Item {
         title: "Please choose a color"
         onAccepted: {
             secondPage.enabled = false
-            colorCorrectorController.getHlsFromHex(colorDialog.color,
+            colorCorrectorController.getHslFromHex(colorDialog.color,
                 function test(hue, saturation, lightness) {
-                    colorCorrectorController.changeHue(hue, isOriginalImage.checked)
+                    colorCorrectorController.changeHue(isOriginalImage.checked, hue)
             });
             secondPage.updateProcessingImage()
             secondPage.enabled = true
@@ -81,7 +81,7 @@ Item {
                             value: 0                            
                             to: 100
                             onValueChanged: {
-                                colorModelSelector.onAllUpdate()
+                                colorModelBalance.onAllUpdate()
                             }
                             Layout.fillWidth: true
                             ToolTip {
@@ -100,7 +100,7 @@ Item {
                             value: 0                            
                             to: 100
                             onValueChanged: {
-                                colorModelSelector.onAllUpdate()
+                                colorModelBalance.onAllUpdate()
                             }
                             Layout.fillWidth: true
                             ToolTip {
@@ -123,7 +123,7 @@ Item {
                             to: 255
                             name: secondPage.colorModelTag
                             onValueChanged: {
-                                colorModelSelector.onAllUpdate()
+                                colorModelBalance.onAllUpdate()
                             }
                         }
                         Label {
@@ -140,7 +140,7 @@ Item {
                             // value: 0                            
                             to: 100
                             // onValueChanged: {
-                            //     colorModelSelector.onAllUpdate()
+                            //     colorModelBalance.onAllUpdate()
                             // }
                             Layout.fillWidth: true
                             ToolTip {

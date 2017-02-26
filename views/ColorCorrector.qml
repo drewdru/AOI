@@ -17,19 +17,22 @@ Item {
 
     // property string colorModelTag: "RGB"
 
-    ColorDialog {
-        id: colorDialog
-        title: "Please choose a color"
-        onAccepted: {
-            firstPage.enabled = false
-            colorCorrectorController.getHlsFromHex(colorDialog.color,
-                function test(hue, saturation, lightness) {
-                    colorCorrectorController.changeHue(hue, isOriginalImage.checked)
-            });
-            firstPage.updateProcessingImage()
-            firstPage.enabled = true
-        }
-    }
+    // ColorDialog {
+    //     id: colorDialog
+    //     title: "Please choose a color"
+    //     onAccepted: {
+    //         firstPage.enabled = false
+    //         colorCorrectorController.getHslFromHex(colorDialog.color,
+    //             function test(hue, saturation, lightness) {
+    //                 console.log(hue)
+    //                 console.log(saturation)
+    //                 console.log(lightness)
+    //                 colorCorrectorController.changeHueByPallet(isOriginalImage.checked, hue, saturation, lightness)
+    //         });
+    //         firstPage.updateProcessingImage()
+    //         firstPage.enabled = true
+    //     }
+    // }
 
     Flickable {
         focus: true
@@ -83,24 +86,24 @@ Item {
                     onValueChanged: {
                         Slider.running = true
                         preferenceColorPanel.enabled = false
-                        colorCorrectorController.changeHue(value, isOriginalImage.checked)
+                        colorCorrectorController.changeHue(isOriginalImage.checked, value)
                         preferenceColorPanel.enabled = true
                         Slider.running = false
                         firstPage.updateProcessingImage()
                     }
                 }
-                Button {
-                    text: qsTr("Palette")
-                    onClicked: colorDialog.open()
-                }
+                // Button {
+                //     text: qsTr("Palette")
+                //     onClicked: colorDialog.open()
+                // }
             }
             
-            ColorModelSelector {
-                id: colorModelSelector
+            ColorModelBalance {
+                id: colorModelBalance
                 isOriginalImage: isOriginalImage.checked
                 onUpdateProcessingImage: firstPage.updateProcessingImage()
                 // onColorModelTagChanged: {
-                //     firstPage.colorModelTag = colorModelSelector.colorModelTag
+                //     firstPage.colorModelTag = colorModelBalance.colorModelTag
                 // }
             }        
         }

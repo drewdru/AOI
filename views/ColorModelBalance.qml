@@ -9,7 +9,9 @@ ColumnLayout {
     property int currentImageChannelIndex: 0
     property bool isOriginalImage
     signal updateProcessingImage()
-
+    
+    // anchors.fill: parent
+    
     ColumnLayout {
         GroupBox {
             // anchors.fill: parent
@@ -75,17 +77,64 @@ ColumnLayout {
                 }
             }
         }
+        GroupBox {
+            // anchors.fill: parent
+            Layout.fillWidth: true
+            title: qsTr("Color balance")
+            ColumnLayout {
+                anchors.fill: parent
+                RowLayout {
+                    Label {
+                        text: isFirstImageChannel.text
+                    }
+                    ChannelBalanceSlider {
+                        id: firstChannelBalance
+                        to: 255
+                        name: isFirstImageChannel.text
+                        onValueChanged: {
+                            colorModelBalance.onAllUpdate()
+                        }
+                    }
+                }
+                RowLayout {
+                    Label {
+                        text: isSecondImageChannel.text
+                    }
+                    ChannelBalanceSlider {
+                        id: secondChannelBalance
+                        to: 255
+                        name: isSecondImageChannel.text
+                        onValueChanged: {
+                            colorModelBalance.onAllUpdate()
+                        }
+                    }
+                }
+                RowLayout {
+                    Label {
+                        text: isThirdImageChannel.text
+                    }
+                    ChannelBalanceSlider {
+                        id: thirdChannelBalance
+                        to: 255
+                        name: isThirdImageChannel.text
+                        onValueChanged: {
+                            colorModelBalance.onAllUpdate()
+                        }
+                    }
+                }
+            }
+        }
     }
     function onAllUpdate() {
         colorModelBalance.enabled = false
-        // colorCorrectorController.changeColorModel(
-        //     colorModelBalance.colorModelTag,
-        //     colorModelBalance.currentImageChannelIndex,
-        //     isOriginalImage,
-        //     firstChannelBalance.value,
-        //     secondChannelBalance.value,
-        //     thirdChannelBalance.value
-        // )
+        colorCorrectorController.changeColorModel(
+            colorModelBalance.colorModelTag,
+            colorModelBalance.currentImageChannelIndex,
+            isOriginalImage,
+            firstChannelBalance.value,
+            secondChannelBalance.value,
+            thirdChannelBalance.value
+        )
         colorModelBalance.updateProcessingImage()
         colorModelBalance.enabled = true
     }
@@ -109,7 +158,7 @@ ColumnLayout {
         secondChannelBalance.to = secondChannelValue
         thirdChannelBalance.to = thirdChannelValue
 
-        // colorModelBalance.onAllUpdate()
+        colorModelBalance.onAllUpdate()
         isAllImageChannel.checked = true
     }
 }

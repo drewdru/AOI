@@ -46,14 +46,20 @@ class ColorCorrectorController(QObject):
         return '#%02x%02x%02x' % (red, green, blue)
 
     @pyqtSlot(str, 'QJSValue')
-    def getHlsFromHex(self, hexColor, callback):
+    def getHslFromHex(self, hexColor, callback):
         color = self.hexToRgb(hexColor)
+        print(color)
         color = colorModel.colorRgbToHsl(color[0], color[1], color[2])
+        print((color[0], color[1], color[2]))
         if callback.isCallable():
             callback.call([QJSValue(color[0]), QJSValue(color[1]), QJSValue(color[2])])
+    
+    @pyqtSlot(bool, int, int, int)
+    def changeHueByPallet(self, isOriginalImage, hValue=0, sValue=0, lValue=0):
+        self.changeHue(self, isOriginalImage, hValue=hValue, sValue=sValue, lValue=lValue)
 
-    @pyqtSlot(int, bool)
-    def changeHue(self, value, isOriginalImage):
+    @pyqtSlot(bool, int)
+    def changeHue(self, isOriginalImage, value=None, hValue=0, sValue=0, lValue=0):
         """ Change an image hue
 
             @param value: The hue value
@@ -63,7 +69,7 @@ class ColorCorrectorController(QObject):
         if img is None:
             return
         data = np.asarray(img, dtype="float")
-        data = colorModel.rgbToHsl(data, value)
+        data = colorModel.rgbToHsl(data, value=value, hValue=hValue, sValue=sValue, lValue=lValue)
         self.saveHistogram(data=data, model='HSL')
         data = colorModel.hslToRgb(data)
         img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
