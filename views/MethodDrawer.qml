@@ -34,7 +34,7 @@ Drawer {
             //     imageNoiseId.colorModelTag = colorCorrectorId.colorModelTag
             // }
         }
-        ImageNoise {
+        NoiseGenerator {
             id: imageNoiseId
             // colorModelTag: colorCorrectorId.colorModelTag
             width: drawer.width

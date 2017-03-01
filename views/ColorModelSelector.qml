@@ -4,10 +4,11 @@ import QtQuick.Controls 2.1
 import QtQuick.Controls.Material 2.1
 
 ColumnLayout {
-    id: colorModelBalance
+    id: colorModelSelector
     property string colorModelTag: "RGB"
+    property string channelTag: "RGB"
     property int currentImageChannelIndex: 0
-    property bool isOriginalImage
+    // property bool isOriginalImage
     signal updateProcessingImage()
 
     ColumnLayout {
@@ -21,18 +22,18 @@ ColumnLayout {
                     checked: true
                     text: qsTr("RGB")
                     onClicked: {
-                        onUpdateColorModel(text, "R", "G", "B", 255, 255, 255)
+                        onUpdateColorModel(text, "R", "G", "B")
                     }
                 }
                 RadioButton {
                     id: isYuvModel
                     text: qsTr("YUV")
-                    onClicked: onUpdateColorModel(text, "Y", "U", "V", 255, 128, 128)
+                    onClicked: onUpdateColorModel(text, "Y", "U", "V")
                 }
                 RadioButton {
                     id: isHslModel
                     text: qsTr("HSL")
-                    onClicked: onUpdateColorModel(text, "H", "S", "L", 360, 100, 100)
+                    onClicked: onUpdateColorModel(text, "H", "S", "L")
                 }
             }
         }
@@ -45,71 +46,57 @@ ColumnLayout {
                     checked: true
                     text: qsTr("RGB")
                     onClicked: {
-                        colorModelBalance.currentImageChannelIndex = 0
-                        colorModelBalance.onAllUpdate()
+                        colorModelSelector.currentImageChannelIndex = 0
+                        colorModelSelector.onAllUpdate()
                     }
                 }
                 RadioButton {
                     id: isFirstImageChannel
                     text: qsTr("R")
                     onClicked: {
-                        colorModelBalance.currentImageChannelIndex = 1
-                        colorModelBalance.onAllUpdate()
+                        colorModelSelector.currentImageChannelIndex = 1
+                        colorModelSelector.onAllUpdate()
                     }
                 }
                 RadioButton {
                     id: isSecondImageChannel
                     text: qsTr("G")
                     onClicked: {
-                        colorModelBalance.currentImageChannelIndex = 2
-                        colorModelBalance.onAllUpdate()
+                        colorModelSelector.currentImageChannelIndex = 2
+                        colorModelSelector.onAllUpdate()
                     }
                 }
                 RadioButton {
                     id: isThirdImageChannel
                     text: qsTr("B")
                     onClicked: {
-                        colorModelBalance.currentImageChannelIndex = 3
-                        colorModelBalance.onAllUpdate()
+                        colorModelSelector.currentImageChannelIndex = 3
+                        colorModelSelector.onAllUpdate()
                     }
                 }
             }
         }
     }
     function onAllUpdate() {
-        colorModelBalance.enabled = false
-        // colorCorrectorController.changeColorModel(
-        //     colorModelBalance.colorModelTag,
-        //     colorModelBalance.currentImageChannelIndex,
-        //     isOriginalImage,
-        //     firstChannelBalance.value,
-        //     secondChannelBalance.value,
-        //     thirdChannelBalance.value
-        // )
-        colorModelBalance.updateProcessingImage()
-        colorModelBalance.enabled = true
+        colorModelSelector.channelTag = (isAllImageChannel.checked ? isAllImageChannel.text : '') +
+            (isFirstImageChannel.checked ? isFirstImageChannel.text : '') +
+            (isSecondImageChannel.checked ? isSecondImageChannel.text : '') +
+            (isThirdImageChannel.checked ? isThirdImageChannel.text : '');
+        
     }
     function onUpdateColorModel(text,
             firstChannel,
             secondChannel,
-            thirdChannel,
-            firstChannelValue,
-            secondChannelValue,
-            thirdChannelValue) {
-        colorModelBalance.colorModelTag = text
+            thirdChannel) {
+        colorModelSelector.colorModelTag = text
         isAllImageChannel.text = text
         isAllImageChannel.checked = true
-        colorModelBalance.currentImageChannelIndex = 0
+        colorModelSelector.currentImageChannelIndex = 0
 
         isFirstImageChannel.text = firstChannel
         isSecondImageChannel.text = secondChannel
         isThirdImageChannel.text = thirdChannel
-
-        firstChannelBalance.to = firstChannelValue
-        secondChannelBalance.to = secondChannelValue
-        thirdChannelBalance.to = thirdChannelValue
-
-        // colorModelBalance.onAllUpdate()
+        colorModelSelector.onAllUpdate()
         isAllImageChannel.checked = true
     }
 }
