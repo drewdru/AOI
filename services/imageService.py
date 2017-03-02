@@ -24,3 +24,4 @@ class ImageService(QObject):
             return img.convert(mode='RGB')
         except Exception as err:
             return None
+
