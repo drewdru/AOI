@@ -28,11 +28,14 @@ def impulsNoise(pixels, size, colorModelTag, impulsP, noiseLvl):
             else:
                 value = (255, currentColor[1], currentColor[2])
         if colorModelTag == 'HSL':
+            colorValue = currentColor[0]
             if randomValue < impulsP:
-                currentColor -= 180
-                currentColor = currentColor if currentColor > 0 else 360 + currentColor
+                colorValue -= 180
             else:
-                currentColor += 180
-                currentColor = currentColor if currentColor > 360 else currentColor - 360
-            value = (currentColor, currentColor[1], currentColor[2])
+                colorValue += 180
+            if colorValue > 360:
+                colorValue -= 360
+            if colorValue < 0:
+                colorValue += 360
+            value = (colorValue, currentColor[1], currentColor[2])
         pixels[x, y] = value

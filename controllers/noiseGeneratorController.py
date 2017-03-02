@@ -48,6 +48,7 @@ class NoiseGeneratorController(QObject):
                 colorModelTag,
                 impulseNoise,
                 noiseLevel)
+            colorModel.yuvToRgb(img.load(), img.size)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = np.asarray(img, dtype="float")

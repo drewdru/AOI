@@ -76,8 +76,10 @@ def rgbToYuv(pixels, size, yValue=0, uValue=0, vValue=0):
             else: V = 255
 
             Y = Y + yValue
-            U = (U + uValue)/2
-            V = (V + vValue)/2
+            if uValue != 0:
+                U = (U + uValue)/2
+            if vValue != 0:
+                V = (V + vValue)/2
 
             pixels[i, j] = (int(Y), int(U), int(V))
 
