@@ -10,7 +10,7 @@ import random
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, colorHistogram
-from services import histogramService
+from services import histogramService, imageService
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
@@ -22,20 +22,7 @@ class ColorCorrectorController(QObject):
         QObject.__init__(self)
         self.appDir = os.getcwd()
         self.histogramService = histogramService.HistogramService()
-
-    def openImage(self, isOriginalImage):
-        """ Open image for processing
-
-            @param isOriginalImage: The value for choose original or processing Image
-        """
-        try:
-            if isOriginalImage:
-                img = Image.open('{}/temp/inImage.png'.format(self.appDir))
-            else:
-                img = Image.open('{}/temp/processingImage.png'.format(self.appDir))
-            return img.convert(mode='RGB')
-        except Exception:
-            return None
+        self.imageService = imageService.ImageService()
 
     def hexToRgb(self, value):
         """Return (red, green, blue) for the color given as #rrggbb."""
@@ -67,7 +54,7 @@ class ColorCorrectorController(QObject):
             @param value: The hue value
             @param isOriginalImage: The value for choose original or processing Image
         """
-        img = self.openImage(isOriginalImage)
+        img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
         data = np.asarray(img, dtype="float")
@@ -83,7 +70,7 @@ class ColorCorrectorController(QObject):
 
             @param isOriginalImage: The value for choose original or processing Image
         """
-        img = self.openImage(isOriginalImage)
+        img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
 
@@ -170,7 +157,7 @@ class ColorCorrectorController(QObject):
         # img = img.convert(mode='RGB')
         # if img is None:
         #     return
-        img = self.openImage(isOriginalImage)
+        img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
         if colorModelTag == 'RGB':

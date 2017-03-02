@@ -10,7 +10,7 @@ import random
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, noiseGenerator, colorHistogram
-from services import histogramService
+from services import histogramService,imageService
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
@@ -22,20 +22,7 @@ class NoiseGeneratorController(QObject):
         QObject.__init__(self)
         self.appDir = os.getcwd()
         self.histogramService = histogramService.HistogramService()
-
-    def openImage(self, isOriginalImage):
-        """ Open image for processing
-
-            @param isOriginalImage: The value for choose original or processing Image
-        """
-        try:
-            if isOriginalImage:
-                img = Image.open('{}/temp/inImage.png'.format(self.appDir))
-            else:
-                img = Image.open('{}/temp/processingImage.png'.format(self.appDir))
-            return img.convert(mode='RGB')
-        except Exception:
-            return None
+        self.imageService = imageService.ImageService()
 
     @pyqtSlot(str, int, int, bool)
     def addImpulsNoise(self, colorModelTag, impulseNoise, noiseLevel, isOriginalImage):
@@ -44,7 +31,7 @@ class NoiseGeneratorController(QObject):
             @param colorModelTag: The color model tag
             @param currentImageChannelIndex: The index of current image channel
         """
-        img = self.openImage(isOriginalImage)
+        img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
         if colorModelTag == 'RGB':
