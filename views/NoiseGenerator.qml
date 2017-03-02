@@ -84,7 +84,7 @@ Item {
                             to: 100
                             onValueChanged: {
                                 secondPage.enabled = false
-                                noiseGeneratorController.addImpulsNoise(colorModelSelector.colorModelTag, value, noiseLevelBalance.value, isOriginalImage.checked)
+                                noiseGeneratorController.addImpulsNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, value, noiseLevelBalance.value, isOriginalImage.checked)
                                 secondPage.enabled = true
                                 secondPage.updateProcessingImage()
                             }

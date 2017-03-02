@@ -24,8 +24,8 @@ class NoiseGeneratorController(QObject):
         self.histogramService = histogramService.HistogramService()
         self.imageService = imageService.ImageService()
 
-    @pyqtSlot(str, int, int, bool)
-    def addImpulsNoise(self, colorModelTag, impulseNoise, noiseLevel, isOriginalImage):
+    @pyqtSlot(str, int, int, int, bool)
+    def addImpulsNoise(self, colorModelTag, currentImageChannelIndex, impulseNoise, noiseLevel, isOriginalImage):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
@@ -38,6 +38,7 @@ class NoiseGeneratorController(QObject):
             noiseGenerator.impulsNoise(img.load(),
                 img.size,
                 colorModelTag,
+                currentImageChannelIndex,
                 impulseNoise,
                 noiseLevel)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
@@ -46,6 +47,7 @@ class NoiseGeneratorController(QObject):
             noiseGenerator.impulsNoise(img.load(),
                 img.size,
                 colorModelTag,
+                currentImageChannelIndex,
                 impulseNoise,
                 noiseLevel)
             colorModel.yuvToRgb(img.load(), img.size)
@@ -56,6 +58,7 @@ class NoiseGeneratorController(QObject):
             noiseGenerator.impulsNoise(data,
                 data.shape,
                 colorModelTag,
+                currentImageChannelIndex,
                 impulseNoise,
                 noiseLevel)
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
