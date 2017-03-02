@@ -13,6 +13,7 @@ from PyQt5.QtQuick import QQuickView
 from PyQt5.QtGui import QIcon
 
 from controllers.mainController import MainController
+from controllers.noiseGeneratorController import NoiseGeneratorController
 from controllers.colorCorrectorController import ColorCorrectorController
 
 if __name__ == '__main__':
@@ -39,6 +40,9 @@ if __name__ == '__main__':
 
     colorCorrectorController = ColorCorrectorController()
     context.setContextProperty('colorCorrectorController', colorCorrectorController)
+
+    noiseGeneratorController = NoiseGeneratorController()
+    context.setContextProperty('noiseGeneratorController', noiseGeneratorController)
 
     # Show the View
     appView.setSource(QUrl('./views/main.qml'))
