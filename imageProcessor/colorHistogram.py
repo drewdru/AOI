@@ -1,5 +1,6 @@
 import numpy
 from PyQt5.QtCore import QCoreApplication
+
 def getHistogramImage(pixels, size):
     """
     @use:
@@ -24,9 +25,9 @@ def getHistogramArray(npPixels):
     histogram1 = numpy.zeros(361)
     histogram2 = numpy.zeros(101)
     histogram3 = numpy.zeros(101)
-    for i, pixels in enumerate(npPixels):
+    for pixels in npPixels:
         QCoreApplication.processEvents()
-        for j, pixel in enumerate(pixels):
+        for pixel in pixels:
             channel1, channel2, channel3 = pixel
             histogram1[int(channel1)] += 1
             histogram2[int(channel2)] += 1

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import random
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
-from imageProcessor import colorModel, colorHistogram
+from imageProcessor import colorModel, colorHistogram, colorCorrector
 from imageProcessor import histogramService, imageService
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtCore import QObject, pyqtSlot
@@ -153,10 +153,6 @@ class ColorCorrectorController(QObject):
             @param colorModelTag: The color model tag
             @param currentImageChannelIndex: The index of current image channel
         """
-        # img = Image.open('inImage.png')
-        # img = img.convert(mode='RGB')
-        # if img is None:
-        #     return
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
@@ -184,12 +180,6 @@ class ColorCorrectorController(QObject):
                     currentImageChannelIndex - 1)
                 colorModel.yuvToRgb(img.load(), img.size)
         if colorModelTag == 'HSL':
-            # colorModel.rgbToHsl(img.load(),
-            #     img.size,
-            #     firstChannel,
-            #     secondChannel,
-            #     thirdChannel)
-
             data = np.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data,
                 None,
@@ -199,13 +189,44 @@ class ColorCorrectorController(QObject):
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
-            # img.save('{}/temp/processingImage.png'.format(self.appDir))
-            # if currentImageChannelIndex > 0:
-            #     colorModel.viewYUVChannelByID(img.load(),
-            #         img.size,
-            #         currentImageChannelIndex - 1)
-            #     colorModel.yuvToRgb(img.load(), img.size)
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
+    @pyqtSlot(bool)
+    def histogramEqualization(self, isOriginalImage):
+        """
+            Normolize image histograms
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        colorCorrector.histogramEqualization(img.load(), img.size)
+        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+
+    @pyqtSlot(bool, float)
+    def changeGamma(self, isOriginalImage, value):
+        """
+            Change image gamma
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        colorCorrector.gamma(img.load(), img.size, value)
+        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+
+    @pyqtSlot(bool)
+    def toGrayWorld(self, isOriginalImage):
+        """
+            Convert image to grayscale
+
+            @param isOriginalImage: The value for choose original or processing Image
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        colorCorrector.toGrayWorld(img.load(), img.size)
+        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
 

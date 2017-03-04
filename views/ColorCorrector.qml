@@ -73,6 +73,51 @@ Item {
                     firstPage.updateProcessingImage()
                     preferenceColorPanel.enabled = true
                 }
+            }    
+            Button {
+                id: grayWorldButton
+                text: qsTr("Gray world")
+                onClicked: {
+                    preferenceColorPanel.enabled = false
+                    colorCorrectorController.toGrayWorld(isOriginalImage.checked)
+                    firstPage.updateProcessingImage()
+                    preferenceColorPanel.enabled = true
+                }
+            }   
+            Button {
+                id: histogramEqualizationButton
+                text: qsTr("Histogram equalization")
+                onClicked: {
+                    preferenceColorPanel.enabled = false
+                    colorCorrectorController.histogramEqualization(isOriginalImage.checked)
+                    firstPage.updateProcessingImage()
+                    preferenceColorPanel.enabled = true
+                }
+            }
+            RowLayout {
+                Label {
+                    text: qsTr("Gamma:")
+                }
+                Slider {
+                    id: gammaSlider
+                    from: 0
+                    value: 1                            
+                    to: 5
+                    Layout.fillWidth: true
+                    onValueChanged: {
+                        Slider.running = true
+                        preferenceColorPanel.enabled = false
+                        colorCorrectorController.changeGamma(isOriginalImage.checked, value)
+                        preferenceColorPanel.enabled = true
+                        Slider.running = false
+                        firstPage.updateProcessingImage()
+                    }
+
+                    ToolTip {
+                        visible: parent.pressed
+                        text: qsTr("Max deviation is " + parent.valueAt(parent.position).toFixed(1) + "%")
+                    }
+                }
             }
             RowLayout {
                 Label {
