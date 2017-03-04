@@ -78,8 +78,11 @@ class ColorCorrectorController(QObject):
         if img is None:
             return
 
+        start_time = time.time()
         colorModel.rgbToYuv(img.load(), img.size)
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
+        with open('{}/temp/toGrayscale.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
         self.histogramService.saveHistogram(img=img, model='RGB')
 
@@ -161,22 +164,28 @@ class ColorCorrectorController(QObject):
         if img is None:
             return
         if colorModelTag == 'RGB':
+            start_time = time.time()
             colorModel.changeRgbBalance(img.load(),
                 img.size,
                 firstChannel,
                 secondChannel,
                 thirdChannel)
+            with open('{}/temp/changeColorModelRGB.log'.format(self.appDir), "a+") as text_file:
+                text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
             if currentImageChannelIndex > 0:
                 colorModel.viewRGBChannelByID(img.load(),
                     img.size,
                     currentImageChannelIndex - 1)
         if colorModelTag == 'YUV':
+            start_time = time.time()
             colorModel.rgbToYuv(img.load(),
                 img.size,
                 firstChannel,
                 secondChannel,
                 thirdChannel)
+            with open('{}/temp/changeColorModelYUV.log'.format(self.appDir), "a+") as text_file:
+                text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
             if currentImageChannelIndex > 0:
                 colorModel.viewYUVChannelByID(img.load(),
@@ -184,16 +193,18 @@ class ColorCorrectorController(QObject):
                     currentImageChannelIndex - 1)
                 colorModel.yuvToRgb(img.load(), img.size)
         if colorModelTag == 'HSL':
+            start_time = time.time()
             data = np.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data,
                 None,
                 firstChannel,
                 secondChannel,
                 thirdChannel)
+            with open('{}/temp/changeColorModelHSL.log'.format(self.appDir), "a+") as text_file:
+                text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
-
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(bool)
@@ -204,7 +215,10 @@ class ColorCorrectorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
+        start_time = time.time()
         colorCorrector.histogramEqualization(img.load(), img.size)
+        with open('{}/temp/histogramEqualization.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
@@ -216,7 +230,10 @@ class ColorCorrectorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
+        start_time = time.time()
         colorCorrector.gamma(img.load(), img.size, value)
+        with open('{}/temp/changeGamma.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
@@ -230,7 +247,10 @@ class ColorCorrectorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
+        start_time = time.time()
         colorCorrector.toGrayWorld(img.load(), img.size)
+        with open('{}/temp/toGrayWorld.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
@@ -244,6 +264,9 @@ class ColorCorrectorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
+        start_time = time.time()
         colorCorrector.autolevels(img.load(), img.size)
+        with open('{}/temp/toGrayWorld.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
