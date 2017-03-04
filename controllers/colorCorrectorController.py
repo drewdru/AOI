@@ -61,7 +61,8 @@ class ColorCorrectorController(QObject):
         start_time = time.time()
         data = np.asarray(img, dtype="float")
         data = colorModel.rgbToHsl(data, value=value, hValue=hValue, sValue=sValue, lValue=lValue)
-        print("--- %s seconds ---" % (time.time() - start_time))
+        with open('{}/temp/changeHue.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(data=data, model='HSL')
         data = colorModel.hslToRgb(data)
         img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
