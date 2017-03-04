@@ -10,7 +10,7 @@ import random
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, colorHistogram
-from services import histogramService, imageService
+from imageProcessor import histogramService, imageService
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue

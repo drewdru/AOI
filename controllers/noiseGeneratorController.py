@@ -7,10 +7,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, noiseGenerator, colorHistogram
-from services import histogramService,imageService
+from imageProcessor import histogramService, imageService
 from PyQt5.QtCore import QCoreApplication
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
@@ -67,10 +68,91 @@ class NoiseGeneratorController(QObject):
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
+    @pyqtSlot(str, int, int, int, bool)
+    def addAdditiveNoise(self, colorModelTag, currentImageChannelIndex, deviation, noiseLevel, isOriginalImage):
+        """ Change color model and channels
 
+            @param colorModelTag: The color model tag
+            @param currentImageChannelIndex: The index of current image channel
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        if colorModelTag == 'RGB':
+            noiseGenerator.additiveNoise(img.load(),
+                img.size,
+                colorModelTag,
+                currentImageChannelIndex,
+                deviation,
+                noiseLevel)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            noiseGenerator.additiveNoise(img.load(),
+                img.size,
+                colorModelTag,
+                currentImageChannelIndex,
+                deviation,
+                noiseLevel)
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            noiseGenerator.additiveNoise(data,
+                data.shape,
+                colorModelTag,
+                currentImageChannelIndex,
+                deviation,
+                noiseLevel)
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
 
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    
-    
+    @pyqtSlot(str, int, int, int, int, bool)
+    def addMultiplicativeNoise(self, colorModelTag, currentImageChannelIndex, kmin, kmax, noiseLevel, isOriginalImage):
+        """ Change color model and channels
 
+            @param colorModelTag: The color model tag
+            @param currentImageChannelIndex: The index of current image channel
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        if colorModelTag == 'RGB':
+            noiseGenerator.multiplicativeNoise(img.load(),
+                img.size,
+                colorModelTag,
+                currentImageChannelIndex,
+                kmin,
+                kmax,
+                noiseLevel)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            noiseGenerator.multiplicativeNoise(img.load(),
+                img.size,
+                colorModelTag,
+                currentImageChannelIndex,
+                kmin,
+                kmax,
+                noiseLevel)
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            noiseGenerator.multiplicativeNoise(data,
+                data.shape,
+                colorModelTag,
+                currentImageChannelIndex,
+                kmin,
+                kmax,
+                noiseLevel)
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
 
+        img.save('{}/temp/processingImage.png'.format(self.appDir))

@@ -75,67 +75,103 @@ Item {
                     }
                     RowLayout {
                         Label {
-                            text: "Impulse noise: White"
+                            text: "Impulse noise:"
                         }
                         Slider {
                             id: impulseNoiseBalance
                             from: 0
                             value: 0                            
                             to: 100
+                            Layout.fillWidth: true
                             onValueChanged: {
                                 secondPage.enabled = false
                                 noiseGeneratorController.addImpulsNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, value, noiseLevelBalance.value, isOriginalImage.checked)
                                 secondPage.enabled = true
                                 secondPage.updateProcessingImage()
                             }
-                            Layout.fillWidth: true
                             ToolTip {
                                 visible: parent.pressed
                                 text: {
-                                    qsTr("Black is " + parent.valueAt(parent.position).toFixed(1) + "%")
+                                    qsTr("Min color channel value is " + parent.valueAt(parent.position).toFixed(1) + "%")
                                 }
                             }
                         }
-                        Label {
-                            text: "Black"
-                        }
+                        // Label {
+                        //     text: "Black"
+                        // }
                     }
                     RowLayout {
                         Label {
-                            text: "Additive noise: -"
+                            text: qsTr("Additive noise")
                         }
-                        ChannelBalanceSlider {
-                            id: additive
-                            to: 255
-                            name: secondPage.colorModelTag
-                            onValueChanged: {
-                                colorModelBalance.onAllUpdate()
-                            }
-                        }
-                        Label {
-                            text: "+"
-                        }
-                    }
-                    RowLayout {
-                        Label {
-                            text: qsTr("Kmin")
-                        }
-                        RangeSlider {
-                            id: kminKmax
+                        Slider {
+                            id: additiveNoiseBalance
                             from: 0
-                            // value: 0                            
+                            value: 50                            
                             to: 100
-                            // onValueChanged: {
-                            //     colorModelBalance.onAllUpdate()
-                            // }
                             Layout.fillWidth: true
+                            onValueChanged: {
+                                secondPage.enabled = false
+                                noiseGeneratorController.addAdditiveNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, value, noiseLevelBalance.value, isOriginalImage.checked)
+                                secondPage.enabled = true
+                                secondPage.updateProcessingImage()
+                            }
                             ToolTip {
                                 visible: parent.pressed
-                                text: qsTr("Noise level is " + parent.valueAt(parent.position).toFixed(1) + "%")
+                                text: qsTr("Max deviation is " + parent.valueAt(parent.position).toFixed(1) + "%")
                             }
                         }
-                        Label {
-                            text: qsTr("Kmax")
+                    }
+                    GroupBox {
+                        Layout.fillWidth: true
+                        ColumnLayout {
+                            Label {
+                                text: qsTr("Multiplicative noise")
+                            }
+                            RowLayout {
+                                Label {
+                                    text: qsTr("Kmin:\t")
+                                }
+                                TextField {
+                                    id: kmin
+                                    text: qsTr("0")
+                                    Layout.fillWidth: true
+                                    validator: IntValidator{}
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                                    background: Rectangle {
+                                        radius: 2
+                                        border.color: "#333"
+                                        border.width: 1
+                                    }
+                                }
+                            }
+                            RowLayout {
+                                Label {
+                                    text: qsTr("Kmax:\t")
+                                }
+                                TextField {
+                                    id: kmax
+                                    text: qsTr("1")
+                                    Layout.fillWidth: true
+                                    validator: IntValidator{}
+                                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                                    background: Rectangle {
+                                        radius: 2
+                                        border.color: "#333"
+                                        border.width: 1
+                                    }
+                                }
+                            }
+                            Button {
+                                text: qsTr("add multiplicative noise")
+                                width: parent.width
+                                onClicked: {
+                                    secondPage.enabled = false
+                                    noiseGeneratorController.addMultiplicativeNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, kmin.text, kmax.text, noiseLevelBalance.value, isOriginalImage.checked)
+                                    secondPage.enabled = true
+                                    secondPage.updateProcessingImage()
+                                }
+                            }
                         }
                     }
                 }
