@@ -7,6 +7,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import time
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, colorHistogram, colorCorrector
@@ -57,8 +58,10 @@ class ColorCorrectorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
+        start_time = time.time()
         data = np.asarray(img, dtype="float")
         data = colorModel.rgbToHsl(data, value=value, hValue=hValue, sValue=sValue, lValue=lValue)
+        print("--- %s seconds ---" % (time.time() - start_time))
         self.histogramService.saveHistogram(data=data, model='HSL')
         data = colorModel.hslToRgb(data)
         img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
@@ -219,7 +222,7 @@ class ColorCorrectorController(QObject):
     @pyqtSlot(bool)
     def toGrayWorld(self, isOriginalImage):
         """
-            Convert image to grayscale
+            Convert image to gray world
 
             @param isOriginalImage: The value for choose original or processing Image
         """
@@ -230,3 +233,16 @@ class ColorCorrectorController(QObject):
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
+    @pyqtSlot(bool)
+    def toAutolevels(self, isOriginalImage):
+        """
+            Convert image to autolevels
+
+            @param isOriginalImage: The value for choose original or processing Image
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        colorCorrector.autolevels(img.load(), img.size)
+        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))

@@ -63,7 +63,17 @@ Item {
                 id: isOriginalImage
                 checked: true
                 text: qsTr("Use original image")
-            }    
+            }     
+            Button {
+                id: autolevelsButton
+                text: qsTr("Autolevels")
+                onClicked: {
+                    preferenceColorPanel.enabled = false
+                    colorCorrectorController.toAutolevels(isOriginalImage.checked)
+                    firstPage.updateProcessingImage()
+                    preferenceColorPanel.enabled = true
+                }
+            }   
             Button {
                 id: grayscaleButton
                 text: qsTr("Grayscale")
