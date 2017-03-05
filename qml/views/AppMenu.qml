@@ -2,7 +2,7 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.2
-import "../../JS/main.js" as App
+import "../JS/main.js" as App
 import "../components"
 
 Item {
@@ -24,7 +24,7 @@ Item {
     FileDialog {
         id: fileOpenDialog
         title: qsTr("Open a file")
-        folder: "../"
+        folder: appDir + "/temp"
         onAccepted: {
             App.openFile(fileOpenDialog.fileUrls)
             menuWrapper.updateImages()
@@ -33,7 +33,7 @@ Item {
     FileDialog {
         id: fileSaveDialog
         title: qsTr("Save as...")
-        folder: "../"
+        folder: appDir + "/temp"
         selectExisting: false
         onAccepted: {
             App.saveFile(fileSaveDialog.fileUrls)
