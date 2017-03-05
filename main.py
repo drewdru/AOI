@@ -19,7 +19,7 @@ from controllers.colorCorrectorController import ColorCorrectorController
 if __name__ == '__main__':
     # Create main app
     myApp = QApplication(sys.argv)
-    myApp.setWindowIcon(QIcon('./image/icon.png'))
+    myApp.setWindowIcon(QIcon('./images/icon.png'))
 
     # Create a View and set its properties
     appView = QQuickView()

@@ -17,7 +17,7 @@ Slider {
         Image {
             width: parent.width
             height: parent.height
-            source: appDir + "/image/slider.png"
+            source: appDir + "/images/slider.png"
         }
     }
     handle: Rectangle {

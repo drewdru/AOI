@@ -15,10 +15,10 @@ Drawer {
     signal updateHistograms()
 
     onUpdateHistograms: {
-        hist0.source = appDir + "/image/clearHist.png"
-        hist1.source = appDir + "/image/clearHist.png"
-        hist2.source = appDir + "/image/clearHist.png"
-        hist3.source = appDir + "/image/clearHist.png"
+        hist0.source = appDir + "/images/clearHist.png"
+        hist1.source = appDir + "/images/clearHist.png"
+        hist2.source = appDir + "/images/clearHist.png"
+        hist3.source = appDir + "/images/clearHist.png"
         
         hist0.source = appDir + "/temp/hist0.png"
         hist1.source = appDir + "/temp/hist1.png"
