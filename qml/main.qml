@@ -107,8 +107,12 @@ Rectangle {
         width: parent.width
         height: 20
         
-        onShowDrawer: drawerMethod.open()
-        onHideDrawer: drawerMethod.close()
+        onShowMethodDrawer: drawerMethod.open()
+        onHideMethodDrawer: drawerMethod.close()
+
+        onShowHistDrawer: drawerHistogram.open()
+        onHideHistDrawer: drawerHistogram.close()
+        
         onUpdateImages: {
             photoPreview.source = appDir + "/temp/processingImage.png"
             photoPreview.source = appDir + "/temp/inImage.png"

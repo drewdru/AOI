@@ -9,8 +9,10 @@ Item {
     id: menuWrapper
     
     property bool isDrawerVisible: false
-    signal showDrawer()
-    signal hideDrawer()
+    signal showMethodDrawer()
+    signal hideMethodDrawer()
+    signal showHistDrawer()
+    signal hideHistDrawer()
     signal updateImages()
     
     Shortcut {
@@ -91,6 +93,32 @@ Item {
                     MenuItem {
                         text: "Exit"
                         onTriggered: Qt.quit()
+                    }
+                }
+            }
+            ToolButton { 
+                onClicked:{                    
+                    if (menuWrapper.isDrawerVisible)
+                        menuWrapper.hideHistDrawer()
+                    else
+                        menuWrapper.showHistDrawer()
+                }
+                background: Rectangle {
+                    implicitWidth: 40
+                    implicitHeight: 40
+                    color: {
+                        if (parent.down)
+                            Qt.darker("#33333333", parent.enabled && (parent.checked || parent.highlighted) ? 1.5 : 1.0)
+                        else
+                            Qt.darker("#00FFFFFF", parent.enabled && (parent.checked || parent.highlighted) ? 1.5 : 1.0)
+
+                    }
+                    opacity: enabled ? 1 : 0.3
+                    Image {
+                        anchors.margins: 5                     
+                        anchors.fill: parent
+                        fillMode : "PreserveAspectFit"
+                        source: appDir + "/images/hist.png"
                     }
                 }
             }
