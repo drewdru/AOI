@@ -2,7 +2,8 @@ import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 import QtQuick.Dialogs 1.2
-import "../JS/main.js" as App
+import "../../JS/main.js" as App
+import "../components"
 
 Item {
     id: menuWrapper

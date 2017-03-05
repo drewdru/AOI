@@ -45,7 +45,7 @@ if __name__ == '__main__':
     context.setContextProperty('noiseGeneratorController', noiseGeneratorController)
 
     # Show the View
-    appView.setSource(QUrl('./views/main.qml'))
+    appView.setSource(QUrl('./qml/main.qml'))
     appView.show()
 
     # Execute the Application and Exit
