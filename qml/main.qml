@@ -99,10 +99,10 @@ Rectangle {
         sequence: "Ctrl+W"
         onActivated: rootWindow.viewDrawer('drawerHistogram')
     }
-    Shortcut {
-        sequence: "Ctrl+Q"
-        onActivated: Qt.quit()
-    }
+    // Shortcut {
+    //     sequence: "Ctrl+Q"
+    //     onActivated: Qt.quit()
+    // }
     Shortcut {
         sequence: "Ctrl+D"
         onActivated: rootWindow.viewDrawer('drawerFeatureList')
