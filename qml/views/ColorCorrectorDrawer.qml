@@ -15,6 +15,7 @@ Drawer {
     // height: parent.height
 
     signal updateProcessingImage()
+    signal backClicked()
 
 
     StackLayout {
@@ -31,60 +32,21 @@ Drawer {
             width: drawer.width
             height: drawer.height
             onUpdateProcessingImage: drawer.updateProcessingImage()
-            // onColorModelTagChanged: {
-            //     imageNoiseId.colorModelTag = colorCorrectorId.colorModelTag
-            // }
-        }
-        NoiseGenerator {
-            id: imageNoiseId
-            // colorModelTag: colorCorrectorId.colorModelTag
-            width: drawer.width
-            height: drawer.height
-            onUpdateProcessingImage: drawer.updateProcessingImage()
-        }
-        Item {
-            id: activityTab
         }
     }
     TabBar {
         id: tabBar
         width: parent.width
-            TabButton {
-                text: qsTr("Color corrector")
-                onClicked: {tabBar.currentIndex = 0}
+        TabButton {       
+            Text {
+                text: qsTr("    ← Color corrector")
+                color: "white"
             }
-            TabButton {
-                text: qsTr("Image noise")
-                onClicked: {tabBar.currentIndex = 1}
-            }
+            background: Rectangle {                
+                anchors.fill: parent                
+                color: Qt.darker("#333333", parent.hovered ? 1.5 : 1.0)
+            }   
+            onClicked: drawer.backClicked()
+        }
     }
-    // PageIndicator {
-    //     id: indicator
-
-    //     count: view.count
-    //     currentIndex: view.currentIndex
-
-    //     anchors.bottom: view.bottom
-    //     anchors.horizontalCenter: parent.horizontalCenter
-    // }
-
-    // IS MOBILE:
-    // SwipeView {
-    //     id: view
-
-    //     currentIndex: tabBar.currentIndex
-    //     anchors.fill: parent
-    //     y: parent.height
-    //     height: parent.height - y
-        
-    //     ColorCorrector {}
-    //     Item {
-    //         id: secondPage
-    //     }
-    //     Item {
-    //         id: thirdPage
-    //     }
-    // }
-
-    
 }

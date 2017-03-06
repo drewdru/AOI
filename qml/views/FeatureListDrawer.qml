@@ -15,6 +15,7 @@ Drawer {
     // height: parent.height
 
     signal showColorCorrectorDrawer()
+    signal showNoiseGeneratorDrawer()
 
     Flickable {
         focus: true
@@ -36,17 +37,23 @@ Drawer {
                 value: verticalScrollBar.hovered
             }
         }
-
+        anchors.margins: 10
         ColumnLayout {
             id: preferenceColorPanel
-            // Layout.fillWidth: true
-            width: drawer.width
+            width: drawer.width - 20
+
             Button {
                 id: colorCorrectorButton
-                // checked: true
+                Layout.fillWidth: true  
                 text: qsTr("View color corrector methods")
                 onClicked: drawer.showColorCorrectorDrawer()
-            }     
+            }
+            Button {
+                id: noiseGeneratorButton
+                Layout.fillWidth: true  
+                text: qsTr("View image noise generators")
+                onClicked: drawer.showNoiseGeneratorDrawer()
+            }  
         }
     }
 }

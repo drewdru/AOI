@@ -38,12 +38,29 @@ Rectangle {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
-        onShowColorCorrectorDrawer: {
-            drawerFeatureList.close()
-            drawerColorCorrector.open();
+        onShowColorCorrectorDrawer: rootWindow.viewDrawer('drawerColorCorrector')
+        onShowNoiseGeneratorDrawer: rootWindow.viewDrawer('drawerNoiseGenerator')
+    }
+    NoiseGeneratorDrawer {
+        id: drawerNoiseGenerator
+        height: parent.height
+        onUpdateProcessingImage: {
+            photoPreview2.source = appDir + "/temp/inImage.png"
+            photoPreview2.source = appDir + "/temp/processingImage.png"
+            drawerHistogram.updateHistograms()
+        }
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
     }
-
     ColorCorrectorDrawer {
         id: drawerColorCorrector
         height: parent.height
@@ -54,6 +71,7 @@ Rectangle {
         }
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
+        onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
         Shortcut {
             sequence: "Ctrl+D"
             onActivated: rootWindow.viewDrawer('drawerFeatureList')
@@ -81,7 +99,7 @@ Rectangle {
         onClosed: appMenu.isDrawerVisible = false
         Shortcut {
             sequence: "Ctrl+W"
-            onActivated: rootWindow.viewDrawer('drawerHistogram')
+            onActivated: drawerHistogram.close()
         }
         Shortcut {
             sequence: "Ctrl+D"
@@ -144,8 +162,10 @@ Rectangle {
         drawerFeatureList.close()
         drawerColorCorrector.close()
         drawerHistogram.close()
+        drawerNoiseGenerator.close()
         if (drawerName == 'drawerFeatureList') drawerFeatureList.open()
         if (drawerName == 'drawerColorCorrector') drawerColorCorrector.open()
-        if (drawerName == 'drawerHistogram') drawerHistogram.open()        
+        if (drawerName == 'drawerHistogram') drawerHistogram.open()
+        if (drawerName == 'drawerNoiseGenerator') drawerNoiseGenerator.open()     
     }
 }
