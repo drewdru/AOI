@@ -25,14 +25,27 @@ Rectangle {
         drawerHistogram.updateHistograms()
     }
 
-    Shortcut {
-        sequence: "Ctrl+D"
-        onActivated: drawerMethod.open()
+    FeatureListDrawer {
+        id: drawerFeatureList
+        height: parent.height
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: drawerFeatureList.close()
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
+        }
+        onShowColorCorrectorDrawer: {
+            drawerFeatureList.close()
+            drawerColorCorrector.open();
+        }
     }
 
-    MethodDrawer {
-        id: drawerMethod
-        // y: 40
+    ColorCorrectorDrawer {
+        id: drawerColorCorrector
         height: parent.height
         onUpdateProcessingImage: {
             photoPreview2.source = appDir + "/temp/inImage.png"
@@ -43,17 +56,21 @@ Rectangle {
         onClosed: appMenu.isDrawerVisible = false
         Shortcut {
             sequence: "Ctrl+D"
-            onActivated: drawerMethod.close()
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
         }
         Shortcut {
             sequence: "Ctrl+W"
-            onActivated: {drawerMethod.close(); drawerHistogram.open()}
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
     }
 
     Shortcut {
         sequence: "Ctrl+W"
-        onActivated: drawerHistogram.open()
+        onActivated: rootWindow.viewDrawer('drawerHistogram')
+    }
+    Shortcut {
+        sequence: "Ctrl+D"
+        onActivated: rootWindow.viewDrawer('drawerFeatureList')
     }
     HistDrawer {
         id: drawerHistogram
@@ -64,11 +81,11 @@ Rectangle {
         onClosed: appMenu.isDrawerVisible = false
         Shortcut {
             sequence: "Ctrl+W"
-            onActivated: drawerHistogram.close()
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
         Shortcut {
             sequence: "Ctrl+D"
-            onActivated: {drawerMethod.open();drawerHistogram.close()}
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
         }
     }
 
@@ -107,10 +124,10 @@ Rectangle {
         width: parent.width
         height: 20
         
-        onShowMethodDrawer: drawerMethod.open()
-        onHideMethodDrawer: drawerMethod.close()
+        onShowDrawerFeatureList: rootWindow.viewDrawer('drawerFeatureList')
+        onHideDrawerFeatureList: drawerFeatureList.close()
 
-        onShowHistDrawer: drawerHistogram.open()
+        onShowHistDrawer: rootWindow.viewDrawer('drawerHistogram')
         onHideHistDrawer: drawerHistogram.close()
         
         onUpdateImages: {
@@ -121,5 +138,14 @@ Rectangle {
             photoPreview2.source = appDir + "/temp/processingImage.png"
             drawerHistogram.updateHistograms()
         }
+    }
+    
+    function viewDrawer(drawerName) {
+        drawerFeatureList.close()
+        drawerColorCorrector.close()
+        drawerHistogram.close()
+        if (drawerName == 'drawerFeatureList') drawerFeatureList.open()
+        if (drawerName == 'drawerColorCorrector') drawerColorCorrector.open()
+        if (drawerName == 'drawerHistogram') drawerHistogram.open()        
     }
 }

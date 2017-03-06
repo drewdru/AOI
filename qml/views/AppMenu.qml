@@ -9,8 +9,8 @@ Item {
     id: menuWrapper
     
     property bool isDrawerVisible: false
-    signal showMethodDrawer()
-    signal hideMethodDrawer()
+    signal showDrawerFeatureList()
+    signal hideDrawerFeatureList()
     signal showHistDrawer()
     signal hideHistDrawer()
     signal updateImages()
@@ -49,11 +49,25 @@ Item {
         width: parent.width
         RowLayout {
             ToolButton { 
+                background: Rectangle {
+                    implicitWidth: 40
+                    implicitHeight: 40
+                    color: Qt.darker("#00FFFFFF", parent.enabled && (parent.checked || parent.highlighted) ? 1.5 : 1.0)
+                    Image {
+                        anchors.margins: 5
+                        id: iconImage                        
+                        anchors.fill: parent
+                        fillMode : "PreserveAspectFit"
+                        source: appDir + "/images/icon.png"
+                    }
+                }
+            }
+            ToolButton { 
                 onClicked:{                    
                     if (menuWrapper.isDrawerVisible)
-                        menuWrapper.hideDrawer()
+                        menuWrapper.hideDrawerFeatureList()
                     else
-                        menuWrapper.showDrawer()
+                        menuWrapper.showDrawerFeatureList()
                 }
                 background: Rectangle {
                     implicitWidth: 40
