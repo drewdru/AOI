@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
 import QtQuick.Dialogs 1.2
 import "../JS/main.js" as App
 import "../components"
@@ -52,7 +53,7 @@ Item {
                 background: Rectangle {
                     implicitWidth: 40
                     implicitHeight: 40
-                    color: Qt.darker("#00FFFFFF", parent.enabled && (views || parent.highlighted) ? 1.5 : 1.0)
+                    color: Qt.darker("#00FFFFFF", parent.enabled && (parent.views || parent.highlighted) ? 1.5 : 1.0)
                     Image {
                         anchors.margins: 5
                         id: iconImage                        
