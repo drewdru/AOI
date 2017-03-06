@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.1
 // import QtQuick.Controls 2.1
 import "JS/main.js" as App
 import "views"
+import "drawers"
 
 Rectangle {
 
