@@ -52,7 +52,7 @@ Item {
                 background: Rectangle {
                     implicitWidth: 40
                     implicitHeight: 40
-                    color: Qt.darker("#00FFFFFF", parent.enabled && (parent.checked || parent.highlighted) ? 1.5 : 1.0)
+                    color: Qt.darker("#00FFFFFF", parent.enabled && (views || parent.highlighted) ? 1.5 : 1.0)
                     Image {
                         anchors.margins: 5
                         id: iconImage                        

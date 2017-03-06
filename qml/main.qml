@@ -36,6 +36,10 @@ Rectangle {
             onActivated: drawerFeatureList.close()
         }
         Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
@@ -58,6 +62,10 @@ Rectangle {
             onActivated: rootWindow.viewDrawer('drawerFeatureList')
         }
         Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
@@ -78,6 +86,10 @@ Rectangle {
             onActivated: rootWindow.viewDrawer('drawerFeatureList')
         }
         Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
@@ -86,6 +98,10 @@ Rectangle {
     Shortcut {
         sequence: "Ctrl+W"
         onActivated: rootWindow.viewDrawer('drawerHistogram')
+    }
+    Shortcut {
+        sequence: "Ctrl+Q"
+        onActivated: Qt.quit()
     }
     Shortcut {
         sequence: "Ctrl+D"
@@ -101,6 +117,10 @@ Rectangle {
         Shortcut {
             sequence: "Ctrl+W"
             onActivated: drawerHistogram.close()
+        }
+        Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
         }
         Shortcut {
             sequence: "Ctrl+D"
