@@ -45,7 +45,7 @@ Item {
 
         ColumnLayout {
             id: preferenceColorPanel
-            // Layout.fillWidth: true
+            Layout.fillWidth: true
             width: secondPage.width
             CheckBox {
                 id: isOriginalImage

@@ -45,7 +45,7 @@ Drawer {
             }
             background: Rectangle {                
                 anchors.fill: parent                
-                color: Qt.darker("#333333", parent.hovered ? 1.5 : 1.0)
+                color: Qt.lighter("#333333", parent.hovered ? 2 : 1.0)
             }   
             onClicked: drawer.backClicked()
         }

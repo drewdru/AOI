@@ -17,7 +17,6 @@ Drawer {
     signal updateProcessingImage()
     signal backClicked()
 
-
     StackLayout {
         id: view
         Layout.fillWidth: true
@@ -26,9 +25,7 @@ Drawer {
         width: parent.width
         currentIndex: tabBar.currentIndex
 
-        NoiseGenerator {
-            id: imageNoiseId
-            // colorModelTag: colorCorrectorId.colorModelTag
+        Filters {
             width: drawer.width
             height: drawer.height
             onUpdateProcessingImage: drawer.updateProcessingImage()
@@ -39,7 +36,7 @@ Drawer {
         width: parent.width
         TabButton { 
             Text {
-                text: qsTr("    ← Image noise")
+                text: qsTr("    ← Filters")
                 color: "white"
             }
             background: Rectangle {                

@@ -17,6 +17,7 @@ Drawer {
 
     signal showColorCorrectorDrawer()
     signal showNoiseGeneratorDrawer()
+    signal showFiltersDrawer()
 
     Flickable {
         focus: true
@@ -45,7 +46,7 @@ Drawer {
 
             Button {
                 id: colorCorrectorButton
-                Layout.fillWidth: true  
+                Layout.fillWidth: true
                 text: qsTr("View color corrector methods")
                 onClicked: drawer.showColorCorrectorDrawer()
             }
@@ -54,7 +55,13 @@ Drawer {
                 Layout.fillWidth: true  
                 text: qsTr("View image noise generators")
                 onClicked: drawer.showNoiseGeneratorDrawer()
-            }  
+            }
+            Button {
+                id: filterButton
+                Layout.fillWidth: true  
+                text: qsTr("View image filters")
+                onClicked: drawer.showFiltersDrawer()
+            }
         }
     }
 }

@@ -45,15 +45,12 @@ Rectangle {
         }
         onShowColorCorrectorDrawer: rootWindow.viewDrawer('drawerColorCorrector')
         onShowNoiseGeneratorDrawer: rootWindow.viewDrawer('drawerNoiseGenerator')
+        onShowFiltersDrawer: rootWindow.viewDrawer('drawerFilters')
     }
     NoiseGeneratorDrawer {
         id: drawerNoiseGenerator
         height: parent.height
-        onUpdateProcessingImage: {
-            photoPreview2.source = appDir + "/temp/inImage.png"
-            photoPreview2.source = appDir + "/temp/processingImage.png"
-            drawerHistogram.updateHistograms()
-        }
+        onUpdateProcessingImage: updateProcessingImage()
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
@@ -73,11 +70,27 @@ Rectangle {
     ColorCorrectorDrawer {
         id: drawerColorCorrector
         height: parent.height
-        onUpdateProcessingImage: {
-            photoPreview2.source = appDir + "/temp/inImage.png"
-            photoPreview2.source = appDir + "/temp/processingImage.png"
-            drawerHistogram.updateHistograms()
+        onUpdateProcessingImage: updateProcessingImage()
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
         }
+        Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
+        }
+    }
+    FiltersDrawer {
+        id: drawerFilters
+        height: parent.height
+        onUpdateProcessingImage: updateProcessingImage()
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
@@ -99,10 +112,6 @@ Rectangle {
         sequence: "Ctrl+W"
         onActivated: rootWindow.viewDrawer('drawerHistogram')
     }
-    // Shortcut {
-    //     sequence: "Ctrl+Q"
-    //     onActivated: Qt.quit()
-    // }
     Shortcut {
         sequence: "Ctrl+D"
         onActivated: rootWindow.viewDrawer('drawerFeatureList')
@@ -178,15 +187,24 @@ Rectangle {
             drawerHistogram.updateHistograms()
         }
     }
+
+
+    function updateProcessingImage() {
+        photoPreview2.source = appDir + "/temp/inImage.png"
+        photoPreview2.source = appDir + "/temp/processingImage.png"
+        drawerHistogram.updateHistograms()
+    }
     
     function viewDrawer(drawerName) {
         drawerFeatureList.close()
         drawerColorCorrector.close()
         drawerHistogram.close()
         drawerNoiseGenerator.close()
+        drawerFilters.close()
         if (drawerName == 'drawerFeatureList') drawerFeatureList.open()
         if (drawerName == 'drawerColorCorrector') drawerColorCorrector.open()
         if (drawerName == 'drawerHistogram') drawerHistogram.open()
-        if (drawerName == 'drawerNoiseGenerator') drawerNoiseGenerator.open()     
+        if (drawerName == 'drawerNoiseGenerator') drawerNoiseGenerator.open()
+        if (drawerName == 'drawerFilters') drawerFilters.open()
     }
 }
