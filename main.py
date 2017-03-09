@@ -7,7 +7,7 @@ import sys
 import os
 
 from PyQt5.QtQml import QQmlEngine
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QDir 
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtQuick import QQuickView
 from PyQt5.QtGui import QIcon
@@ -35,7 +35,12 @@ if __name__ == '__main__':
     mainController = MainController()
     context.setContextProperty('PyConsole', mainController)
     context.setContextProperty('mainController', mainController)
-    appDir = os.getcwd()
+    # appDir = os.getcwd()
+    appDir = QUrl(QDir.currentPath())
+    print(appDir)
+    # print('appDir:', appDir)
+    appDir = 'file:///h:/QtDocuments/AOI'
+    print(appDir)
     context.setContextProperty('appDir', appDir)
 
     colorCorrectorController = ColorCorrectorController()

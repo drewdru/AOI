@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, noiseGenerator, colorHistogram
 from imageProcessor import histogramService, imageService
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
 from PIL import Image
@@ -22,7 +22,7 @@ class NoiseGeneratorController(QObject):
     """ Controller for color corrector view """
     def __init__(self):
         QObject.__init__(self)
-        self.appDir = os.getcwd()
+        self.appDir = QDir.currentPath()
         self.histogramService = histogramService.HistogramService()
         self.imageService = imageService.ImageService()
 

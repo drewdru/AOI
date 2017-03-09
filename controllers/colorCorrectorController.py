@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, colorHistogram, colorCorrector
 from imageProcessor import histogramService, imageService
-from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
 from PIL import Image
@@ -21,7 +21,7 @@ class ColorCorrectorController(QObject):
     """ Controller for color corrector view """
     def __init__(self):
         QObject.__init__(self)
-        self.appDir = os.getcwd()
+        self.appDir = QDir.currentPath()
         self.histogramService = histogramService.HistogramService()
         self.imageService = imageService.ImageService()
 
@@ -83,8 +83,11 @@ class ColorCorrectorController(QObject):
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
         with open('{}/temp/toGrayscale.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
+        print('{}/temp/processingImage.png'.format(self.appDir))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        print('Image saved')
         self.histogramService.saveHistogram(img=img, model='RGB')
+        print('Histogram saved')
 
     def pltProcessEvents(self):
         QCoreApplication.processEvents()

@@ -51,7 +51,8 @@ function onLoad() {
  * @param fileUrl: The qml file url
  */
 function openFile(fileUrl) {
-    var filePath = replaceUrlToPath(fileUrl, "file://", "");
+    var filePath = replaceUrlToPath(fileUrl, "file:///", "");
+    console.log(filePath)
     mainController.openFile(filePath);
 }
 

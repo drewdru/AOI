@@ -8,7 +8,7 @@ import numpy
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel
-from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSlot, QDir 
 from PyQt5.QtQml import QJSValue
 from PIL import Image
 
@@ -17,7 +17,7 @@ class MainController(QObject):
     def __init__(self):
         QObject.__init__(self)
         self.callback = []
-        self.appDir = os.getcwd()
+        self.appDir = QDir.currentPath()
 
     def dump(self):
         """ Return to callbacks """
@@ -56,6 +56,7 @@ class MainController(QObject):
             @param file: The path to file
         """
         try:
+            print('openFile:', file)
             img = Image.open(file)
             img.save('{}/temp/inImage.png'.format(self.appDir))
         except:

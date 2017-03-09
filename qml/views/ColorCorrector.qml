@@ -81,7 +81,9 @@ Item {
                 onClicked: {
                     preferenceColorPanel.enabled = false
                     colorCorrectorController.toGrayscale(isOriginalImage.checked)
+                    console.log('before updateProcessingImage')
                     firstPage.updateProcessingImage()
+                    console.log('after updateProcessingImage')
                     preferenceColorPanel.enabled = true
                 }
             }    
