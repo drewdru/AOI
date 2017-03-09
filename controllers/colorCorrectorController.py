@@ -38,9 +38,7 @@ class ColorCorrectorController(QObject):
     @pyqtSlot(str, 'QJSValue')
     def getHslFromHex(self, hexColor, callback):
         color = self.hexToRgb(hexColor)
-        print(color)
         color = colorModel.colorRgbToHsl(color[0], color[1], color[2])
-        print((color[0], color[1], color[2]))
         if callback.isCallable():
             callback.call([QJSValue(color[0]), QJSValue(color[1]), QJSValue(color[2])])
     
@@ -83,11 +81,8 @@ class ColorCorrectorController(QObject):
         colorModel.yuvToGrayscaleRgb(img.load(), img.size)
         with open('{}/temp/toGrayscale.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        print('{}/temp/processingImage.png'.format(self.appDir))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
-        print('Image saved')
         self.histogramService.saveHistogram(img=img, model='RGB')
-        print('Histogram saved')
 
     def pltProcessEvents(self):
         QCoreApplication.processEvents()

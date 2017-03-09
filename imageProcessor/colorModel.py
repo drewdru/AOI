@@ -155,8 +155,6 @@ def rgbToHsl(pixelsArray, value=None, hValue=0, sValue=0, lValue=0):
 
         @param pixelsArray The numpy array is a Pillow RGB Image
     """
-    print("pixelsArray, value, hValue, sValue, sValue")
-    print(pixelsArray, value, hValue, sValue, sValue)
     for i, pixels in enumerate(pixelsArray):
         QCoreApplication.processEvents()
         for j, pixel in enumerate(pixels):

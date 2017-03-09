@@ -3,13 +3,13 @@ import os
 import numpy as np
 
 from imageProcessor import colorModel, colorHistogram
-from PyQt5.QtCore import QCoreApplication, QObject
+from PyQt5.QtCore import QCoreApplication, QObject, QDir
 from PIL import Image
 
 class ImageService(QObject):
     def __init__(self):
         QObject.__init__(self)
-        self.appDir = os.getcwd()
+        self.appDir = QDir.currentPath()
 
     def openImage(self, isOriginalImage):
         """ Open image for processing

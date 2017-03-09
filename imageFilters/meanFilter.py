@@ -18,7 +18,7 @@ def meanFilter(pixels, imgSize, filterSize):
     for x, y, aperture in apertures:
         rSum = gSum = bSum = kSum = 0
         # print(x, y)
-        print(aperture)
+        # print(aperture)
         for apertureLine in aperture:
             for apertureCoordinate in apertureLine:
                 pixelPosX, pixelPosY = apertureCoordinate
@@ -49,7 +49,7 @@ def meanFilter(pixels, imgSize, filterSize):
                 pixelPosX, pixelPosY = apertureCoordinate
                 pixels[pixelPosX, pixelPosY] = (int(rSum), int(gSum), int(bSum))
 
-img = Image.open('test.png')
+img = Image.open('./test2.jpg')
 img = img.convert(mode='RGB')
 img.show()
 meanFilter(img.load(), img.size, (3, 3))

@@ -50,7 +50,7 @@ Rectangle {
     NoiseGeneratorDrawer {
         id: drawerNoiseGenerator
         height: parent.height
-        onUpdateProcessingImage: updateProcessingImage()
+        onUpdateProcessingImage: rootWindow.updateProcessingImage()
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
@@ -70,9 +70,7 @@ Rectangle {
     ColorCorrectorDrawer {
         id: drawerColorCorrector
         height: parent.height
-        onUpdateProcessingImage: {
-            rootWindow.updateProcessingImage()
-        }
+        onUpdateProcessingImage: rootWindow.updateProcessingImage()
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
@@ -92,7 +90,7 @@ Rectangle {
     FiltersDrawer {
         id: drawerFilters
         height: parent.height
-        onUpdateProcessingImage: updateProcessingImage()
+        onUpdateProcessingImage: rootWindow.updateProcessingImage()
         onOpened: appMenu.isDrawerVisible = true
         onClosed: appMenu.isDrawerVisible = false
         onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
@@ -192,11 +190,8 @@ Rectangle {
 
 
     function updateProcessingImage() {
-        console.log(appDir + "/temp/inImage.png")
         photoPreview2.source = appDir + "/temp/inImage.png"
-        console.log(appDir + "/temp/processingImage.png")
         photoPreview2.source = appDir + "/temp/processingImage.png"
-        console.log("before updateHistograms")
         drawerHistogram.updateHistograms()
     }
     

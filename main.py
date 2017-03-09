@@ -36,11 +36,12 @@ if __name__ == '__main__':
     context.setContextProperty('PyConsole', mainController)
     context.setContextProperty('mainController', mainController)
     # appDir = os.getcwd()
-    appDir = QUrl(QDir.currentPath())
-    print(appDir)
-    # print('appDir:', appDir)
-    appDir = 'file:///h:/QtDocuments/AOI'
-    print(appDir)
+    # print(QDir.currentPath())
+    appDir = 'file:///' + QDir.currentPath()
+    # print(appDir)
+    # # print('appDir:', appDir)
+    # appDir = 'file:///h:/QtDocuments/AOI'
+    # print(appDir)
     context.setContextProperty('appDir', appDir)
 
     colorCorrectorController = ColorCorrectorController()

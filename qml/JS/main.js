@@ -51,7 +51,13 @@ function onLoad() {
  * @param fileUrl: The qml file url
  */
 function openFile(fileUrl) {
-    var filePath = replaceUrlToPath(fileUrl, "file:///", "");
+    var filePrefix = ''
+    if (Qt.platform.os === "windows") {
+        filePrefix = "file:///"
+    } else {
+        filePrefix = "file://"
+    }
+    var filePath = replaceUrlToPath(fileUrl, filePrefix, "");
     console.log(filePath)
     mainController.openFile(filePath);
 }
@@ -62,6 +68,12 @@ function openFile(fileUrl) {
  * @param fileUrl: The qml file url
  */
 function saveFile(fileUrl) {
-    var filePath = replaceUrlToPath(fileUrl, "file://", "");
+    var filePrefix = ''
+    if (Qt.platform.os === "windows") {
+        filePrefix = "file:///"
+    } else {
+        filePrefix = "file://"
+    }
+    var filePath = replaceUrlToPath(fileUrl, filePrefix, "");
     mainController.saveFile(filePath);
 }
