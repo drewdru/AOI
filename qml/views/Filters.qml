@@ -52,7 +52,58 @@ Item {
                 checked: true
                 text: qsTr("Use original image")
             }
-            
+            GroupBox {
+                Layout.fillWidth: true
+                ColumnLayout {
+                    Label {
+                        text: qsTr("Mean filter")
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("filter width:\t")
+                        }
+                        TextField {
+                            id: kmin
+                            text: qsTr("3")
+                            Layout.fillWidth: true
+                            validator: IntValidator{}
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("filter height:\t")
+                        }
+                        TextField {
+                            id: kmax
+                            text: qsTr("3")
+                            Layout.fillWidth: true
+                            validator: IntValidator{}
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    Button {
+                        text: qsTr("Mean filter")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            noiseGeneratorController.addMultiplicativeNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, kmin.text, kmax.text, noiseLevelBalance.value, isOriginalImage.checked)
+                            secondPage.enabled = true
+                            secondPage.updateProcessingImage()
+                        }
+                    }
+                }
+            }
         }
     }
 }
