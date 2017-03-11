@@ -4,11 +4,12 @@
 """
 import sys
 import os
+import time
 import numpy
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel
-from PyQt5.QtCore import QObject, pyqtSlot, QDir 
+from PyQt5.QtCore import QObject, pyqtSlot, QDir, QCoreApplication
 from PyQt5.QtQml import QJSValue
 from PIL import Image
 
@@ -46,8 +47,8 @@ class MainController(QObject):
         try:
             img = Image.open('{}/temp/inImage.png'.format(self.appDir))
             img.save('{}/temp/processingImage.png'.format(self.appDir))
-        except:
-            pass
+        except Exception as error:
+            print(error)
 
     @pyqtSlot(str)
     def openFile(self, file):
@@ -61,6 +62,14 @@ class MainController(QObject):
             img.save('{}/temp/inImage.png'.format(self.appDir))
         except:
             pass
+        while True:
+            if os.path.exists('{}/temp/inImage.png'.format(self.appDir)):
+                try:
+                    os.rename('{}/temp/inImage.png'.format(self.appDir), '{}/temp/inImage.png'.format(self.appDir)+"_")
+                    os.rename('{}/temp/inImage.png'.format(self.appDir)+"_", '{}/temp/inImage.png'.format(self.appDir))
+                    break
+                except OSError as e:
+                    print(e)
 
     @pyqtSlot(str)
     def saveFile(self, file):

@@ -15,6 +15,7 @@ from PyQt5.QtGui import QIcon
 from controllers.mainController import MainController
 from controllers.noiseGeneratorController import NoiseGeneratorController
 from controllers.colorCorrectorController import ColorCorrectorController
+from controllers.filtersController import FiltersController
 
 if __name__ == '__main__':
     # Create main app
@@ -49,6 +50,9 @@ if __name__ == '__main__':
 
     noiseGeneratorController = NoiseGeneratorController()
     context.setContextProperty('noiseGeneratorController', noiseGeneratorController)
+
+    filtersController = FiltersController()
+    context.setContextProperty('filtersController', filtersController)
 
     # Show the View
     appView.setSource(QUrl('./qml/main.qml'))

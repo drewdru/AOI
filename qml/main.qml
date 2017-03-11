@@ -149,6 +149,7 @@ Rectangle {
             Layout.columnSpan: 2
             Image {
                 id: photoPreview
+                cache: false
                 width: parent.width/2 - 10
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -157,6 +158,7 @@ Rectangle {
             }
             Image {
                 id: photoPreview2
+                cache: false
                 x:photoPreview.width + 10
                 width: parent.width / 2
                 Layout.fillWidth: true
@@ -188,9 +190,8 @@ Rectangle {
         }
     }
 
-
     function updateProcessingImage() {
-        photoPreview2.source = appDir + "/temp/inImage.png"
+        photoPreview2.source = appDir + "/images/hist0.png"
         photoPreview2.source = appDir + "/temp/processingImage.png"
         drawerHistogram.updateHistograms()
     }
