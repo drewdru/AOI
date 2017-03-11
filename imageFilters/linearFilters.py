@@ -47,21 +47,24 @@ def meanFilter(pixels, imgSize, filterSize):
         if bSum < 0: bSum = 0
         if bSum > 255: bSum = 255
 
-        for apertureLine in aperture:
-            for apertureCoordinate in apertureLine:
-                pixelPosX, pixelPosY = apertureCoordinate
-                pixels[pixelPosX, pixelPosY] = (int(rSum), int(gSum), int(bSum))
+        # for apertureLine in aperture:
+        #     for apertureCoordinate in apertureLine:
+        #         pixelPosX, pixelPosY = apertureCoordinate
+        #         pixels[pixelPosX, pixelPosY] = (int(rSum), int(gSum), int(bSum))
+        aperturePosX = int(len(aperture)/2)
+        aperturePosY = int(len(aperture[aperturePosX])/2)
+        pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
 
 def medianFilter(pixels, imgSize, filterSize):
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
-    flagX = 0
-    flagY = 0
+    # flagX = 0
+    # flagY = 0
     for x, y, aperture in apertures:
         QCoreApplication.processEvents()
         redList = []
         greenList = []
         blueList = []
-        for apertureLine in enumerate(aperture):
+        for apertureLine in aperture:
             for apertureCoordinate in apertureLine:
                 pixelPosX, pixelPosY = apertureCoordinate
                 red, green, blue = pixels[pixelPosX, pixelPosY]
@@ -74,11 +77,20 @@ def medianFilter(pixels, imgSize, filterSize):
         greenList.sort()
         blueList.sort()
 
-        rValue = redList[int(len(redList)/2)]
-        gValue = greenList[int(len(redList)/2)]
-        bValue = blueList[int(len(redList)/2)]
+        apertureCenter = int(len(redList)/2)
+        rValue = redList[apertureCenter]
+        gValue = greenList[apertureCenter]
+        bValue = blueList[apertureCenter]
 
-        for apertureLine in aperture:
-            for apertureCoordinate in apertureLine:
-                pixelPosX, pixelPosY = apertureCoordinate
-                pixels[pixelPosX, pixelPosY] = (int(rValue), int(gValue), int(bValue))
+        aperturePosX = int(len(aperture)/2)
+        aperturePosY = int(len(aperture[aperturePosX])/2)
+        pixels[aperture[aperturePosX][aperturePosY]] = (int(rValue), int(gValue), int(bValue))
+        # for apertureLine in aperture:
+        #     for apertureCoordinate in apertureLine:
+        #         pixelPosX, pixelPosY = apertureCoordinate
+        # aperturePosX = int((filterSize[0])/2)
+        # aperturePosY = int((filterSize[1])/2)
+        # print(aperture)
+        # print(type(aperture))
+        # print(aperture[aperturePosX][aperturePosY])
+        # pixels[aperture[aperturePosX][aperturePosY]] = (int(rValue), int(gValue), int(bValue))

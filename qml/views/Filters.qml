@@ -64,7 +64,7 @@ Item {
                 }
                 TextField {
                     id: filterWidth
-                    text: qsTr("3")
+                    text: qsTr("7")
                     Layout.fillWidth: true
                     validator: IntValidator{}
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
@@ -81,7 +81,7 @@ Item {
                 }
                 TextField {
                     id: filterHeight
-                    text: qsTr("3")
+                    text: qsTr("7")
                     Layout.fillWidth: true
                     validator: IntValidator{}
                     inputMethodHints: Qt.ImhFormattedNumbersOnly
