@@ -67,7 +67,7 @@ class NoiseGeneratorController(QObject):
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))        
-        with open('{}/temp/addImpulsNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
+        with open('{}/temp/log/addImpulsNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
@@ -113,7 +113,7 @@ class NoiseGeneratorController(QObject):
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))        
-        with open('{}/temp/addAdditiveNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
+        with open('{}/temp/log/addAdditiveNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
@@ -162,7 +162,7 @@ class NoiseGeneratorController(QObject):
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))        
-        with open('{}/temp/addMultiplicativeNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
+        with open('{}/temp/log/addMultiplicativeNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
 
 

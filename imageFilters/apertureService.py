@@ -8,14 +8,12 @@ def getAperturePosition(x, y, imgSize, i, j, filterSize):
     if pixelPosY < 0:
         pixelPosY += centerY
     if pixelPosX >= imgSize[0]:
-        pixelPosX -= centerX#(filterSize[0]-1)#imgSize[0]# - (filterSize[0] / 2.0)# - 1
+        pixelPosX -= centerX
     if pixelPosY >= imgSize[1]:
-        pixelPosY -= centerY#(filterSize[1]-1)#imgSize[1]# - (filterSize[1] / 2.0)# - 1
+        pixelPosY -= centerY
     if pixelPosX >= imgSize[0] or pixelPosY >= imgSize[1]:
-        # print(pixelPosX, pixelPosY)
         pixelPosX = imgSize[0] - centerX
         pixelPosY = imgSize[1] - centerY
-        # return -1, -1
     return (int(pixelPosX), int(pixelPosY))
 
 def getAperturePointGenerator(imgSize, filterSize):

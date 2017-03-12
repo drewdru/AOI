@@ -122,6 +122,48 @@ Item {
                     secondPage.updateProcessingImage()
                 }
             }
+            RowLayout {
+                Label {
+                    text: qsTr("sigma i:")
+                }
+                TextField {
+                    id: sigma_i
+                    text: qsTr("12")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+                Label {
+                    text: qsTr("sigma s:")
+                }
+                TextField {
+                    id: sigma_s
+                    text: qsTr("16")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+            }
+            Button {
+                text: qsTr("BilateralFilter blur")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    filtersController.bilateralFilter(isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma_i.text, sigma_s.text)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
             //     }
             // }
         }

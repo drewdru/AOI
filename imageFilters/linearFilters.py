@@ -82,7 +82,7 @@ def gaussian(x, sigma):
     return (1.0 / (2 * math.pi * (sigma ** 2))) * math.exp(- (x ** 2) / (2 * sigma ** 2))
 
 def gaussianBlur(pixels, imgSize, filterSize):#, r):
-    """ mean filter || homogeneous smoothing || box filter"""
+    """ Gaussian blur"""
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
     sigma = 0.5
     for x, y, aperture in apertures:
@@ -123,32 +123,54 @@ def gaussianBlur(pixels, imgSize, filterSize):#, r):
 
 
 
+def distance(x, y, i, j):
+    return math.sqrt((x-i)**2 + (y-j)**2)
+
+
+def bilateralFilter(pixels, imgSize, filterSize, sigma_i, sigma_s):
+    """ Bilateral filter """
+    apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
+    # sigma_i = 12.5
+    # sigma_s = 16.5
+    for x, y, aperture in apertures:
+        QCoreApplication.processEvents()
+        filteredRed = WpRed = filteredGreen = WpGreen = filteredBlue = WpBlue = 0
+        for i, apertureLine in enumerate(aperture):
+            for apertureCoordinate in apertureLine:
+                pixelPosX, pixelPosY = apertureCoordinate
+                red, green, blue = pixels[pixelPosX, pixelPosY]
+                xyRed, xyGreen, xyBlue = pixels[x, y]
+
+                giRed = gaussian(red - xyRed, sigma_i)
+                gsRed = gaussian(distance(pixelPosX, pixelPosY, x, y), sigma_s)
+                wRed = giRed * gsRed
+                filteredRed += red * wRed
+                WpRed += wRed
+
+                giGreen = gaussian(green - xyGreen, sigma_i)
+                gsGreen = gaussian(distance(pixelPosX, pixelPosY, x, y), sigma_s)
+                wGreen = giGreen * gsGreen
+                filteredGreen += green * wGreen
+                WpGreen += wGreen
+
+                giBlue = gaussian(blue - xyBlue, sigma_i)
+                gsBlue = gaussian(distance(x, y, pixelPosX, pixelPosY), sigma_s)
+                wBlue = giBlue * gsBlue
+                filteredBlue += blue * wBlue
+                WpBlue += wBlue
+        filteredRed = int(round(filteredRed / WpRed))
+        filteredGreen = int(round(filteredGreen / WpGreen))
+        filteredBlue = int(round(filteredBlue / WpBlue))
+
+        aperturePosX = int(len(aperture)/2)
+        aperturePosY = int(len(aperture[aperturePosX])/2)
+        if len(aperture) != 0 and aperturePosY != 0:
+            pixels[aperture[aperturePosX][aperturePosY]] = \
+                (filteredRed, filteredGreen, filteredBlue)
 
 
 
-# def apply_bilateral_filter(source, filtered_image, x, y, diameter, sigma_i, sigma_s):
-#     hl = diameter/2
-#     i_filtered = 0
-#     Wp = 0
-#     i = 0
-#     while i < diameter:
-#         j = 0
-#         while j < diameter:
-#             neighbour_x = x - (hl - i)
-#             neighbour_y = y - (hl - j)
-#             if neighbour_x >= len(source):
-#                 neighbour_x -= len(source)
-#             if neighbour_y >= len(source[0]):
-#                 neighbour_y -= len(source[0])
-#             gi = gaussian(source[neighbour_x][neighbour_y] - source[x][y], sigma_i)
-#             gs = gaussian(distance(neighbour_x, neighbour_y, x, y), sigma_s)
-#             w = gi * gs
-#             i_filtered += source[neighbour_x][neighbour_y] * w
-#             Wp += w
-#             j += 1
-#         i += 1
-#     i_filtered = i_filtered / Wp
-#     filtered_image[x][y] = int(round(i_filtered))
+
 
 
 # def bilateral_filter_own(source, filter_diameter, sigma_i, sigma_s):

@@ -35,7 +35,7 @@ class FiltersController(QObject):
             return
         start_time = time.time()
         linearFilters.meanFilter(img.load(), img.size, (filterWidth, filterHeight))
-        with open('{}/temp/meanFilter.log'.format(self.appDir), "a+") as text_file:
+        with open('{}/temp/log/meanFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
@@ -50,7 +50,7 @@ class FiltersController(QObject):
             return
         start_time = time.time()
         linearFilters.medianFilter(img.load(), img.size, (filterWidth, filterHeight))
-        with open('{}/temp/medianFilter.log'.format(self.appDir), "a+") as text_file:
+        with open('{}/temp/log/medianFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
@@ -65,7 +65,22 @@ class FiltersController(QObject):
             return
         start_time = time.time()
         linearFilters.gaussianBlur(img.load(), img.size, (filterWidth, filterHeight))
-        with open('{}/temp/gaussianBlur.log'.format(self.appDir), "a+") as text_file:
+        with open('{}/temp/log/gaussianBlur.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
+        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+
+    @pyqtSlot(bool, int, int, int, int)
+    def bilateralFilter(self, isOriginalImage, filterWidth, filterHeight, sigma_i, sigma_s):
+        """
+            Mean filter
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        start_time = time.time()
+        linearFilters.bilateralFilter(img.load(), img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
+        with open('{}/temp/log/bilateralFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
