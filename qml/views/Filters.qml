@@ -112,6 +112,16 @@ Item {
                     secondPage.updateProcessingImage()
                 }
             }
+            Button {
+                text: qsTr("Gaussian blur")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    filtersController.gaussianBlur(isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
             //     }
             // }
         }
