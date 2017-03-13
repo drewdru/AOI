@@ -10,7 +10,7 @@ import random
 import time
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
-from imageFilters import linearFilters
+from imageFilters import filters
 from imageProcessor import histogramService, imageService
 from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot
@@ -34,7 +34,7 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        linearFilters.meanFilter(img.load(), img.size, (filterWidth, filterHeight))
+        filters.meanFilter(img.load(), img.size, (filterWidth, filterHeight))
         with open('{}/temp/log/meanFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
@@ -49,7 +49,7 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        linearFilters.medianFilter(img.load(), img.size, (filterWidth, filterHeight))
+        filters.medianFilter(img.load(), img.size, (filterWidth, filterHeight))
         with open('{}/temp/log/medianFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
@@ -64,7 +64,7 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        linearFilters.gaussianBlur(img.load(), img.size, (filterWidth, filterHeight))
+        filters.gaussianBlur(img.load(), img.size, (filterWidth, filterHeight))
         with open('{}/temp/log/gaussianBlur.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
@@ -79,7 +79,7 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        linearFilters.bilateralFilter(img.load(), img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
+        filters.bilateralFilter(img.load(), img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
         with open('{}/temp/log/bilateralFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
@@ -94,7 +94,7 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        linearFilters.laplacianBlur(img.load(), img.size, (filterWidth, filterHeight), sigma)
+        filters.laplacianBlur(img.load(), img.size, (filterWidth, filterHeight), sigma)
         with open('{}/temp/log/laplacianBlur.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
