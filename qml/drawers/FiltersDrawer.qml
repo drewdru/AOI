@@ -17,13 +17,13 @@ Drawer {
     signal updateProcessingImage()
     signal backClicked()
     
-    property int lastTab: 1
-    onOpened: {
-        tabBar.currentIndex = drawer.lastTab
-    }
-    Component.onCompleted: {
-        tabBar.currentIndex = drawer.lastTab
-    }
+    // property int lastTab: 1
+    // onOpened: {
+    //     tabBar.currentIndex = drawer.lastTab
+    // }
+    // Component.onCompleted: {
+    //     tabBar.currentIndex = drawer.lastTab
+    // }
 
     StackLayout {
         id: view
@@ -34,43 +34,54 @@ Drawer {
 
         currentIndex: tabBar.currentIndex
 
-        Item {
-            id: backTab
-        }
-        LinerFilters {
+        // Item {
+        //     id: backTab
+        // }
+        Filters {
             width: drawer.width
             height: drawer.height
             onUpdateProcessingImage: drawer.updateProcessingImage()
         }
-        NonLinerFilters {
-            width: drawer.width
-            height: drawer.height
-            onUpdateProcessingImage: drawer.updateProcessingImage()
-        }
+        // NonLinerFilters {
+        //     width: drawer.width
+        //     height: drawer.height
+        //     onUpdateProcessingImage: drawer.updateProcessingImage()
+        // }
     }
     TabBar {
         id: tabBar
         width: parent.width
         TabButton {
-            text: qsTr("← Back")
-            onClicked: {
-                tabBar.currentIndex = drawer.lastTab
-                drawer.backClicked()
+            Text {
+                text: qsTr("    ← Filters")
+                color: "white"
             }
+            background: Rectangle {                
+                anchors.fill: parent                
+                color: Qt.lighter("#333333", parent.hovered ? 2 : 1.0)
+            }   
+            onClicked: drawer.backClicked()
         }
-        TabButton {
-            text: qsTr("Liner")
-            onClicked: {
-                tabBar.currentIndex = 1
-                drawer.lastTab = 1
-            }
-        }
-        TabButton {
-            text: qsTr("Non-linear")
-            onClicked: {
-                tabBar.currentIndex = 2
-                drawer.lastTab = 2
-            }
-        }
+        // TabButton {
+        //     text: qsTr("← Back")
+        //     onClicked: {
+        //         tabBar.currentIndex = drawer.lastTab
+        //         drawer.backClicked()
+        //     }
+        // }
+        // TabButton {
+        //     text: qsTr("Liner")
+        //     onClicked: {
+        //         tabBar.currentIndex = 1
+        //         drawer.lastTab = 1
+        //     }
+        // }
+        // TabButton {
+        //     text: qsTr("Non-linear")
+        //     onClicked: {
+        //         tabBar.currentIndex = 2
+        //         drawer.lastTab = 2
+        //     }
+        // }
     }
 }

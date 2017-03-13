@@ -1,6 +1,6 @@
 """
-    @package meanFilter
-    Add mean filter to image
+    @package linearFilters
+    Linear filters for images
 """
 
 import threading
@@ -49,8 +49,6 @@ def meanFilter(pixels, imgSize, filterSize):
 
 def medianFilter(pixels, imgSize, filterSize):
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
-    # flagX = 0
-    # flagY = 0
     for x, y, aperture in apertures:
         QCoreApplication.processEvents()
         redList = []
@@ -79,7 +77,8 @@ def medianFilter(pixels, imgSize, filterSize):
         pixels[aperture[aperturePosX][aperturePosY]] = (int(rValue), int(gValue), int(bValue))
 
 def gaussian(x, sigma):
-    return (1.0 / (2 * math.pi * (sigma ** 2))) * math.exp(- (x ** 2) / (2 * sigma ** 2))
+    return (1.0 / (2 * math.pi * (sigma ** 2))) \
+        * math.exp(- (x ** 2) / (2 * sigma ** 2))
 
 def gaussianBlur(pixels, imgSize, filterSize):#, r):
     """ Gaussian blur"""
@@ -121,11 +120,8 @@ def gaussianBlur(pixels, imgSize, filterSize):#, r):
             aperturePosY = int(len(aperture[aperturePosX])/2)
             pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
 
-
-
 def distance(x, y, i, j):
     return math.sqrt((x-i)**2 + (y-j)**2)
-
 
 def bilateralFilter(pixels, imgSize, filterSize, sigma_i, sigma_s):
     """ Bilateral filter """
@@ -168,19 +164,47 @@ def bilateralFilter(pixels, imgSize, filterSize, sigma_i, sigma_s):
             pixels[aperture[aperturePosX][aperturePosY]] = \
                 (filteredRed, filteredGreen, filteredBlue)
 
+def laplacian(x, y, sigma):
+    return (-1/(math.pi * (sigma**4))) * \
+        (1 - (x**2 + y**2)/(2*(sigma**2))) * \
+        math.exp(-(x**2)/(2*(sigma**2)))
 
+def laplacianBlur(pixels, imgSize, filterSize, sigma):
+    """ Laplacian blur"""
+    sigma = 2.4
+    apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
+    for x, y, aperture in apertures:
+        QCoreApplication.processEvents()
+        rSum = gSum = bSum = kSum = 0
+        for i, apertureLine in enumerate(aperture):
+            for j, apertureCoordinate in enumerate(apertureLine):
+                pixelPosX, pixelPosY = apertureCoordinate
+                red, green, blue = pixels[pixelPosX, pixelPosY]
 
+                # double kernelVal = blurArray[i][j];
+                kernelVal = laplacian(i, j, sigma)
+                # print(kernelVal)
+                rSum += red * kernelVal
+                gSum += green * kernelVal
+                bSum += blue * kernelVal
 
+                kSum += kernelVal
 
+        if kSum <= 0: kSum = 1
 
-# def bilateral_filter_own(source, filter_diameter, sigma_i, sigma_s):
-#     filtered_image = np.zeros(source.shape)
+        rSum /= kSum
+        if rSum < 0: rSum = 0
+        if rSum > 255: rSum = 255
 
-#     i = 0
-#     while i < len(source):
-#         j = 0
-#         while j < len(source[0]):
-#             apply_bilateral_filter(source, filtered_image, i, j, filter_diameter, sigma_i, sigma_s)
-#             j += 1
-#         i += 1
-# return filtered_image
+        gSum /= kSum
+        if gSum < 0: gSum = 0
+        if gSum > 255: gSum = 255
+
+        bSum /= kSum
+        if bSum < 0: bSum = 0
+        if bSum > 255: bSum = 255
+
+        aperturePosX = int(len(aperture)/2)
+        if (len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0):
+            aperturePosY = int(len(aperture[aperturePosX])/2)
+            pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
