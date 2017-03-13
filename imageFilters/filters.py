@@ -208,3 +208,53 @@ def laplacianBlur(pixels, imgSize, filterSize, sigma):
         if (len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0):
             aperturePosY = int(len(aperture[aperturePosX])/2)
             pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
+
+def clippingColor(value1, value0, threshold):
+    if value1 - value0 <= threshold:
+        return value1
+    return 0
+
+def suitabilityValue(value1, value0, threshold):
+    if value1 - value0 <= threshold:
+        return 1
+    return 0
+
+def cleanerFilterByJimCasaburi(pixels, imgSize, filterSize, threshold):
+    """ Laplacian blur"""
+    threshold = 50
+    apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
+    for x, y, aperture in apertures:
+        QCoreApplication.processEvents()
+        ccRed = svRed = ccGreen = svGreen = ccBlue = svBlue = 0
+        centerRed, centerGreen, centerBlue = pixels[x, y]
+        for i, apertureLine in enumerate(aperture):
+            for j, apertureCoordinate in enumerate(apertureLine):
+                pixelPosX, pixelPosY = apertureCoordinate
+                red, green, blue = pixels[pixelPosX, pixelPosY]
+
+                ccRed += clippingColor(red, centerRed, threshold)
+                svRed += suitabilityValue(red, centerRed, threshold)
+
+                ccGreen += clippingColor(green, centerGreen, threshold)
+                svGreen += suitabilityValue(green, centerGreen, threshold)
+
+                ccBlue += clippingColor(blue, centerBlue, threshold)
+                svBlue += suitabilityValue(blue, centerBlue, threshold)
+        if svRed != 0:
+            R = int(ccRed/svRed)
+        else:
+            R = centerRed
+        if svGreen != 0:
+            G = int(ccGreen/svGreen)
+        else:
+            G = centerGreen
+        if svBlue != 0:
+            B = int(ccBlue/svBlue)
+        else:
+            B = centerBlue
+
+        aperturePosX = int(len(aperture)/2)
+        if (len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0):
+            aperturePosY = int(len(aperture[aperturePosX])/2)
+            pixels[aperture[aperturePosX][aperturePosY]] = (R, G, B)
+

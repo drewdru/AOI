@@ -181,6 +181,33 @@ Item {
                     }
                 }
             }
+            RowLayout {
+                Label {
+                    text: qsTr("Threshold:\t")
+                }
+                TextField {
+                    id: thresholdHeight
+                    text: qsTr("50")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+            }
+            Button {
+                text: qsTr("2D Cleaner Filter By Jim Casaburi")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    filtersController.cleanerFilterByJimCasaburi(isOriginalImage.checked, filterWidth.text, filterHeight.text, thresholdHeight.text)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
             //     }
             // }
         }

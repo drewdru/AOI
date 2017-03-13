@@ -100,4 +100,18 @@ class FiltersController(QObject):
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
+    @pyqtSlot(bool, int, int, int)
+    def cleanerFilterByJimCasaburi(self, isOriginalImage, filterWidth, filterHeight, threshold):
+        """
+            Mean filter
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        start_time = time.time()
+        filters.cleanerFilterByJimCasaburi(img.load(), img.size, (filterWidth, filterHeight), threshold)
+        with open('{}/temp/log/cleanerFilterByJimCasaburi.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
+        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
 
