@@ -171,7 +171,7 @@ def laplacian(x, y, sigma):
 
 def laplacianBlur(pixels, imgSize, filterSize, sigma):
     """ Laplacian blur"""
-    sigma = 2.4
+    # sigma = 2.4
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
     for x, y, aperture in apertures:
         QCoreApplication.processEvents()

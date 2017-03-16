@@ -122,6 +122,23 @@ Item {
                     secondPage.updateProcessingImage()
                 }
             }
+            RowLayout {
+                Label {
+                    text: qsTr("sigma:")
+                }
+                TextField {
+                    id: sigma
+                    text: qsTr("2")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+            }
             Button {
                 text: qsTr("Laplacian blur")
                 width: parent.width
