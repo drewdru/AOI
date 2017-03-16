@@ -85,13 +85,12 @@ def impulsNoise(pixels, size, colorModelTag, currentImageChannelIndex, impulsP, 
         pixels[x, y] = value
 
 # fix noise https://dsp.stackexchange.com/questions/13895/which-domain-used-for-denoising-additive-and-multiplicative-noises
-def getAdditiveValue(currentColor, maxValue, deviation):
-    deviation = int(deviation)
-    color = currentColor + random.choice(range(-deviation, deviation))
+def getAdditiveValue(currentColor, maxValue, kmin, kmax):
+    color = currentColor + random.choice(range(int(kmin), int(kmax)))
     color = fixColorChannelRange(color, maxValue)
     return color
 
-def additiveNoise(pixels, size, colorModelTag, currentImageChannelIndex, deviation, noiseLvl):
+def additiveNoise(pixels, size, colorModelTag, currentImageChannelIndex, kmin, kmax, noiseLvl):
     noisepixel = int(size[0] * size[1] * noiseLvl / 100)
     for i in range(noisepixel):
         QCoreApplication.processEvents()
@@ -99,11 +98,10 @@ def additiveNoise(pixels, size, colorModelTag, currentImageChannelIndex, deviati
         y = random.choice(range(0, size[1]))
         currentColor = pixels[x, y]
         if colorModelTag == 'RGB' or colorModelTag == 'YUV':
-            deviationValue = 255 * deviation / 100
             if currentImageChannelIndex == 0:
-                rand1 = getAdditiveValue(currentColor[0], 255, deviationValue)
-                rand2 = getAdditiveValue(currentColor[1], 255, deviationValue)
-                rand3 = getAdditiveValue(currentColor[2], 255, deviationValue)
+                rand1 = getAdditiveValue(currentColor[0], 255, kmin, kmax)
+                rand2 = getAdditiveValue(currentColor[1], 255, kmin, kmax)
+                rand3 = getAdditiveValue(currentColor[2], 255, kmin, kmax)
 
                 value = (rand1, rand2, rand3)
             else:
@@ -111,29 +109,25 @@ def additiveNoise(pixels, size, colorModelTag, currentImageChannelIndex, deviati
                 value[currentImageChannelIndex - 1] = getAdditiveValue(
                     currentColor[currentImageChannelIndex - 1],
                     255,
-                    deviationValue)
+                    kmin, kmax)
                 value = tuple(value)
 
         if colorModelTag == 'HSL':
             if currentImageChannelIndex == 0:
-                deviationValue1 = 360 * deviation / 100
-                rand1 = getAdditiveValue(currentColor[0], 360, deviationValue1)
-                deviationValue2 = 100 * deviation / 100
-                rand2 = getAdditiveValue(currentColor[1], 100, deviationValue2)
-                rand3 = getAdditiveValue(currentColor[2], 100, deviationValue2)
+                rand1 = getAdditiveValue(currentColor[0], 360, kmin, kmax)
+                rand2 = getAdditiveValue(currentColor[1], 100, kmin, kmax)
+                rand3 = getAdditiveValue(currentColor[2], 100, kmin, kmax)
 
                 value = (rand1, rand2, rand3)
             elif currentImageChannelIndex == 1:
-                deviationValue = 360 * deviation / 100
-                randColor = getAdditiveValue(currentColor[0], 360, deviationValue)
+                randColor = getAdditiveValue(currentColor[0], 360, kmin, kmax)
                 value = (randColor, currentColor[1], currentColor[2])
             else:
-                deviationValue = 100 * deviation / 100
                 value = [currentColor[0], currentColor[1], currentColor[2]]
                 value[currentImageChannelIndex - 1] = getAdditiveValue(
                     currentColor[currentImageChannelIndex - 1],
                     100,
-                    deviationValue)
+                    kmin, kmax)
                 value = tuple(value)
 
         pixels[x, y] = value

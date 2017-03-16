@@ -101,34 +101,31 @@ Item {
                         //     text: "Black"
                         // }
                     }
-                    RowLayout {
-                        Label {
-                            text: qsTr("Additive noise")
-                        }
-                        Slider {
-                            id: additiveNoiseBalance
-                            from: 0
-                            value: 50                            
-                            to: 100
-                            Layout.fillWidth: true
-                            onValueChanged: {
-                                secondPage.enabled = false
-                                noiseGeneratorController.addAdditiveNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, value, noiseLevelBalance.value, isOriginalImage.checked)
-                                secondPage.enabled = true
-                                secondPage.updateProcessingImage()
-                            }
-                            ToolTip {
-                                visible: parent.pressed
-                                text: qsTr("Max deviation is " + parent.valueAt(parent.position).toFixed(1) + "%")
-                            }
-                        }
-                    }
+                    // RowLayout {
+                    //     Label {
+                    //         text: qsTr("Additive noise")
+                    //     }
+                    //     Slider {
+                    //         id: additiveNoiseBalance
+                    //         from: 0
+                    //         value: 50                            
+                    //         to: 100
+                    //         Layout.fillWidth: true
+                    //         onValueChanged: {
+                    //             secondPage.enabled = false
+                    //             noiseGeneratorController.addAdditiveNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, value, noiseLevelBalance.value, isOriginalImage.checked)
+                    //             secondPage.enabled = true
+                    //             secondPage.updateProcessingImage()
+                    //         }
+                    //         ToolTip {
+                    //             visible: parent.pressed
+                    //             text: qsTr("Max deviation is " + parent.valueAt(parent.position).toFixed(1) + "%")
+                    //         }
+                    //     }
+                    // }
                     GroupBox {
                         Layout.fillWidth: true
                         ColumnLayout {
-                            Label {
-                                text: qsTr("Multiplicative noise")
-                            }
                             RowLayout {
                                 Label {
                                     text: qsTr("Kmin:\t")
@@ -164,7 +161,17 @@ Item {
                                 }
                             }
                             Button {
-                                text: qsTr("add multiplicative noise")
+                                text: qsTr("Additive noise")
+                                width: parent.width
+                                onClicked: {
+                                    secondPage.enabled = false
+                                    noiseGeneratorController.addAdditiveNoise(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, kmin.text, kmax.text, noiseLevelBalance.value, isOriginalImage.checked)
+                                    secondPage.enabled = true
+                                    secondPage.updateProcessingImage()
+                                }
+                            }
+                            Button {
+                                text: qsTr("Multiplicative noise")
                                 width: parent.width
                                 onClicked: {
                                     secondPage.enabled = false

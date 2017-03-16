@@ -72,8 +72,8 @@ class NoiseGeneratorController(QObject):
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    @pyqtSlot(str, int, int, int, bool)
-    def addAdditiveNoise(self, colorModelTag, currentImageChannelIndex, deviation, noiseLevel, isOriginalImage):
+    @pyqtSlot(str, int, int, int, int, bool)
+    def addAdditiveNoise(self, colorModelTag, currentImageChannelIndex, kmin, kmax, noiseLevel, isOriginalImage):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
@@ -88,7 +88,7 @@ class NoiseGeneratorController(QObject):
                 img.size,
                 colorModelTag,
                 currentImageChannelIndex,
-                deviation,
+                kmin, kmax,
                 noiseLevel)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
@@ -97,7 +97,7 @@ class NoiseGeneratorController(QObject):
                 img.size,
                 colorModelTag,
                 currentImageChannelIndex,
-                deviation,
+                kmin, kmax,
                 noiseLevel)
             colorModel.yuvToRgb(img.load(), img.size)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
@@ -108,7 +108,7 @@ class NoiseGeneratorController(QObject):
                 data.shape,
                 colorModelTag,
                 currentImageChannelIndex,
-                deviation,
+                kmin, kmax,
                 noiseLevel)
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)

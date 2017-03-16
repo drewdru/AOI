@@ -122,31 +122,38 @@ Item {
                     secondPage.updateProcessingImage()
                 }
             }
-            RowLayout {
-                Label {
-                    text: qsTr("sigma:")
-                }
-                TextField {
-                    id: sigma
-                    text: qsTr("2")
+            GroupBox {
+                Layout.fillWidth: true
+                ColumnLayout {
+                    // id: preferenceColorPanel
                     Layout.fillWidth: true
-                    validator: IntValidator{}
-                    inputMethodHints: Qt.ImhFormattedNumbersOnly
-                    background: Rectangle {
-                        radius: 2
-                        border.color: "#333"
-                        border.width: 1
+                    RowLayout {
+                        Label {
+                            text: qsTr("sigma:")
+                        }
+                        TextField {
+                            id: sigma
+                            text: qsTr("2")
+                            Layout.fillWidth: true
+                            validator: IntValidator{}
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
                     }
-                }
-            }
-            Button {
-                text: qsTr("Laplacian blur")
-                width: parent.width
-                onClicked: {
-                    secondPage.enabled = false
-                    filtersController.laplacianBlur(isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma.text)
-                    secondPage.enabled = true
-                    secondPage.updateProcessingImage()
+                    Button {
+                        text: qsTr("Laplacian blur")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            filtersController.laplacianBlur(isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma.text)
+                            secondPage.enabled = true
+                            secondPage.updateProcessingImage()
+                        }
+                    }
                 }
             }
             GroupBox {
