@@ -201,8 +201,11 @@ class ColorCorrectorController(QObject):
             with open('{}/temp/log/changeColorModelHSL.log'.format(self.appDir), "a+") as text_file:
                 text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
-            data = colorModel.hslToRgb(data)
-            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
+            if currentImageChannelIndex > 0:
+                colorModel.viewHslChannelByID(data,
+                    currentImageChannelIndex - 1)
+                data = colorModel.hslToRgb(data)
+                img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(bool)

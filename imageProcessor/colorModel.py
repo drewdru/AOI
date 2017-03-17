@@ -148,6 +148,29 @@ def yuvToGrayscaleRgb(pixels, size):
 
             pixels[i, j] = (int(y), int(u), int(v))
 
+def viewHslChannelByID(pixelsArray, channelID):
+    for i, pixels in enumerate(pixelsArray):
+        QCoreApplication.processEvents()
+        for j, pixel in enumerate(pixels):
+            channelsList = []
+            h, s, l = pixelsArray[i, j]
+
+            if channelID == 0:
+                channelsList.append(h)
+                channelsList.append(100)
+                channelsList.append(50)
+
+            if channelID == 1:
+                channelsList.append(h)
+                channelsList.append(s)
+                channelsList.append(50)
+
+            if channelID == 2:
+                channelsList.append(h)
+                channelsList.append(100)
+                channelsList.append(l)
+
+            pixelsArray[i, j] = tuple(channelsList)
 
 def rgbToHsl(pixelsArray, value=None, hValue=0, sValue=0, lValue=0):
     """
