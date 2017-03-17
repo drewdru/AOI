@@ -116,28 +116,28 @@ class ColorCorrectorController(QObject):
         QCoreApplication.processEvents()
         plt.close('all')
         if channelId == 0:
-            plt.xlabel('Color')
-            plt.ylabel('Frequency')
-            plt.grid(True)
-            plt.title('Histogram {}'.format(model))
+            fig, ax = plt.subplots()
+            ax.set_title('Histogram {}'.format(model))
+            self.histogramService.setupAx(ax)
             for indx, hist in enumerate(histograms):
-                plt.hist(np.arange(hist.shape[0]),
+                ax.hist(np.arange(hist.shape[0]),
                     weights=hist,
+                    rwidth=0.1,
                     facecolor=facecolor[indx],
                     alpha=0.5)
-            fig = plt.figure(1)
+            # fig = plt.figure(1)
             timer = fig.canvas.new_timer(interval=3)
             timer.add_callback(self.pltProcessEvents)
             timer.start()
             plt.show()
         else:
             fig, ax = plt.subplots()
-            ax.set_xlabel('Color')
-            ax.set_ylabel('Frequency')
-            ax.grid(True)
+            self.histogramService.setupAx(ax)
+
             ax.set_title('Histogram {}'.format(model[channelId - 1]))
             ax.hist(np.arange(histogram.shape[0]),
                 weights=histogram,
+                rwidth=0.1,
                 facecolor=facecolor,
                 alpha=0.5)
             timer = fig.canvas.new_timer(interval=3)
