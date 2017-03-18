@@ -132,7 +132,7 @@ def gaussianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filte
         if bSum > 255: bSum = 255
 
         aperturePosX = int(len(aperture)/2)
-        if (len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0):
+        if len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0:
             aperturePosY = int(len(aperture[aperturePosX])/2)
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
@@ -236,7 +236,7 @@ def laplacianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filt
         if bSum > 255: bSum = 255
 
         aperturePosX = int(len(aperture)/2)
-        if (len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0):
+        if len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0:
             aperturePosY = int(len(aperture[aperturePosX])/2)
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
@@ -293,7 +293,7 @@ def cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex, pixels, 
             B = centerBlue
 
         aperturePosX = int(len(aperture)/2)
-        if (len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0):
+        if len(aperture) != 0 and len(aperture[aperturePosX])/2 != 0:
             aperturePosY = int(len(aperture[aperturePosX])/2)
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
@@ -304,5 +304,3 @@ def cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex, pixels, 
                 pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], G, oldColors[2])
             if currentImageChannelIndex == 3:
                 pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], B)
-
-

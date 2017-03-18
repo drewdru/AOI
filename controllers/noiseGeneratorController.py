@@ -4,7 +4,7 @@
 """
 import sys
 import os
-import numpy as np
+import numpy
 import matplotlib.pyplot as plt
 import random
 import time
@@ -56,7 +56,7 @@ class NoiseGeneratorController(QObject):
             colorModel.yuvToRgb(img.load(), img.size)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
-            data = np.asarray(img, dtype="float")
+            data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
             noiseGenerator.impulsNoise(data,
                 data.shape,
@@ -66,7 +66,7 @@ class NoiseGeneratorController(QObject):
                 noiseLevel)
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
-            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))        
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))        
         with open('{}/temp/log/addImpulsNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
 
@@ -102,7 +102,7 @@ class NoiseGeneratorController(QObject):
             colorModel.yuvToRgb(img.load(), img.size)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
-            data = np.asarray(img, dtype="float")
+            data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
             noiseGenerator.additiveNoise(data,
                 data.shape,
@@ -112,7 +112,7 @@ class NoiseGeneratorController(QObject):
                 noiseLevel)
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
-            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))        
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))        
         with open('{}/temp/log/addAdditiveNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
 
@@ -150,7 +150,7 @@ class NoiseGeneratorController(QObject):
             colorModel.yuvToRgb(img.load(), img.size)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
-            data = np.asarray(img, dtype="float")
+            data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
             noiseGenerator.multiplicativeNoise(data,
                 data.shape,
@@ -161,7 +161,7 @@ class NoiseGeneratorController(QObject):
                 noiseLevel)
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             data = colorModel.hslToRgb(data)
-            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))        
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))        
         with open('{}/temp/log/addMultiplicativeNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
 

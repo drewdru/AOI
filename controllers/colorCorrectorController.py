@@ -4,7 +4,7 @@
 """
 import sys
 import os
-import numpy as np
+import numpy
 import matplotlib.pyplot as plt
 import random
 import time
@@ -57,13 +57,13 @@ class ColorCorrectorController(QObject):
         if img is None:
             return
         start_time = time.time()
-        data = np.asarray(img, dtype="float")
+        data = numpy.asarray(img, dtype="float")
         data = colorModel.rgbToHsl(data, value=value, hValue=hValue, sValue=sValue, lValue=lValue)
         with open('{}/temp/log/changeHue.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(data=data, model='HSL')
         data = colorModel.hslToRgb(data)
-        img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
+        img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(bool)
@@ -92,18 +92,18 @@ class ColorCorrectorController(QObject):
         try:
             if channelId == 0:
                 histograms = []
-                histograms.append(np.load('{}/temp/hist1.npy'.format(self.appDir)))
-                histograms.append(np.load('{}/temp/hist2.npy'.format(self.appDir)))
-                histograms.append(np.load('{}/temp/hist3.npy'.format(self.appDir)))
+                histograms.append(numpy.load('{}/temp/hist1.npy'.format(self.appDir)))
+                histograms.append(numpy.load('{}/temp/hist2.npy'.format(self.appDir)))
+                histograms.append(numpy.load('{}/temp/hist3.npy'.format(self.appDir)))
                 facecolor = 'rgb'
             elif channelId == 1:
-                histogram = np.load('{}/temp/hist1.npy'.format(self.appDir))
+                histogram = numpy.load('{}/temp/hist1.npy'.format(self.appDir))
                 facecolor = 'r'
             elif channelId == 2:
-                histogram = np.load('{}/temp/hist2.npy'.format(self.appDir))
+                histogram = numpy.load('{}/temp/hist2.npy'.format(self.appDir))
                 facecolor = 'g'
             elif channelId == 3:
-                histogram = np.load('{}/temp/hist3.npy'.format(self.appDir))
+                histogram = numpy.load('{}/temp/hist3.npy'.format(self.appDir))
                 facecolor = 'b'
             else: return
         except FileNotFoundError:
@@ -120,7 +120,7 @@ class ColorCorrectorController(QObject):
             ax.set_title('Histogram {}'.format(model))
             self.histogramService.setupAx(ax)
             for indx, hist in enumerate(histograms):
-                ax.hist(np.arange(hist.shape[0]),
+                ax.hist(numpy.arange(hist.shape[0]),
                     weights=hist,
                     rwidth=0.1,
                     facecolor=facecolor[indx],
@@ -135,7 +135,7 @@ class ColorCorrectorController(QObject):
             self.histogramService.setupAx(ax)
 
             ax.set_title('Histogram {}'.format(model[channelId - 1]))
-            ax.hist(np.arange(histogram.shape[0]),
+            ax.hist(numpy.arange(histogram.shape[0]),
                 weights=histogram,
                 rwidth=0.1,
                 facecolor=facecolor,
@@ -192,7 +192,7 @@ class ColorCorrectorController(QObject):
                 colorModel.yuvToRgb(img.load(), img.size)
         if colorModelTag == 'HSL':
             start_time = time.time()
-            data = np.asarray(img, dtype="float")
+            data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data,
                 None,
                 firstChannel,
@@ -205,7 +205,7 @@ class ColorCorrectorController(QObject):
                 colorModel.viewHslChannelByID(data,
                     currentImageChannelIndex - 1)
                 data = colorModel.hslToRgb(data)
-                img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
+                img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(bool)

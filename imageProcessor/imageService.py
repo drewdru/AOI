@@ -1,6 +1,6 @@
 import sys
 import os
-import numpy as np
+import numpy
 
 from imageProcessor import colorModel, colorHistogram
 from PyQt5.QtCore import QCoreApplication, QObject, QDir

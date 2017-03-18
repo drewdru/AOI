@@ -1,7 +1,7 @@
 
 import sys
 import os
-import numpy as np
+import numpy
 from PIL import Image
 from PyQt5.QtCore import QCoreApplication
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
@@ -13,9 +13,9 @@ def adpmedf(image, size, window, threshold=0):
     vlength = W*W
 
     ## create 2-D image array and initialize window
-    imageArray = np.reshape(np.array(image, dtype=np.uint8), (ylength, xlength))
-    filterWindow = np.array(np.zeros((W, W)))
-    targetVector = np.array(np.zeros(vlength))
+    imageArray = numpy.reshape(numpy.array(image, dtype=numpy.uint8), (ylength, xlength))
+    filterWindow = numpy.array(numpy.zeros((W, W)))
+    targetVector = numpy.array(numpy.zeros(vlength))
     pixelCount = 0
 
     ## loop over image with specified window W
@@ -24,7 +24,7 @@ def adpmedf(image, size, window, threshold=0):
         for x in range(window, xlength-(window+1)):
         ## populate window, sort, find median
             filterWindow = imageArray[y-window:y+window+1, x-window:x+window+1]
-            targetVector = np.reshape(filterWindow, ((vlength),))
+            targetVector = numpy.reshape(filterWindow, ((vlength),))
             ## internal sort
             median = getMedian(targetVector, vlength)
         ## check for threshold
@@ -32,10 +32,10 @@ def adpmedf(image, size, window, threshold=0):
                 imageArray[y, x] = median
                 pixelCount += 1
             else:
-                scale = np.zeros(vlength)
+                scale = numpy.zeros(vlength)
                 for n in range(vlength):
                     scale[n] = abs(int(targetVector[n]) - int(median))
-                scale = np.sort(scale)
+                scale = numpy.sort(scale)
                 Sk = 1.4826 * (scale[int(vlength/2)])
                 if abs(int(imageArray[y, x]) - int(median)) > (threshold * Sk):
                     imageArray[y, x] = median
@@ -43,7 +43,7 @@ def adpmedf(image, size, window, threshold=0):
     return Image.fromarray(imageArray)
 
 def getMedian(targetArray, arrayLength):
-    sorted_array = np.sort(targetArray)
+    sorted_array = numpy.sort(targetArray)
     median = sorted_array[int(arrayLength/2)]
     return median
 

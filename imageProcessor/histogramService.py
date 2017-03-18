@@ -1,6 +1,6 @@
 import sys
 import os
-import numpy as np
+import numpy
 import matplotlib.pyplot as plt
 
 from imageProcessor import colorModel, colorHistogram
@@ -16,13 +16,13 @@ class HistogramService(QObject):
         fig, ax = plt.subplots()
         ax.set_title('Histogram {}'.format(title))
         self.setupAx(ax)
-        ax.hist(np.arange(histogram.shape[0]),
+        ax.hist(numpy.arange(histogram.shape[0]),
             weights=histogram,
             rwidth=0.1,
             facecolor=color,
             alpha=0.5)
         plt.savefig('{}/temp/{}.png'.format(self.appDir, name))
-        np.save('{}/temp/{}'.format(self.appDir, name), histogram)
+        numpy.save('{}/temp/{}'.format(self.appDir, name), histogram)
         plt.close('all')
 
     def saveHistogram(self, img=None, data=None, model='RGB'):
@@ -44,7 +44,7 @@ class HistogramService(QObject):
         self.setupAx(ax)
         colors = 'rgb'
         for indx, histogram in enumerate([histogram1, histogram2, histogram3]):
-            ax.hist(np.arange(histogram.shape[0]),
+            ax.hist(numpy.arange(histogram.shape[0]),
                 weights=histogram,
                 rwidth=0.1,
                 facecolor=colors[indx],
@@ -60,8 +60,8 @@ class HistogramService(QObject):
         ax.set_ylabel('Frequency')
         ax.grid(True)
         # major ticks every 20, minor ticks every 5
-        major_ticks = np.arange(0, 360, 20)
-        minor_ticks = np.arange(0, 360, 1)
+        major_ticks = numpy.arange(0, 360, 20)
+        minor_ticks = numpy.arange(0, 360, 1)
 
         ax.set_xticks(major_ticks)
         ax.set_xticks(minor_ticks, minor=True)
