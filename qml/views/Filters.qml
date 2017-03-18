@@ -97,7 +97,7 @@ Item {
                 width: parent.width
                 onClicked: {
                     secondPage.enabled = false
-                    filtersController.meanFilter(isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                    filtersController.meanFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
                     secondPage.enabled = true
                     secondPage.updateProcessingImage()
                 }
@@ -107,7 +107,7 @@ Item {
                 width: parent.width
                 onClicked: {
                     secondPage.enabled = false
-                    filtersController.medianFilter(isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                    filtersController.medianFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
                     secondPage.enabled = true
                     secondPage.updateProcessingImage()
                 }
@@ -117,7 +117,7 @@ Item {
                 width: parent.width
                 onClicked: {
                     secondPage.enabled = false
-                    filtersController.gaussianBlur(isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                    filtersController.gaussianBlur(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
                     secondPage.enabled = true
                     secondPage.updateProcessingImage()
                 }
@@ -149,7 +149,7 @@ Item {
                         width: parent.width
                         onClicked: {
                             secondPage.enabled = false
-                            filtersController.laplacianBlur(isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma.text)
+                            filtersController.laplacianBlur(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma.text)
                             secondPage.enabled = true
                             secondPage.updateProcessingImage()
                         }
@@ -198,7 +198,7 @@ Item {
                         width: parent.width
                         onClicked: {
                             secondPage.enabled = false
-                            filtersController.bilateralFilter(isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma_i.text, sigma_s.text)
+                            filtersController.bilateralFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma_i.text, sigma_s.text)
                             secondPage.enabled = true
                             secondPage.updateProcessingImage()
                         }
@@ -227,13 +227,43 @@ Item {
                 width: parent.width
                 onClicked: {
                     secondPage.enabled = false
-                    filtersController.cleanerFilterByJimCasaburi(isOriginalImage.checked, filterWidth.text, filterHeight.text, thresholdHeight.text)
+                    filtersController.cleanerFilterByJimCasaburi(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, thresholdHeight.text)
                     secondPage.enabled = true
                     secondPage.updateProcessingImage()
                 }
             }
-            //     }
-            // }
+
+            RowLayout {
+                Label {
+                    text: qsTr("filterSize:\t")
+                }
+                TextField {
+                    id: adaptiveMedianFilterSize
+                    text: qsTr("7")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+                Button {
+                    text: qsTr("Adaptive median filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.adaptiveMedianFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, adaptiveMedianFilterSize.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
+                }
+            }
+
+            ColorModelSelector {
+                id: colorModelSelector
+            }
         }
     }
 }
