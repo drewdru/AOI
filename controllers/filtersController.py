@@ -10,8 +10,8 @@ import random
 import time
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
-from imageFilters import filters
-from imageProcessor import histogramService, imageService
+from imageFilters import filters, adaptiveFilter
+from imageProcessor import colorModel, histogramService, imageService
 from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
@@ -25,8 +25,8 @@ class FiltersController(QObject):
         self.histogramService = histogramService.HistogramService()
         self.imageService = imageService.ImageService()
 
-    @pyqtSlot(bool, int, int)
-    def meanFilter(self, isOriginalImage, filterWidth, filterHeight):
+    @pyqtSlot(str, int, bool, int, int)
+    def meanFilter(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterWidth, filterHeight):
         """
             Mean filter
         """
@@ -34,14 +34,30 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        filters.meanFilter(img.load(), img.size, (filterWidth, filterHeight))
+        if colorModelTag == 'RGB':
+            filters.meanFilter(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight))
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            filters.meanFilter(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight))
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            filters.meanFilter(colorModelTag, currentImageChannelIndex, data,
+                data.shape, (filterWidth, filterHeight))
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         with open('{}/temp/log/meanFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    @pyqtSlot(bool, int, int)
-    def medianFilter(self, isOriginalImage, filterWidth, filterHeight):
+    @pyqtSlot(str, int, bool, int, int)
+    def medianFilter(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterWidth, filterHeight):
         """
             Mean filter
         """
@@ -49,14 +65,30 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        filters.medianFilter(img.load(), img.size, (filterWidth, filterHeight))
+        if colorModelTag == 'RGB':
+            filters.medianFilter(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight))
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            filters.medianFilter(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight))
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            filters.medianFilter(colorModelTag, currentImageChannelIndex, data,
+                data.shape, (filterWidth, filterHeight))
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         with open('{}/temp/log/medianFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    @pyqtSlot(bool, int, int)
-    def gaussianBlur(self, isOriginalImage, filterWidth, filterHeight):
+    @pyqtSlot(str, int, bool, int, int)
+    def gaussianBlur(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterWidth, filterHeight):
         """
             Mean filter
         """
@@ -64,14 +96,30 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        filters.gaussianBlur(img.load(), img.size, (filterWidth, filterHeight))
+        if colorModelTag == 'RGB':
+            filters.gaussianBlur(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight))
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            filters.gaussianBlur(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight))
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            filters.gaussianBlur(colorModelTag, currentImageChannelIndex, data,
+                data.shape, (filterWidth, filterHeight))
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         with open('{}/temp/log/gaussianBlur.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    @pyqtSlot(bool, int, int, int, int)
-    def bilateralFilter(self, isOriginalImage, filterWidth, filterHeight, sigma_i, sigma_s):
+    @pyqtSlot(str, int, bool, int, int, int, int)
+    def bilateralFilter(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterWidth, filterHeight, sigma_i, sigma_s):
         """
             Mean filter
         """
@@ -79,14 +127,30 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        filters.bilateralFilter(img.load(), img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
+        if colorModelTag == 'RGB':
+            filters.bilateralFilter(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            filters.bilateralFilter(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            filters.bilateralFilter(colorModelTag, currentImageChannelIndex, data,
+                data.shape, (filterWidth, filterHeight), sigma_i, sigma_s)
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         with open('{}/temp/log/bilateralFilter.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    @pyqtSlot(bool, int, int, int)
-    def laplacianBlur(self, isOriginalImage, filterWidth, filterHeight, sigma):
+    @pyqtSlot(str, int, bool, int, int, int)
+    def laplacianBlur(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterWidth, filterHeight, sigma):
         """
             Mean filter
         """
@@ -94,14 +158,30 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        filters.laplacianBlur(img.load(), img.size, (filterWidth, filterHeight), sigma)
+        if colorModelTag == 'RGB':
+            filters.laplacianBlur(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight), sigma)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            filters.laplacianBlur(colorModelTag, currentImageChannelIndex, img.load(),
+                img.size, (filterWidth, filterHeight), sigma)
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            filters.laplacianBlur(colorModelTag, currentImageChannelIndex, data,
+                data.shape, (filterWidth, filterHeight), sigma)
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         with open('{}/temp/log/laplacianBlur.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
-    @pyqtSlot(bool, int, int, int)
-    def cleanerFilterByJimCasaburi(self, isOriginalImage, filterWidth, filterHeight, threshold):
+    @pyqtSlot(str, int, bool, int, int, int)
+    def cleanerFilterByJimCasaburi(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterWidth, filterHeight, threshold):
         """
             Mean filter
         """
@@ -109,9 +189,87 @@ class FiltersController(QObject):
         if img is None:
             return
         start_time = time.time()
-        filters.cleanerFilterByJimCasaburi(img.load(), img.size, (filterWidth, filterHeight), threshold)
+        if colorModelTag == 'RGB':
+            filters.cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex,
+                img.load(), img.size, (filterWidth, filterHeight), threshold)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            filters.cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex,
+                img.load(), img.size, (filterWidth, filterHeight), threshold)
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            filters.cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex,
+                data, data.shape, (filterWidth, filterHeight), threshold)
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
         with open('{}/temp/log/cleanerFilterByJimCasaburi.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
-        self.histogramService.saveHistogram(img=img)
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+
+    @pyqtSlot(str, int, bool, int)
+    def adaptiveMedianFilter(self, colorModelTag, currentImageChannelIndex, isOriginalImage, filterSize):
+        """
+            Adaptive mean filter
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        start_time = time.time()
+        if colorModelTag == 'RGB':
+            r, g, b = img.split()
+            if currentImageChannelIndex == 0:
+                r = adaptiveFilter.adpmedf(r, img.size, filterSize)
+                g = adaptiveFilter.adpmedf(g, img.size, filterSize)
+                b = adaptiveFilter.adpmedf(b, img.size, filterSize)
+            if currentImageChannelIndex == 1:
+                r = adaptiveFilter.adpmedf(r, img.size, filterSize)
+            if currentImageChannelIndex == 2:
+                g = adaptiveFilter.adpmedf(g, img.size, filterSize)
+            if currentImageChannelIndex == 3:
+                b = adaptiveFilter.adpmedf(b, img.size, filterSize)
+            img = Image.merge("RGB", (r, g, b))
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            colorModel.rgbToYuv(img.load(), img.size)
+            r, g, b = img.split()
+            if currentImageChannelIndex == 0:
+                r = adaptiveFilter.adpmedf(r, img.size, filterSize)
+                g = adaptiveFilter.adpmedf(g, img.size, filterSize)
+                b = adaptiveFilter.adpmedf(b, img.size, filterSize)
+            if currentImageChannelIndex == 1:
+                r = adaptiveFilter.adpmedf(r, img.size, filterSize)
+            if currentImageChannelIndex == 2:
+                g = adaptiveFilter.adpmedf(g, img.size, filterSize)
+            if currentImageChannelIndex == 3:
+                b = adaptiveFilter.adpmedf(b, img.size, filterSize)
+            img = Image.merge("RGB", (r, g, b))
+            colorModel.yuvToRgb(img.load(), img.size)
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'HSL':
+            data = np.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            r = data[:, :, 0]
+            g = data[:, :, 1]
+            b = data[:, :, 2]
+            if currentImageChannelIndex == 0:
+                r = adaptiveFilter.adpmedf(r, img.size, filterSize)
+                g = adaptiveFilter.adpmedf(g, img.size, filterSize)
+                b = adaptiveFilter.adpmedf(b, img.size, filterSize)
+            if currentImageChannelIndex == 1:
+                r = adaptiveFilter.adpmedf(r, img.size, filterSize)
+            if currentImageChannelIndex == 2:
+                g = adaptiveFilter.adpmedf(g, img.size, filterSize)
+            if currentImageChannelIndex == 3:
+                b = adaptiveFilter.adpmedf(b, img.size, filterSize)
+            data = np.dstack((r, g, b))
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(np.asarray(np.clip(data, 0, 255), dtype="uint8"))
+        with open('{}/temp/log/adaptiveMedianFilter.log'.format(self.appDir), "a+") as text_file:
+            text_file.write("{}\n".format(time.time() - start_time))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 

@@ -2,13 +2,11 @@
 import sys
 import os
 import numpy as np
-import matplotlib.pyplot as plt
-import random
 from PIL import Image
+from PyQt5.QtCore import QCoreApplication
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
-import apertureService
 
-def adpmedf(image, size, window, threshold):
+def adpmedf(image, size, window, threshold=0):
     ## set filter window and image dimensions
     W = 2*window + 1
     xlength, ylength = size
@@ -22,6 +20,7 @@ def adpmedf(image, size, window, threshold):
 
     ## loop over image with specified window W
     for y in range(window, ylength-(window+1)):
+        QCoreApplication.processEvents()
         for x in range(window, xlength-(window+1)):
         ## populate window, sort, find median
             filterWindow = imageArray[y-window:y+window+1, x-window:x+window+1]
@@ -48,8 +47,7 @@ def getMedian(targetArray, arrayLength):
     median = sorted_array[int(arrayLength/2)]
     return median
 
-
-def adaptiveMedianFilter(img, filterSize, isBinarization=False, threshold=0):
+def adaptiveMedianFilter(colorModelTag, currentImageChannelIndex, img, filterSize, isBinarization=False, threshold=0):
     if isBinarization:
         img = img.convert(mode='L')
         img = adpmedf(img, img.size, filterSize, threshold)
@@ -58,4 +56,5 @@ def adaptiveMedianFilter(img, filterSize, isBinarization=False, threshold=0):
         r = adpmedf(r, img.size, filterSize, threshold)
         g = adpmedf(g, img.size, filterSize, threshold)
         b = adpmedf(b, img.size, filterSize, threshold)
-        img = Image.merge("RGB", (b, g, r))
+        img = Image.merge("RGB", (r, g, b))
+    return img
