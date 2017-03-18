@@ -41,7 +41,7 @@ class ColorCorrectorController(QObject):
         color = colorModel.colorRgbToHsl(color[0], color[1], color[2])
         if callback.isCallable():
             callback.call([QJSValue(color[0]), QJSValue(color[1]), QJSValue(color[2])])
-    
+
     @pyqtSlot(bool, int, int, int)
     def changeHueByPallet(self, isOriginalImage, hValue=0, sValue=0, lValue=0):
         self.changeHue(self, isOriginalImage, hValue=hValue, sValue=sValue, lValue=lValue)
@@ -58,7 +58,8 @@ class ColorCorrectorController(QObject):
             return
         start_time = time.time()
         data = numpy.asarray(img, dtype="float")
-        data = colorModel.rgbToHsl(data, value=value, hValue=hValue, sValue=sValue, lValue=lValue)
+        data = colorModel.rgbToHsl(data, value=value, hValue=hValue, sValue=sValue,
+                lValue=lValue)
         with open('{}/temp/log/changeHue.log'.format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(data=data, model='HSL')
@@ -168,7 +169,8 @@ class ColorCorrectorController(QObject):
                 firstChannel,
                 secondChannel,
                 thirdChannel)
-            with open('{}/temp/log/changeColorModelRGB.log'.format(self.appDir), "a+") as text_file:
+            with open('{}/temp/log/changeColorModelRGB.log'
+                    .format(self.appDir), "a+") as text_file:
                 text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
             if currentImageChannelIndex > 0:
@@ -182,7 +184,8 @@ class ColorCorrectorController(QObject):
                 firstChannel,
                 secondChannel,
                 thirdChannel)
-            with open('{}/temp/log/changeColorModelYUV.log'.format(self.appDir), "a+") as text_file:
+            with open('{}/temp/log/changeColorModelYUV.log'
+                    .format(self.appDir), "a+") as text_file:
                 text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
             if currentImageChannelIndex > 0:
@@ -198,14 +201,16 @@ class ColorCorrectorController(QObject):
                 firstChannel,
                 secondChannel,
                 thirdChannel)
-            with open('{}/temp/log/changeColorModelHSL.log'.format(self.appDir), "a+") as text_file:
+            with open('{}/temp/log/changeColorModelHSL.log'
+                    .format(self.appDir), "a+") as text_file:
                 text_file.write("{}\n".format(time.time() - start_time))
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             if currentImageChannelIndex > 0:
                 colorModel.viewHslChannelByID(data,
                     currentImageChannelIndex - 1)
                 data = colorModel.hslToRgb(data)
-                img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
+                img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255),
+                        dtype="uint8"))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(bool)
@@ -218,7 +223,8 @@ class ColorCorrectorController(QObject):
             return
         start_time = time.time()
         colorCorrector.histogramEqualization(img.load(), img.size)
-        with open('{}/temp/log/histogramEqualization.log'.format(self.appDir), "a+") as text_file:
+        with open('{}/temp/log/histogramEqualization.log'
+                .format(self.appDir), "a+") as text_file:
             text_file.write("{}\n".format(time.time() - start_time))
         self.histogramService.saveHistogram(img=img)
         img.save('{}/temp/processingImage.png'.format(self.appDir))

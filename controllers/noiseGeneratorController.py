@@ -27,7 +27,8 @@ class NoiseGeneratorController(QObject):
         self.imageService = imageService.ImageService()
 
     @pyqtSlot(str, int, int, int, bool)
-    def addImpulsNoise(self, colorModelTag, currentImageChannelIndex, impulseNoise, noiseLevel, isOriginalImage):
+    def addImpulsNoise(self, colorModelTag, currentImageChannelIndex, impulseNoise,
+            noiseLevel, isOriginalImage):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
@@ -36,7 +37,7 @@ class NoiseGeneratorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        start_time = time.time()
+        methodTimer = time.time()
         if colorModelTag == 'RGB':
             noiseGenerator.impulsNoise(img.load(),
                 img.size,
@@ -44,6 +45,7 @@ class NoiseGeneratorController(QObject):
                 currentImageChannelIndex,
                 impulseNoise,
                 noiseLevel)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
@@ -54,6 +56,7 @@ class NoiseGeneratorController(QObject):
                 impulseNoise,
                 noiseLevel)
             colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -64,16 +67,21 @@ class NoiseGeneratorController(QObject):
                 currentImageChannelIndex,
                 impulseNoise,
                 noiseLevel)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            timerTemp = time.time()
             data = colorModel.hslToRgb(data)
-            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))        
-        with open('{}/temp/log/addImpulsNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}\n".format(time.time() - start_time))
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
+            methodTimer = time.time() - timerTemp + methodTimer
+        with open('{}/temp/log/addImpulsNoise{}.log'
+                .format(self.appDir, colorModelTag), "a+") as text_file:
+            text_file.write("{}\n".format(methodTimer))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, int, int, int, bool)
-    def addAdditiveNoise(self, colorModelTag, currentImageChannelIndex, kmin, kmax, noiseLevel, isOriginalImage):
+    def addAdditiveNoise(self, colorModelTag, currentImageChannelIndex,
+            kmin, kmax, noiseLevel, isOriginalImage):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
@@ -82,7 +90,7 @@ class NoiseGeneratorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        start_time = time.time()
+        methodTimer = time.time()
         if colorModelTag == 'RGB':
             noiseGenerator.additiveNoise(img.load(),
                 img.size,
@@ -90,6 +98,7 @@ class NoiseGeneratorController(QObject):
                 currentImageChannelIndex,
                 kmin, kmax,
                 noiseLevel)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
@@ -100,6 +109,7 @@ class NoiseGeneratorController(QObject):
                 kmin, kmax,
                 noiseLevel)
             colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -110,16 +120,21 @@ class NoiseGeneratorController(QObject):
                 currentImageChannelIndex,
                 kmin, kmax,
                 noiseLevel)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            timerTemp = time.time()
             data = colorModel.hslToRgb(data)
-            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))        
-        with open('{}/temp/log/addAdditiveNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}\n".format(time.time() - start_time))
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
+            methodTimer = time.time() - timerTemp + methodTimer
+        with open('{}/temp/log/addAdditiveNoise{}.log'
+                .format(self.appDir, colorModelTag), "a+") as text_file:
+            text_file.write("{}\n".format(methodTimer))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, int, int, int, bool)
-    def addMultiplicativeNoise(self, colorModelTag, currentImageChannelIndex, kmin, kmax, noiseLevel, isOriginalImage):
+    def addMultiplicativeNoise(self, colorModelTag, currentImageChannelIndex,
+            kmin, kmax, noiseLevel, isOriginalImage):
         """ Change color model and channels
 
             @param colorModelTag: The color model tag
@@ -128,7 +143,7 @@ class NoiseGeneratorController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        start_time = time.time()
+        methodTimer = time.time()
         if colorModelTag == 'RGB':
             noiseGenerator.multiplicativeNoise(img.load(),
                 img.size,
@@ -137,6 +152,7 @@ class NoiseGeneratorController(QObject):
                 kmin,
                 kmax,
                 noiseLevel)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
@@ -148,6 +164,7 @@ class NoiseGeneratorController(QObject):
                 kmax,
                 noiseLevel)
             colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -159,11 +176,14 @@ class NoiseGeneratorController(QObject):
                 kmin,
                 kmax,
                 noiseLevel)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            timerTemp = time.time()
             data = colorModel.hslToRgb(data)
-            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))        
-        with open('{}/temp/log/addMultiplicativeNoise{}.log'.format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}\n".format(time.time() - start_time))
-
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
+            methodTimer = time.time() - timerTemp + methodTimer
+        with open('{}/temp/log/addMultiplicativeNoise{}.log'
+                .format(self.appDir, colorModelTag), "a+") as text_file:
+            text_file.write("{}\n".format(methodTimer))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))

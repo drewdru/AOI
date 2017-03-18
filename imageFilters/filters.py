@@ -46,13 +46,17 @@ def meanFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterS
 
         oldColors = pixels[aperture[aperturePosX][aperturePosY]]
         if currentImageChannelIndex == 0:
-            pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                int(rSum), int(gSum), int(bSum))
         if currentImageChannelIndex == 1:
-            pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), oldColors[1], oldColors[2])
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                int(rSum), oldColors[1], oldColors[2])
         if currentImageChannelIndex == 2:
-            pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], int(gSum), oldColors[2])
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                oldColors[0], int(gSum), oldColors[2])
         if currentImageChannelIndex == 3:
-            pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], int(bSum))
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                oldColors[0], oldColors[1], int(bSum))
 
 def medianFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterSize):
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
@@ -84,19 +88,23 @@ def medianFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize, filte
 
         oldColors = pixels[aperture[aperturePosX][aperturePosY]]
         if currentImageChannelIndex == 0:
-            pixels[aperture[aperturePosX][aperturePosY]] = (int(rValue), int(gValue), int(bValue))
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                int(rValue), int(gValue), int(bValue))
         if currentImageChannelIndex == 1:
-            pixels[aperture[aperturePosX][aperturePosY]] = (int(rValue), oldColors[1], oldColors[2])
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                int(rValue), oldColors[1], oldColors[2])
         if currentImageChannelIndex == 2:
-            pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], int(gValue), oldColors[2])
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                oldColors[0], int(gValue), oldColors[2])
         if currentImageChannelIndex == 3:
-            pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], int(bValue))
+            pixels[aperture[aperturePosX][aperturePosY]] = (
+                oldColors[0], oldColors[1], int(bValue))
 
 def gaussian(x, sigma):
     return (1.0 / (2 * math.pi * (sigma ** 2))) \
         * math.exp(- (x ** 2) / (2 * sigma ** 2))
 
-def gaussianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterSize):#, r):
+def gaussianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterSize):
     """ Gaussian blur"""
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
     sigma = 0.5
@@ -136,18 +144,23 @@ def gaussianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filte
             aperturePosY = int(len(aperture[aperturePosX])/2)
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
-                pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    int(rSum), int(gSum), int(bSum))
             if currentImageChannelIndex == 1:
-                pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), oldColors[1], oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    int(rSum), oldColors[1], oldColors[2])
             if currentImageChannelIndex == 2:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], int(gSum), oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], int(gSum), oldColors[2])
             if currentImageChannelIndex == 3:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], int(bSum))
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], oldColors[1], int(bSum))
 
 def distance(x, y, i, j):
     return math.sqrt((x-i)**2 + (y-j)**2)
 
-def bilateralFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterSize, sigma_i, sigma_s):
+def bilateralFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize,
+        filterSize, sigma_i, sigma_s):
     """ Bilateral filter """
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
     # sigma_i = 12.5
@@ -187,20 +200,25 @@ def bilateralFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize, fi
         if len(aperture) != 0 and aperturePosY != 0:
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
-                pixels[aperture[aperturePosX][aperturePosY]] = (filteredRed, filteredGreen, filteredBlue)
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    filteredRed, filteredGreen, filteredBlue)
             if currentImageChannelIndex == 1:
-                pixels[aperture[aperturePosX][aperturePosY]] = (filteredRed, oldColors[1], oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    filteredRed, oldColors[1], oldColors[2])
             if currentImageChannelIndex == 2:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], filteredGreen, oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], filteredGreen, oldColors[2])
             if currentImageChannelIndex == 3:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], filteredBlue)
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], oldColors[1], filteredBlue)
 
 def laplacian(x, y, sigma):
     return (-1/(math.pi * (sigma**4))) * \
         (1 - (x**2 + y**2)/(2*(sigma**2))) * \
         math.exp(-(x**2)/(2*(sigma**2)))
 
-def laplacianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterSize, sigma):
+def laplacianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize,
+        filterSize, sigma):
     """ Laplacian blur"""
     # sigma = 2.4
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
@@ -240,13 +258,17 @@ def laplacianBlur(colorModelTag, currentImageChannelIndex, pixels, imgSize, filt
             aperturePosY = int(len(aperture[aperturePosX])/2)
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
-                pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), int(gSum), int(bSum))
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    int(rSum), int(gSum), int(bSum))
             if currentImageChannelIndex == 1:
-                pixels[aperture[aperturePosX][aperturePosY]] = (int(rSum), oldColors[1], oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    int(rSum), oldColors[1], oldColors[2])
             if currentImageChannelIndex == 2:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], int(gSum), oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], int(gSum), oldColors[2])
             if currentImageChannelIndex == 3:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], int(bSum))
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], oldColors[1], int(bSum))
 
 def clippingColor(value1, value0, threshold):
     if value1 - value0 <= threshold:
@@ -258,7 +280,8 @@ def suitabilityValue(value1, value0, threshold):
         return 1
     return 0
 
-def cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex, pixels, imgSize, filterSize, threshold):
+def cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex, pixels,
+        imgSize, filterSize, threshold):
     """ Laplacian blur"""
     threshold = 50
     apertures = apertureService.getApertureMatrixGenerator(imgSize, filterSize)
@@ -297,10 +320,14 @@ def cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex, pixels, 
             aperturePosY = int(len(aperture[aperturePosX])/2)
             oldColors = pixels[aperture[aperturePosX][aperturePosY]]
             if currentImageChannelIndex == 0:
-                pixels[aperture[aperturePosX][aperturePosY]] = (R, G, B)
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    R, G, B)
             if currentImageChannelIndex == 1:
-                pixels[aperture[aperturePosX][aperturePosY]] = (R, oldColors[1], oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    R, oldColors[1], oldColors[2])
             if currentImageChannelIndex == 2:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], G, oldColors[2])
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], G, oldColors[2])
             if currentImageChannelIndex == 3:
-                pixels[aperture[aperturePosX][aperturePosY]] = (oldColors[0], oldColors[1], B)
+                pixels[aperture[aperturePosX][aperturePosY]] = (
+                    oldColors[0], oldColors[1], B)

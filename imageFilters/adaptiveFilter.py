@@ -47,7 +47,8 @@ def getMedian(targetArray, arrayLength):
     median = sorted_array[int(arrayLength/2)]
     return median
 
-def adaptiveMedianFilter(colorModelTag, currentImageChannelIndex, img, filterSize, isBinarization=False, threshold=0):
+def adaptiveMedianFilter(colorModelTag, currentImageChannelIndex, img, filterSize,
+        isBinarization=False, threshold=0):
     if isBinarization:
         img = img.convert(mode='L')
         img = adpmedf(img, img.size, filterSize, threshold)

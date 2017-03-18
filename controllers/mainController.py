@@ -65,8 +65,10 @@ class MainController(QObject):
         while True:
             if os.path.exists('{}/temp/inImage.png'.format(self.appDir)):
                 try:
-                    os.rename('{}/temp/inImage.png'.format(self.appDir), '{}/temp/inImage.png'.format(self.appDir)+"_")
-                    os.rename('{}/temp/inImage.png'.format(self.appDir)+"_", '{}/temp/inImage.png'.format(self.appDir))
+                    os.rename('{}/temp/inImage.png'.format(self.appDir),
+                            '{}/temp/inImage.png'.format(self.appDir) + "_")
+                    os.rename('{}/temp/inImage.png'.format(self.appDir) + "_",
+                            '{}/temp/inImage.png'.format(self.appDir))
                     break
                 except OSError as e:
                     print(e)
