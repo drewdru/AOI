@@ -202,6 +202,7 @@ Rectangle {
         mainController.getLastMethodWorkTime(function setMethodWorkTime(response) {
             methodWorkTimer.text = 'Timer: ' + response
         })
+        drawerHistogram.updateHistograms()
     }
     
     function viewDrawer(drawerName) {
