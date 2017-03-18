@@ -122,86 +122,72 @@ Item {
                     secondPage.updateProcessingImage()
                 }
             }
-            GroupBox {
-                Layout.fillWidth: true
-                ColumnLayout {
-                    // id: preferenceColorPanel
+            RowLayout {
+                Label {
+                    text: qsTr("sigma:")
+                }
+                TextField {
+                    id: sigma
+                    text: qsTr("2")
                     Layout.fillWidth: true
-                    RowLayout {
-                        Label {
-                            text: qsTr("sigma:")
-                        }
-                        TextField {
-                            id: sigma
-                            text: qsTr("2")
-                            Layout.fillWidth: true
-                            validator: IntValidator{}
-                            inputMethodHints: Qt.ImhFormattedNumbersOnly
-                            background: Rectangle {
-                                radius: 2
-                                border.color: "#333"
-                                border.width: 1
-                            }
-                        }
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
                     }
-                    Button {
-                        text: qsTr("Laplacian blur")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            filtersController.laplacianBlur(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma.text)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
-                        }
+                }
+                Button {
+                    text: qsTr("Laplacian blur")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.laplacianBlur(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
                     }
                 }
             }
-            GroupBox {
-                Layout.fillWidth: true
-                ColumnLayout {
-                    // id: preferenceColorPanel
+            RowLayout {
+                Label {
+                    text: qsTr("sigma i:")
+                }
+                TextField {
+                    id: sigma_i
+                    text: qsTr("12")
                     Layout.fillWidth: true
-                    RowLayout {
-                        Label {
-                            text: qsTr("sigma i:")
-                        }
-                        TextField {
-                            id: sigma_i
-                            text: qsTr("12")
-                            Layout.fillWidth: true
-                            validator: IntValidator{}
-                            inputMethodHints: Qt.ImhFormattedNumbersOnly
-                            background: Rectangle {
-                                radius: 2
-                                border.color: "#333"
-                                border.width: 1
-                            }
-                        }
-                        Label {
-                            text: qsTr("sigma s:")
-                        }
-                        TextField {
-                            id: sigma_s
-                            text: qsTr("16")
-                            Layout.fillWidth: true
-                            validator: IntValidator{}
-                            inputMethodHints: Qt.ImhFormattedNumbersOnly
-                            background: Rectangle {
-                                radius: 2
-                                border.color: "#333"
-                                border.width: 1
-                            }
-                        }
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
                     }
-                    Button {
-                        text: qsTr("Bilateral filter")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            filtersController.bilateralFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma_i.text, sigma_s.text)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
-                        }
+                }
+                Label {
+                    text: qsTr("sigma s:")
+                }
+                TextField {
+                    id: sigma_s
+                    text: qsTr("16")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+                Button {
+                    text: qsTr("Bilateral filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.bilateralFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, sigma_i.text, sigma_s.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
                     }
                 }
             }
@@ -221,15 +207,15 @@ Item {
                         border.width: 1
                     }
                 }
-            }
-            Button {
-                text: qsTr("2D Cleaner Filter By Jim Casaburi")
-                width: parent.width
-                onClicked: {
-                    secondPage.enabled = false
-                    filtersController.cleanerFilterByJimCasaburi(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, thresholdHeight.text)
-                    secondPage.enabled = true
-                    secondPage.updateProcessingImage()
+                Button {
+                    text: qsTr("Jim Casaburi Filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.cleanerFilterByJimCasaburi(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text, thresholdHeight.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
                 }
             }
 

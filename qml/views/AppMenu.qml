@@ -126,7 +126,6 @@ Item {
                             Qt.darker("#33333333", parent.enabled && (parent.checked || parent.highlighted) ? 1.5 : 1.0)
                         else
                             Qt.darker("#00FFFFFF", parent.enabled && (parent.checked || parent.highlighted) ? 1.5 : 1.0)
-
                     }
                     opacity: enabled ? 1 : 0.3
                     Image {

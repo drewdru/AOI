@@ -75,7 +75,7 @@ class NoiseGeneratorController(QObject):
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/addImpulsNoise{}.log'
                 .format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
@@ -128,7 +128,7 @@ class NoiseGeneratorController(QObject):
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/addAdditiveNoise{}.log'
                 .format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
@@ -184,6 +184,6 @@ class NoiseGeneratorController(QObject):
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/addMultiplicativeNoise{}.log'
                 .format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
 
         img.save('{}/temp/processingImage.png'.format(self.appDir))

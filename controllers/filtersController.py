@@ -59,7 +59,7 @@ class FiltersController(QObject):
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/meanFilter.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
         imageComparison.calculateImageDifference()
 
@@ -97,7 +97,7 @@ class FiltersController(QObject):
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/medianFilter.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, bool, int, int)
@@ -134,7 +134,7 @@ class FiltersController(QObject):
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/gaussianBlur.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, bool, int, int, int, int)
@@ -172,7 +172,7 @@ class FiltersController(QObject):
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/bilateralFilter.log'
                 .format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, bool, int, int, int)
@@ -209,7 +209,7 @@ class FiltersController(QObject):
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/laplacianBlur.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, bool, int, int, int)
@@ -247,7 +247,7 @@ class FiltersController(QObject):
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/cleanerFilterByJimCasaburi.log'
                 .format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, bool, int)
@@ -317,6 +317,6 @@ class FiltersController(QObject):
             methodTimer = time.time() - timerTemp + methodTimer
         with open('{}/temp/log/adaptiveMedianFilter.log'
                 .format(self.appDir), "a+") as text_file:
-            text_file.write("{}\n".format(methodTimer))
+            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 

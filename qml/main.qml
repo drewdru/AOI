@@ -187,13 +187,21 @@ Rectangle {
             photoPreview2.source = appDir + "/temp/inImage.png"
             photoPreview2.source = appDir + "/temp/processingImage.png"
             drawerHistogram.updateHistograms()
+        }        
+        Label {
+            id: methodWorkTimer
+            anchors.right: parent.right
+            // anchors.verticalCenter: parent.bottom
+            text: qsTr("Timer\t")
         }
     }
 
     function updateProcessingImage() {
-        photoPreview2.source = appDir + "/images/hist0.png"
+        photoPreview2.source = appDir + "/images/clearHist.png"
         photoPreview2.source = appDir + "/temp/processingImage.png"
-        drawerHistogram.updateHistograms()
+        mainController.getLastMethodWorkTime(function setMethodWorkTime(response) {
+            methodWorkTimer.text = 'Timer: ' + response
+        })
     }
     
     function viewDrawer(drawerName) {
