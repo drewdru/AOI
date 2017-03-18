@@ -20,7 +20,19 @@ def array2PIL(arr, size):
         arr = np.c_[arr, 255*np.ones((len(arr),1), np.uint8)]
     return Image.frombuffer(mode, size, arr.tostring(), 'raw', mode, 0, 1)
 
-def smothAdpmedf(image_array, window, ylength, xlength, vlength, threshold):
+def adpmedf(image, size, window, threshold):
+    
+    ## set filter window and image dimensions
+    W = 2*window + 1
+    xlength, ylength = size
+    vlength = W*W
+
+    print(np.array(image, dtype=np.uint8), (ylength,xlength))
+    
+    ## create 2-D image array and initialize window
+    image_array = np.reshape(np.array(image, dtype=np.uint8), (ylength,xlength))
+    filter_window = np.array(np.zeros((W,W)))
+    target_vector = np.array(np.zeros(vlength))
     pixel_count = 0
     ## loop over image with specified window W
     for y in range(window, ylength-(window+1)):
@@ -44,31 +56,7 @@ def smothAdpmedf(image_array, window, ylength, xlength, vlength, threshold):
                 if abs(int(image_array[y,x]) - int(median)) > (threshold * Sk):
                     image_array[y,x] = median
                     pixel_count += 1
-
-def adpmedf(image, size, window, threshold):
-    
-    ## set filter window and image dimensions
-    W = 2*window + 1
-    xlength, ylength = size
-    vlength = W*W
-
-    print(np.array(image, dtype=np.uint8), (ylength,xlength))
-    ## create 2-D image array and initialize window
-    filter_window = np.array(np.zeros((W,W)))
-    target_vector = np.array(np.zeros(vlength))
-
-    red, green, blue = img.split()
-    image_arrayR = np.reshape(np.array(red, dtype=np.uint8), (ylength,xlength))
-    smothAdpmedf(image_arrayR, window, ylength, xlength, vlength, threshold)
-
-    image_arrayG = np.reshape(np.array(green, dtype=np.uint8), (ylength,xlength))
-    smothAdpmedf(image_arrayG, window, ylength, xlength, vlength, threshold)
-
-    image_arrayB = np.reshape(np.array(blue, dtype=np.uint8), (ylength,xlength))
-    smothAdpmedf(image_arrayB, window, ylength, xlength, vlength, threshold)
-    
-    return Image.merge("RGB", (Image.fromarray(image_arrayB),
-        Image.fromarray(image_arrayG), Image.fromarray(image_arrayR)))
+    return Image.fromarray(image_array)
 
 def demo(target_array, array_length):
     sorted_array = np.sort(target_array)
@@ -77,7 +65,7 @@ def demo(target_array, array_length):
     return median
 
 img = Image.open('./test3.jpg')
-img = img.convert(mode='RGB')
+img = img.convert(mode='L')
 img.show()
 
 img = adpmedf(img, img.size, 3, 0)
