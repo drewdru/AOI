@@ -12,7 +12,7 @@ import time
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, noiseGenerator, colorHistogram
-from imageProcessor import histogramService, imageService
+from imageProcessor import histogramService, imageService, imageComparison
 from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
@@ -73,10 +73,10 @@ class NoiseGeneratorController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/addImpulsNoise{}.log'
-                .format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
-
+        logFile = '{}/temp/log/addImpulsNoise.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, int, int, int, bool)
@@ -126,10 +126,10 @@ class NoiseGeneratorController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/addAdditiveNoise{}.log'
-                .format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
-
+        logFile = '{}/temp/log/addAdditiveNoise.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
         img.save('{}/temp/processingImage.png'.format(self.appDir))
 
     @pyqtSlot(str, int, int, int, int, bool)
@@ -182,8 +182,8 @@ class NoiseGeneratorController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/addMultiplicativeNoise{}.log'
-                .format(self.appDir, colorModelTag), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
-
+        logFile = '{}/temp/log/addMultiplicativeNoise.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
         img.save('{}/temp/processingImage.png'.format(self.appDir))

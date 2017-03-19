@@ -90,9 +90,9 @@ class MainController(QObject):
     #     return 25
 
     @pyqtSlot('QJSValue')
-    def getLastMethodWorkTime(self, callback):
+    def getLastMethodWorkMetrics(self, callback):
         max_mtime = 0
-        for dirname,subdirs,files in os.walk('{}/temp/log'.format(self.appDir)):
+        for dirname, subdirs, files in os.walk('{}/temp/log'.format(self.appDir)):
             for fname in files:
                 full_path = os.path.join(dirname, fname)
                 mtime = os.stat(full_path).st_mtime
@@ -101,19 +101,29 @@ class MainController(QObject):
                     max_dir = dirname
                     max_file = fname
 
-        methodTime = 0
-        with open('{}/{}'.format(max_dir, max_file), 'r') as fh:
-            lines = fh.readlines()
-            if lines:
-                methodTime = lines[-1]
-
+        methodTime = methodMSE = methodPSNR = methodRMS = 0
+        with open('{}/{}'.format(max_dir, max_file), 'r') as fileStream:
+            for textLine in fileStream.readlines():
+                if 'Timer: ' in textLine:
+                    methodTime = textLine.replace('Timer: ', '')
+                if 'MSE: ' in textLine:
+                    methodMSE = textLine.replace('MSE: ', '')
+                if 'PSNR: ' in textLine:
+                    methodPSNR = textLine.replace('PSNR: ', '')
+                if 'RMS: ' in textLine:
+                    methodRMS = textLine.replace('RMS: ', '')
+        responseText = '<h1>{}</h1><h2>Timer(seconds):</h2>{}'.format(
+            max_file.replace('.log', ''),
+            methodTime)
+        responseText = '{}<h2>MSE:</h2>{}'.format(responseText, methodMSE)
+        responseText = '{}<h2>PSNR:</h2>{}'.format(responseText, methodPSNR)
+        responseText = '{}<h2>RMS:</h2>{}'.format(responseText, methodRMS)
         if callback.isCallable():
-            callback.call([QJSValue(methodTime)])
+            callback.call([QJSValue(responseText)])
 
     @pyqtSlot(str)
     def log(self, s):
         """ PyConsole
-
             @param s: The string
         """
         print(s)

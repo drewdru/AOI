@@ -25,28 +25,6 @@ Rectangle {
         photoPreview2.source = appDir + "/temp/processingImage.png"
         drawerHistogram.updateHistograms()
     }
-
-    FeatureListDrawer {
-        id: drawerFeatureList
-        height: parent.height
-        onOpened: appMenu.isDrawerVisible = true
-        onClosed: appMenu.isDrawerVisible = false
-        Shortcut {
-            sequence: "Ctrl+D"
-            onActivated: drawerFeatureList.close()
-        }
-        Shortcut {
-            sequence: "Ctrl+Q"
-            onActivated: Qt.quit()
-        }
-        Shortcut {
-            sequence: "Ctrl+W"
-            onActivated: rootWindow.viewDrawer('drawerHistogram')
-        }
-        onShowColorCorrectorDrawer: rootWindow.viewDrawer('drawerColorCorrector')
-        onShowNoiseGeneratorDrawer: rootWindow.viewDrawer('drawerNoiseGenerator')
-        onShowFiltersDrawer: rootWindow.viewDrawer('drawerFilters')
-    }
     NoiseGeneratorDrawer {
         id: drawerNoiseGenerator
         height: parent.height
@@ -65,6 +43,10 @@ Rectangle {
         Shortcut {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
+        }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
         }
     }
     ColorCorrectorDrawer {
@@ -86,6 +68,10 @@ Rectangle {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
+        }
     }
     FiltersDrawer {
         id: drawerFilters
@@ -106,8 +92,37 @@ Rectangle {
             sequence: "Ctrl+W"
             onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
+        }
     }
 
+    FeatureListDrawer {
+        id: drawerFeatureList
+        height: parent.height
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: drawerFeatureList.close()
+        }
+        Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
+        }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
+        }
+        onShowColorCorrectorDrawer: rootWindow.viewDrawer('drawerColorCorrector')
+        onShowNoiseGeneratorDrawer: rootWindow.viewDrawer('drawerNoiseGenerator')
+        onShowFiltersDrawer: rootWindow.viewDrawer('drawerFilters')
+    }
     Shortcut {
         sequence: "Ctrl+W"
         onActivated: rootWindow.viewDrawer('drawerHistogram')
@@ -116,6 +131,11 @@ Rectangle {
         sequence: "Ctrl+D"
         onActivated: rootWindow.viewDrawer('drawerFeatureList')
     }
+    Shortcut {
+        sequence: "Ctrl+A"
+        onActivated: rootWindow.viewDrawer('drawerMetrics')
+    }
+
     HistDrawer {
         id: drawerHistogram
         height: parent.height / 3
@@ -134,6 +154,34 @@ Rectangle {
         Shortcut {
             sequence: "Ctrl+D"
             onActivated: rootWindow.viewDrawer('drawerFeatureList')
+        }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
+        }
+    }
+    MetricsDrawer {
+        id: drawerMetrics
+        height: parent.height// / 3
+        width: parent.width / 4
+        edge:Qt.RightEdge
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: drawerMetrics.close()
+        }
+        Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
         }
     }
 
@@ -179,6 +227,9 @@ Rectangle {
 
         onShowHistDrawer: rootWindow.viewDrawer('drawerHistogram')
         onHideHistDrawer: drawerHistogram.close()
+
+        onShowMetricsDrawer: rootWindow.viewDrawer('drawerMetrics')
+        onHideMetricsDrawer: drawerMetrics.close()
         
         onUpdateImages: {
             photoPreview.source = appDir + "/temp/processingImage.png"
@@ -187,22 +238,14 @@ Rectangle {
             photoPreview2.source = appDir + "/temp/inImage.png"
             photoPreview2.source = appDir + "/temp/processingImage.png"
             drawerHistogram.updateHistograms()
-        }        
-        Label {
-            id: methodWorkTimer
-            anchors.right: parent.right
-            // anchors.verticalCenter: parent.bottom
-            text: qsTr("Timer\t")
         }
     }
 
     function updateProcessingImage() {
         photoPreview2.source = appDir + "/images/clearHist.png"
         photoPreview2.source = appDir + "/temp/processingImage.png"
-        mainController.getLastMethodWorkTime(function setMethodWorkTime(response) {
-            methodWorkTimer.text = 'Timer: ' + response
-        })
         drawerHistogram.updateHistograms()
+        drawerMetrics.updateMetrics()
     }
     
     function viewDrawer(drawerName) {
@@ -211,10 +254,12 @@ Rectangle {
         drawerHistogram.close()
         drawerNoiseGenerator.close()
         drawerFilters.close()
+        drawerMetrics.close()
         if (drawerName == 'drawerFeatureList') drawerFeatureList.open()
         if (drawerName == 'drawerColorCorrector') drawerColorCorrector.open()
         if (drawerName == 'drawerHistogram') drawerHistogram.open()
         if (drawerName == 'drawerNoiseGenerator') drawerNoiseGenerator.open()
         if (drawerName == 'drawerFilters') drawerFilters.open()
+        if (drawerName == 'drawerMetrics') drawerMetrics.open()
     }
 }

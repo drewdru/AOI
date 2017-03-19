@@ -45,11 +45,11 @@ def calculatePSNR():
         Calculate PSNR
     """
     mse = calculateMSE()
-    print('mse:', mse)
     if mse == 0:
-        return 100
+        return (100, 0)
     PIXEL_MAX = 255.0
-    return 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
+    psnr = 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
+    return (mse, psnr)
 
 def rmsDifference():
     """
@@ -60,10 +60,18 @@ def rmsDifference():
     return numpy.sqrt(numpy.mean(numpy.square(imgOriginal - imgProcessed)))
 
 
-def calculateImageDifference():
-    psnr = calculatePSNR()
-    print('psnr:', psnr)
-
+def calculateImageDifference(colorModelTag, logFile):
+    mse, psnr = calculatePSNR()
     rms = rmsDifference()
-    print('rms:', rms)
+
+    with open(logFile, "a+") as text_file:
+        if colorModelTag is not None:
+            text_file.write("MSE: {}: {}\n".format(colorModelTag, mse))
+            text_file.write("PSNR: {}: {}\n".format(colorModelTag, psnr))
+            text_file.write("RMS: {}: {}\n".format(colorModelTag, rms))
+        else:
+            text_file.write("MSE: {}\n".format(mse))
+            text_file.write("PSNR: {}\n".format(psnr))
+            text_file.write("RMS: {}\n".format(rms))
+
 

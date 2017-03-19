@@ -58,10 +58,12 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/meanFilter.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+
+        logFile = '{}/temp/log/meanFilter.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
-        imageComparison.calculateImageDifference()
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int)
     def medianFilter(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
@@ -96,9 +98,11 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/medianFilter.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+        logFile = '{}/temp/log/medianFilter.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int)
     def gaussianBlur(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
@@ -133,9 +137,11 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/gaussianBlur.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+        logFile = '{}/temp/log/gaussianBlur.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int, int, int)
     def bilateralFilter(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
@@ -170,10 +176,11 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/bilateralFilter.log'
-                .format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+        logFile = '{}/temp/log/bilateralFilter.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int, int)
     def laplacianBlur(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
@@ -208,9 +215,11 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/laplacianBlur.log'.format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+        logFile = '{}/temp/log/laplacianBlur.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int, int)
     def cleanerFilterByJimCasaburi(self, colorModelTag, currentImageChannelIndex,
@@ -245,10 +254,11 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/cleanerFilterByJimCasaburi.log'
-                .format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+        logFile = '{}/temp/log/cleanerFilterByJimCasaburi.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int)
     def adaptiveMedianFilter(self, colorModelTag, currentImageChannelIndex,
@@ -315,8 +325,9 @@ class FiltersController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        with open('{}/temp/log/adaptiveMedianFilter.log'
-                .format(self.appDir), "a+") as text_file:
-            text_file.write("{}: {}\n".format(colorModelTag, methodTimer))
+        logFile = '{}/temp/log/adaptiveMedianFilter.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
