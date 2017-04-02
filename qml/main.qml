@@ -97,6 +97,30 @@ Rectangle {
             onActivated: rootWindow.viewDrawer('drawerMetrics')
         }
     }
+    BinarizeDrawer {
+        id: binarizeDrawer
+        height: parent.height
+        onUpdateProcessingImage: rootWindow.updateProcessingImage()
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
+        }
+        Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
+        }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
+        }
+    }
 
     FeatureListDrawer {
         id: drawerFeatureList
@@ -122,6 +146,7 @@ Rectangle {
         onShowColorCorrectorDrawer: rootWindow.viewDrawer('drawerColorCorrector')
         onShowNoiseGeneratorDrawer: rootWindow.viewDrawer('drawerNoiseGenerator')
         onShowFiltersDrawer: rootWindow.viewDrawer('drawerFilters')
+        onShowBinarizeDrawer: rootWindow.viewDrawer('binarizeDrawer')
     }
     Shortcut {
         sequence: "Ctrl+W"
@@ -254,12 +279,14 @@ Rectangle {
         drawerHistogram.close()
         drawerNoiseGenerator.close()
         drawerFilters.close()
+        binarizeDrawer.close()
         drawerMetrics.close()
         if (drawerName == 'drawerFeatureList') drawerFeatureList.open()
         if (drawerName == 'drawerColorCorrector') drawerColorCorrector.open()
         if (drawerName == 'drawerHistogram') drawerHistogram.open()
         if (drawerName == 'drawerNoiseGenerator') drawerNoiseGenerator.open()
         if (drawerName == 'drawerFilters') drawerFilters.open()
+        if (drawerName == 'binarizeDrawer') binarizeDrawer.open()
         if (drawerName == 'drawerMetrics') drawerMetrics.open()
     }
 }

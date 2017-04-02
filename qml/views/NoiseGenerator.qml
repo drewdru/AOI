@@ -52,6 +52,9 @@ Item {
                 checked: true
                 text: qsTr("Use original image")
             }
+            ColorModelSelector {
+                id: colorModelSelector
+            }
             GroupBox {
                 // anchors.fill: parent
                 Layout.fillWidth: true
@@ -183,9 +186,6 @@ Item {
                         }
                     }
                 }
-            }
-            ColorModelSelector {
-                id: colorModelSelector
             }
         }
     }

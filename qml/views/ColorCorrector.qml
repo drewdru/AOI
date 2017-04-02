@@ -64,7 +64,15 @@ Item {
                 id: isOriginalImage
                 checked: true
                 text: qsTr("Use original image")
-            }     
+            }
+            ColorModelBalance {
+                id: colorModelBalance
+                isOriginalImage: isOriginalImage.checked
+                onUpdateProcessingImage: firstPage.updateProcessingImage()
+                // onColorModelTagChanged: {
+                //     firstPage.colorModelTag = colorModelBalance.colorModelTag
+                // }
+            }
             Button {
                 id: autolevelsButton
                 text: qsTr("Autolevels")
@@ -152,16 +160,7 @@ Item {
                 //     text: qsTr("Palette")
                 //     onClicked: colorDialog.open()
                 // }
-            }
-            
-            ColorModelBalance {
-                id: colorModelBalance
-                isOriginalImage: isOriginalImage.checked
-                onUpdateProcessingImage: firstPage.updateProcessingImage()
-                // onColorModelTagChanged: {
-                //     firstPage.colorModelTag = colorModelBalance.colorModelTag
-                // }
-            }        
+            }              
         }
     }
 }

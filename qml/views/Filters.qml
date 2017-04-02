@@ -52,6 +52,9 @@ Item {
                 checked: true
                 text: qsTr("Use original image")
             }
+            ColorModelSelector {
+                id: colorModelSelector
+            }
             // GroupBox {
             //     Layout.fillWidth: true
             //     ColumnLayout {
@@ -245,10 +248,6 @@ Item {
                         secondPage.updateProcessingImage()
                     }
                 }
-            }
-
-            ColorModelSelector {
-                id: colorModelSelector
             }
         }
     }

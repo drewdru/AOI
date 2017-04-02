@@ -18,6 +18,7 @@ Drawer {
     signal showColorCorrectorDrawer()
     signal showNoiseGeneratorDrawer()
     signal showFiltersDrawer()
+    signal showBinarizeDrawer()
 
     Flickable {
         focus: true
@@ -61,6 +62,12 @@ Drawer {
                 Layout.fillWidth: true  
                 text: qsTr("View image filters")
                 onClicked: drawer.showFiltersDrawer()
+            }
+            Button {
+                id: binarizeButton
+                Layout.fillWidth: true  
+                text: qsTr("View Binarize methods")
+                onClicked: drawer.showBinarizeDrawer()
             }
         }
     }
