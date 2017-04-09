@@ -55,6 +55,33 @@ Item {
             ColorModelSelector {
                 id: colorModelSelector
             }
+            RowLayout {
+                Label {
+                    text: qsTr("k:")
+                }
+                TextField {
+                    id: otsu_k
+                    text: qsTr("100")
+                    Layout.fillWidth: true
+                    validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+                Button {
+                    text: qsTr("Otsu")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        binarizeController.otsuBinarize(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, otsu_k.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
+                }
+            }
         }
     }
 }

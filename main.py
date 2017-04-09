@@ -16,6 +16,7 @@ from controllers.mainController import MainController
 from controllers.noiseGeneratorController import NoiseGeneratorController
 from controllers.colorCorrectorController import ColorCorrectorController
 from controllers.filtersController import FiltersController
+from controllers.binarizeController import BinarizeController
 
 if __name__ == '__main__':
     # Create main app
@@ -53,6 +54,9 @@ if __name__ == '__main__':
 
     filtersController = FiltersController()
     context.setContextProperty('filtersController', filtersController)
+
+    binarizeController = BinarizeController()
+    context.setContextProperty('binarizeController', binarizeController)
 
     # Show the View
     appView.setSource(QUrl('./qml/main.qml'))

@@ -3,6 +3,8 @@
     Linear filters for images
 """
 
+# Рекурсивный фильтр скользящего среднего https://habrahabr.ru/post/325590/
+
 import threading
 import multiprocessing
 import math
