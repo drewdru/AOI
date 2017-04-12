@@ -1,92 +1,102 @@
-"""Global thresholding segmentations"""
+"""Gloabal thresholding binarize"""
 import math
+from PIL import PSDraw
+def getHistogramRGB(img, size):
+    """
+    @use:
+    img = Image.open(filepath)
+    img = img.convert(mode='RGB')
+    img = img.resize(size, Image.ANTIALIAS)
+    histogramR, histogramG, histogramB = get_histogramRGB(img, size)
+    """
+    histogramR = []
+    histogramG = []
+    histogramB = []
+    for i in range(256):
+        histogramR.append(0)
+        histogramG.append(0)
+        histogramB.append(0)
+    for i in range(size[0]):
+        for j in range(size[1]):
+            r, g, b = img.getpixel((i, j))
+            histogramR[r] += 1
+            histogramG[g] += 1
+            histogramB[b] += 1
+    histogram = []
+    for i in range(256):
+        histogramR[i] /= size[0]*size[1]
+        histogramG[i] /= size[0]*size[1]
+        histogramB[i] /= size[0]*size[1]
+    return histogramR, histogramG, histogramB
 
-def getAperturePosition(x, y, imgSize, i, j, filterSize):
-    pixelPosX = x + j - filterSize / 2
-    pixelPosY = y + i - filterSize / 2
-    if pixelPosX<0:
-        pixelPosX+=filterSize / 2
-    if pixelPosY<0:
-        pixelPosY+=filterSize / 2
-    if pixelPosX>imgSize[0] or pixelPosY>imgSize[1]:
-        return -1, -1
-    if pixelPosX==imgSize[0]:
-        pixelPosX=imgSize[0] - (filterSize / 2)-1
-    if pixelPosY==imgSize[1]:
-        pixelPosY=imgSize[1]-(filterSize / 2)-1
-    return pixelPosX, pixelPosY
+def getHistogram(pixels, size):
+    histogram = []
+    for i in range(256):
+        histogram.append(0)
+    for i in range(size[0]):
+        for j in range(size[1]):
+            color = pixels[i, j]
+            histogram[color] += 1
+    for i in range(256):
+        histogram[i] /= size[0]*size[1]
+    return histogram
 
+def histogramPeak3(histogram, size, k):
+    k /= 256
+    peak = []
+    lastValue = 0
+    maxVal = max(histogram)
+    for indx, v in enumerate(histogram):
+        if maxVal - v > k:
+            peak.append(indx-1)
+    return peak
 
-# Bersen's method
-def bernsen(img, imgSize, filterSize):
-    pixels = img.load()
-    for x in range(imgSize[0]):
-        for y in range(imgSize[1]):
-            minValue = 255
-            maxValue = 0
-            for i in range(filterSize):
-                for j in range(filterSize):
-                    pixelPosX, pixelPosY = getAperturePosition(x, y, imgSize, i, j, filterSize) 
-                    if pixelPosX == -1 or pixelPosY == -1:
-                        continue                  
-                    if pixels[pixelPosX,pixelPosY] > maxValue:
-                        maxValue = pixels[pixelPosX,pixelPosY]
-                    if pixels[pixelPosX,pixelPosY] < minValue:
-                        minValue = pixels[pixelPosX,pixelPosY]
-            avg = (minValue + maxValue) / 2
-            for i in range(filterSize):
-                for j in range(filterSize):
-                    pixelPosX, pixelPosY = getAperturePosition(x, y, imgSize, i, j, filterSize)
-                    if pixelPosX == -1 or pixelPosY == -1:
-                        continue
-                    if pixels[pixelPosX,pixelPosY] < avg:
-                        pixels[pixelPosX,pixelPosY] = 0
-                    else:
-                        pixels[pixelPosX,pixelPosY] = 255
-    img.show()
+def otsuPeak(histogram, size, k):
+    peak = []
+    lastValue = 0
+    w1 = 0
+    w2 = 0
+    w = 0
+    mu1 = 0
+    mu2 = 0
+    mu = 0
+    for indx, v in enumerate(histogram):
+        if (indx <= k):
+            w1 += v
+        else:
+            w2 += v
+    for indx, v in enumerate(histogram):
+        value = indx*v
+        if (indx <= k):
+            mu1 += value/w1
+        else:
+            mu2 += value/w2
+        mu += (value/w1 + value/w2)
+    nu = (w1*w2*((mu2-mu1)**2))/(mu**2)
+    for indx, v in enumerate(histogram):
+        if v < nu:
+            peak.append(indx-1)
+    return peak
 
-# Niblack`s method
-def niblack(img, imgSize, filterSize):
-    k = 0.2
-    pixels = img.load()
-    for x in range(imgSize[0]):
-        for y in range(imgSize[1]):
-            minValue = 255
-            maxValue = 0
-            for i in range(filterSize):
-                for j in range(filterSize):
-                    pixelPosX, pixelPosY = getAperturePosition(x, y, imgSize, i, j, filterSize)
-                    if pixelPosX == -1 or pixelPosY == -1:
-                        continue                  
-                    if pixels[pixelPosX,pixelPosY] > maxValue:
-                        maxValue = pixels[pixelPosX,pixelPosY]
-                    if pixels[pixelPosX,pixelPosY] < minValue:
-                        minValue = pixels[pixelPosX,pixelPosY]
-            avg = (minValue + maxValue) / 2
-            RMS = 0
-            differenceSum = 0
-            for i in range(filterSize):
-                for j in range(filterSize):
-                    pixelPosX, pixelPosY = getAperturePosition(x, y, imgSize, i, j, filterSize)
-                    if pixelPosX == -1 or pixelPosY == -1:
-                        continue
-                    differenceSum = (pixels[pixelPosX,pixelPosY] - avg) ** 2                    
-            RMS += math.sqrt(differenceSum/filterSize)
-            # value = int(avg + k*RMS)
-            # for i in range(filterSize):
-            #     for j in range(filterSize):
-            #         pixelPosX, pixelPosY = getAperturePosition(x, y, imgSize, i, j, filterSize)
-            #         if pixelPosX == -1 or pixelPosY == -1:
-            #             continue
-            #         pixels[pixelPosX,pixelPosY] = value
-            value = int(avg + k*RMS)
-            for i in range(filterSize):
-                for j in range(filterSize):
-                    pixelPosX, pixelPosY = getAperturePosition(x, y, imgSize, i, j, filterSize)
-                    if pixelPosX == -1 or pixelPosY == -1:
-                        continue
-                    if pixels[pixelPosX,pixelPosY] < value:
-                        pixels[pixelPosX,pixelPosY] = 0
-                    else:
-                        pixels[pixelPosX,pixelPosY] = 255
-    img.show()
+def histogramSegmentation(pixels, size, method, threshold):
+    """http://www.ijcset.net/docs/Volumes/volume2issue1/ijcset2012020103.pdf"""
+    # pixels = img.load()
+    histogram = getHistogram(pixels, size)
+    if method == 'otsu':
+        peak = otsuPeak(histogram, size, threshold)
+        for i in range(size[0]):
+            for j in range(size[1]):
+                if pixels[i, j] in peak:
+                    pixels[i, j] = 255
+                else:
+                    pixels[i, j] = 0
+        # img.show('histogramPeak')
+    if method == 'histPeakValue':
+        peak = histogramPeak3(histogram, size, threshold)
+        for i in range(size[0]):
+            for j in range(size[1]):
+                if pixels[i, j] in peak:
+                    pixels[i, j] = 255
+                else:
+                    pixels[i, j] = 0
+        # img.show('histogramPeak3')
