@@ -49,7 +49,7 @@ class BinarizeController(QObject):
     def histThresholdBinarize(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
             otsu_k):
         """
-            Otsu Binarize
+            Binarize with histogram threshold
         """
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
@@ -59,6 +59,46 @@ class BinarizeController(QObject):
         globalThresholding.histogramSegmentation(img.load(), img.size, 'histPeakValue', otsu_k)
         methodTimer = time.time() - methodTimer
         logFile = '{}/temp/log/histThresholdBinarize.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        img = img.convert(mode='RGB')
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
+
+    @pyqtSlot(str, int, bool, int, int)
+    def bernsenBinarize(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
+            aperture_height, aperture_width):
+        """
+            Bersen's method
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        img = img.convert(mode='L')
+        methodTimer = time.time()
+        localThresholding.bernsen(img.load(), img.size, (aperture_height, aperture_width))
+        methodTimer = time.time() - methodTimer
+        logFile = '{}/temp/log/bersenBinarize.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        img = img.convert(mode='RGB')
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
+
+    @pyqtSlot(str, int, bool, int, int)
+    def niblackBinarize(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
+            aperture_height, aperture_width):
+        """
+            Niblack's method
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        img = img.convert(mode='L')
+        methodTimer = time.time()
+        localThresholding.niblack(img.load(), img.size, (aperture_height, aperture_width))
+        methodTimer = time.time() - methodTimer
+        logFile = '{}/temp/log/niblackBinarize.log'.format(self.appDir)
         with open(logFile, "a+") as text_file:
             text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img = img.convert(mode='RGB')
