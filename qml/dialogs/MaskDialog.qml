@@ -106,9 +106,7 @@ Dialog {
                             onExited: {}
                             onWheel: {}
                             onClicked: {
-                                console.log(widthRepeat)
-                                console.log(heightRepeat)
-                                binarizeController.updateCellMaskList(widthRepeat, heightRepeat, parent.color == '#00aa00' ? false : true)
+                                morphologyController.updateCellMaskList(widthRepeat, heightRepeat, parent.color == '#00aa00' ? false : true)
                                 parent.color = parent.color == '#00aa00' ? '#ffffff' : '#00aa00'
                             }
                         }

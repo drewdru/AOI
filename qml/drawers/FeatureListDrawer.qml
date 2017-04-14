@@ -19,6 +19,7 @@ Drawer {
     signal showNoiseGeneratorDrawer()
     signal showFiltersDrawer()
     signal showBinarizeDrawer()
+    signal showMorphologyDrawer()
 
     Flickable {
         focus: true
@@ -68,6 +69,12 @@ Drawer {
                 Layout.fillWidth: true  
                 text: qsTr("View Binarize methods")
                 onClicked: drawer.showBinarizeDrawer()
+            }
+            Button {
+                id: morphologyButton
+                Layout.fillWidth: true  
+                text: qsTr("View Morphology methods")
+                onClicked: drawer.showMorphologyDrawer()
             }
         }
     }

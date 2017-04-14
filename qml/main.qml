@@ -121,6 +121,30 @@ Rectangle {
             onActivated: rootWindow.viewDrawer('drawerMetrics')
         }
     }
+    MorphologyDrawer {
+        id: morphologyDrawer
+        height: parent.height
+        onUpdateProcessingImage: rootWindow.updateProcessingImage()
+        onOpened: appMenu.isDrawerVisible = true
+        onClosed: appMenu.isDrawerVisible = false
+        onBackClicked: rootWindow.viewDrawer('drawerFeatureList')
+        Shortcut {
+            sequence: "Ctrl+D"
+            onActivated: rootWindow.viewDrawer('drawerFeatureList')
+        }
+        Shortcut {
+            sequence: "Ctrl+Q"
+            onActivated: Qt.quit()
+        }
+        Shortcut {
+            sequence: "Ctrl+W"
+            onActivated: rootWindow.viewDrawer('drawerHistogram')
+        }
+        Shortcut {
+            sequence: "Ctrl+A"
+            onActivated: rootWindow.viewDrawer('drawerMetrics')
+        }
+    }
 
     FeatureListDrawer {
         id: drawerFeatureList
@@ -147,6 +171,7 @@ Rectangle {
         onShowNoiseGeneratorDrawer: rootWindow.viewDrawer('drawerNoiseGenerator')
         onShowFiltersDrawer: rootWindow.viewDrawer('drawerFilters')
         onShowBinarizeDrawer: rootWindow.viewDrawer('binarizeDrawer')
+        onShowMorphologyDrawer: rootWindow.viewDrawer('morphologyDrawer')
     }
     Shortcut {
         sequence: "Ctrl+W"
@@ -281,6 +306,7 @@ Rectangle {
         drawerFilters.close()
         binarizeDrawer.close()
         drawerMetrics.close()
+        morphologyDrawer.close()
         if (drawerName == 'drawerFeatureList') drawerFeatureList.open()
         if (drawerName == 'drawerColorCorrector') drawerColorCorrector.open()
         if (drawerName == 'drawerHistogram') drawerHistogram.open()
@@ -288,5 +314,6 @@ Rectangle {
         if (drawerName == 'drawerFilters') drawerFilters.open()
         if (drawerName == 'binarizeDrawer') binarizeDrawer.open()
         if (drawerName == 'drawerMetrics') drawerMetrics.open()
+        if (drawerName == 'morphologyDrawer') morphologyDrawer.open()
     }
 }
