@@ -16,25 +16,6 @@ Item {
     anchors.fill: parent        
     anchors.margins: 10
 
-    // property string colorModelTag: "RGB"
-
-    // ColorDialog {
-    //     id: colorDialog
-    //     title: "Please choose a color"
-    //     onAccepted: {
-    //         firstPage.enabled = false
-    //         colorCorrectorController.getHslFromHex(colorDialog.color,
-    //             function test(hue, saturation, lightness) {
-    //                 console.log(hue)
-    //                 console.log(saturation)
-    //                 console.log(lightness)
-    //                 colorCorrectorController.changeHueByPallet(isOriginalImage.checked, hue, saturation, lightness)
-    //         });
-    //         firstPage.updateProcessingImage()
-    //         firstPage.enabled = true
-    //     }
-    // }
-
     Flickable {
         focus: true
         anchors.fill: parent
