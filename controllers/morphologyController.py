@@ -53,9 +53,9 @@ class MorphologyController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        tempImg = img.copy()
         methodTimer = time.time()
         if colorModelTag == 'RGB':
+            tempImg = img.copy()
             morphology.dilation(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
             methodTimer = time.time() - methodTimer
@@ -63,11 +63,12 @@ class MorphologyController(QObject):
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
+            tempImg = img.copy()
             morphology.dilation(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
+            img = tempImg.copy()
             colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
-            img = tempImg.copy()
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -97,9 +98,9 @@ class MorphologyController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        tempImg = img.copy()
         methodTimer = time.time()
         if colorModelTag == 'RGB':
+            tempImg = img.copy()
             morphology.erosion(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
             methodTimer = time.time() - methodTimer
@@ -107,11 +108,12 @@ class MorphologyController(QObject):
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
+            tempImg = img.copy()
             morphology.erosion(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
+            img = tempImg.copy()
             colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
-            img = tempImg.copy()
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -139,10 +141,19 @@ class MorphologyController(QObject):
         """
             morphClosing
         """
-        self.morphDilation(colorModelTag, currentImageChannelIndex, isOriginalImage,
-            maskWidth, maskHeight)
-        self.morphErosion(colorModelTag, currentImageChannelIndex, False,
-            maskWidth, maskHeight)
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        methodTimer = time.time()
+        morphology.closing(colorModelTag, currentImageChannelIndex, img,
+            self.maskList, (maskWidth, maskHeight))
+        methodTimer = time.time() - methodTimer
+        self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        logFile = '{}/temp/log/morphClosing.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int)
     def morphOpening(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
@@ -150,10 +161,19 @@ class MorphologyController(QObject):
         """
             morphOpening
         """
-        self.morphErosion(colorModelTag, currentImageChannelIndex, isOriginalImage,
-            maskWidth, maskHeight)
-        self.morphDilation(colorModelTag, currentImageChannelIndex, False,
-            maskWidth, maskHeight)
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        methodTimer = time.time()
+        morphology.opening(colorModelTag, currentImageChannelIndex, img,
+            self.maskList, (maskWidth, maskHeight))
+        methodTimer = time.time() - methodTimer
+        self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        logFile = '{}/temp/log/morphOpening.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
 
     @pyqtSlot(str, int, bool, int, int)
     def morphInnerEdge(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
@@ -164,21 +184,22 @@ class MorphologyController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        tempImg = img.copy()
         methodTimer = time.time()
         if colorModelTag == 'RGB':
+            tempImg = img.copy()
             morphology.erosion(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
-            methodTimer = time.time() - methodTimer
             img = ImageChops.difference(img, tempImg)
+            methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
+            tempImg = img.copy()
             colorModel.rgbToYuv(img.load(), img.size)
             morphology.erosion(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
+            img = ImageChops.difference(img, tempImg)
             colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
-            img = ImageChops.difference(img, tempImg)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -209,9 +230,9 @@ class MorphologyController(QObject):
         img = self.imageService.openImage(isOriginalImage)
         if img is None:
             return
-        tempImg = img.copy()
         methodTimer = time.time()
         if colorModelTag == 'RGB':
+            tempImg = img.copy()
             morphology.dilation(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
             methodTimer = time.time() - methodTimer
@@ -219,11 +240,12 @@ class MorphologyController(QObject):
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
+            tempImg = img.copy()
             morphology.dilation(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, self.maskList, (maskWidth, maskHeight), tempImg.load())
+            img = ImageChops.difference(tempImg, img)
             colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
-            img = ImageChops.difference(tempImg, img)
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
@@ -240,6 +262,27 @@ class MorphologyController(QObject):
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
         logFile = '{}/temp/log/morphOuterEdge.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
+
+
+    @pyqtSlot(str, int, bool, int, int)
+    def morphSkeleton(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
+            maskWidth, maskHeight):
+        """
+            morphSkeleton
+        """
+        img = self.imageService.openImage(isOriginalImage)
+        if img is None:
+            return
+        methodTimer = time.time()
+        morphology.skeleton(colorModelTag, currentImageChannelIndex, img,
+            self.maskList, (maskWidth, maskHeight))
+        methodTimer = time.time() - methodTimer
+        self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        logFile = '{}/temp/log/morphSkeleton.log'.format(self.appDir)
         with open(logFile, "a+") as text_file:
             text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         img.save('{}/temp/processingImage.png'.format(self.appDir))
