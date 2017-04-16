@@ -44,9 +44,11 @@ class FiltersController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
             filters.meanFilter(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, (filterWidth, filterHeight))
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -84,9 +86,11 @@ class FiltersController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
             filters.medianFilter(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, (filterWidth, filterHeight))
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -123,9 +127,11 @@ class FiltersController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
             filters.gaussianBlur(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, (filterWidth, filterHeight))
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -162,9 +168,11 @@ class FiltersController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
             filters.bilateralFilter(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, (filterWidth, filterHeight), sigma_i, sigma_s)
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -201,9 +209,11 @@ class FiltersController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
             filters.laplacianBlur(colorModelTag, currentImageChannelIndex, img.load(),
                 img.size, (filterWidth, filterHeight), sigma)
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -240,9 +250,11 @@ class FiltersController(QObject):
             colorModel.rgbToYuv(img.load(), img.size)
             filters.cleanerFilterByJimCasaburi(colorModelTag, currentImageChannelIndex,
                 img.load(), img.size, (filterWidth, filterHeight), threshold)
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -299,9 +311,11 @@ class FiltersController(QObject):
             if currentImageChannelIndex == 3:
                 b = adaptiveFilter.adpmedf(b, img.size, filterSize)
             img = Image.merge("RGB", (r, g, b))
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)

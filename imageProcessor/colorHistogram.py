@@ -29,6 +29,13 @@ def getHistogramArray(npPixels):
         QCoreApplication.processEvents()
         for pixel in pixels:
             channel1, channel2, channel3 = pixel
+            while channel1 >= 361:
+                channel1 = channel1 - 361
+            if channel2 >= 101:
+                channel2 = 100
+            if channel3 >= 101:
+                channel3 = 100
+
             histogram1[int(channel1)] += 1
             histogram2[int(channel2)] += 1
             histogram3[int(channel3)] += 1

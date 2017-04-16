@@ -145,7 +145,7 @@ class MorphologyController(QObject):
         if img is None:
             return
         methodTimer = time.time()
-        morphology.closing(colorModelTag, currentImageChannelIndex, img,
+        img = morphology.closing(colorModelTag, currentImageChannelIndex, img,
             self.maskList, (maskWidth, maskHeight))
         methodTimer = time.time() - methodTimer
         self.histogramService.saveHistogram(img=img, model=colorModelTag)
@@ -165,7 +165,7 @@ class MorphologyController(QObject):
         if img is None:
             return
         methodTimer = time.time()
-        morphology.opening(colorModelTag, currentImageChannelIndex, img,
+        img = morphology.opening(colorModelTag, currentImageChannelIndex, img,
             self.maskList, (maskWidth, maskHeight))
         methodTimer = time.time() - methodTimer
         self.histogramService.saveHistogram(img=img, model=colorModelTag)
@@ -268,23 +268,23 @@ class MorphologyController(QObject):
         imageComparison.calculateImageDifference(colorModelTag, logFile)
 
 
-    @pyqtSlot(str, int, bool, int, int)
-    def morphSkeleton(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
-            maskWidth, maskHeight):
-        """
-            morphSkeleton
-        """
-        img = self.imageService.openImage(isOriginalImage)
-        if img is None:
-            return
-        methodTimer = time.time()
-        morphology.skeleton(colorModelTag, currentImageChannelIndex, img,
-            self.maskList, (maskWidth, maskHeight))
-        methodTimer = time.time() - methodTimer
-        self.histogramService.saveHistogram(img=img, model=colorModelTag)
-        logFile = '{}/temp/log/morphSkeleton.log'.format(self.appDir)
-        with open(logFile, "a+") as text_file:
-            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
-        img.save('{}/temp/processingImage.png'.format(self.appDir))
-        imageComparison.calculateImageDifference(colorModelTag, logFile)
+    # @pyqtSlot(str, int, bool, int, int)
+    # def morphSkeleton(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
+    #         maskWidth, maskHeight):
+    #     """
+    #         morphSkeleton
+    #     """
+    #     img = self.imageService.openImage(isOriginalImage)
+    #     if img is None:
+    #         return
+    #     methodTimer = time.time()
+    #     morphology.skeleton(colorModelTag, currentImageChannelIndex, img,
+    #         self.maskList, (maskWidth, maskHeight))
+    #     methodTimer = time.time() - methodTimer
+    #     self.histogramService.saveHistogram(img=img, model=colorModelTag)
+    #     logFile = '{}/temp/log/morphSkeleton.log'.format(self.appDir)
+    #     with open(logFile, "a+") as text_file:
+    #         text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+    #     img.save('{}/temp/processingImage.png'.format(self.appDir))
+    #     imageComparison.calculateImageDifference(colorModelTag, logFile)
 

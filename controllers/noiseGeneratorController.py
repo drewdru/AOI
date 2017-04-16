@@ -55,9 +55,11 @@ class NoiseGeneratorController(QObject):
                 currentImageChannelIndex,
                 impulseNoise,
                 noiseLevel)
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -108,9 +110,11 @@ class NoiseGeneratorController(QObject):
                 currentImageChannelIndex,
                 kmin, kmax,
                 noiseLevel)
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
@@ -163,9 +167,11 @@ class NoiseGeneratorController(QObject):
                 kmin,
                 kmax,
                 noiseLevel)
-            colorModel.yuvToRgb(img.load(), img.size)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            timerTemp = time.time()
+            colorModel.yuvToRgb(img.load(), img.size)
+            methodTimer = time.time() - methodTimer
         if colorModelTag == 'HSL':
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)

@@ -20,6 +20,7 @@ Drawer {
     signal showFiltersDrawer()
     signal showBinarizeDrawer()
     signal showMorphologyDrawer()
+    signal showSegmentationDrawer()
 
     Flickable {
         focus: true
@@ -75,6 +76,12 @@ Drawer {
                 Layout.fillWidth: true  
                 text: qsTr("View Morphology methods")
                 onClicked: drawer.showMorphologyDrawer()
+            }
+            Button {
+                id: segmentationButton
+                Layout.fillWidth: true  
+                text: qsTr("View Segmentation methods")
+                onClicked: drawer.showSegmentationDrawer()
             }
         }
     }

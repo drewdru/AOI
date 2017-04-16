@@ -123,16 +123,16 @@ Item {
                             secondPage.updateProcessingImage()
                         }
                     }
-                    Button {
-                        text: qsTr("Skeleton")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            morphologyController.morphSkeleton(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, morphSet.maskWidh, morphSet.maskHeight)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
-                        }
-                    }
+                    // Button {
+                    //     text: qsTr("Skeleton")
+                    //     width: parent.width
+                    //     onClicked: {
+                    //         secondPage.enabled = false
+                    //         morphologyController.morphSkeleton(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, morphSet.maskWidh, morphSet.maskHeight)
+                    //         secondPage.enabled = true
+                    //         secondPage.updateProcessingImage()
+                    //     }
+                    // }
                 }
             }
         }

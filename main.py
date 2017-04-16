@@ -18,6 +18,7 @@ from controllers.colorCorrectorController import ColorCorrectorController
 from controllers.filtersController import FiltersController
 from controllers.binarizeController import BinarizeController
 from controllers.morphologyController import MorphologyController
+from controllers.segmentationController import SegmentationController
 
 if __name__ == '__main__':
     # Create main app
@@ -61,6 +62,9 @@ if __name__ == '__main__':
 
     morphologyController = MorphologyController()
     context.setContextProperty('morphologyController', morphologyController)
+
+    segmentationController = SegmentationController()
+    context.setContextProperty('segmentationController', segmentationController)
 
 
     # Show the View
