@@ -133,11 +133,10 @@ def roberts(colorModelTag, currentImageChannelIndex, pixels, imgSize,
                     oldR, oldG, int(resultB))
 
 
-
 def canny(colorModelTag, currentImageChannelIndex, pixels, imgSize,
         G, amplifier=1.0, threshold=(10, 250)):
     sigma = 2.2
-    
+
     gradxR = []
     gradyR = []
     gradxG = []
@@ -412,7 +411,6 @@ def canny(colorModelTag, currentImageChannelIndex, pixels, imgSize,
     for y in range(imgSize[0]):
         QCoreApplication.processEvents()
         for x in range(imgSize[1]):
-            print((int(gnhR[y][x]), int(gnhG[y][x]), int(gnhB[y][x])))
             oldR, oldG, oldB = pixels[y, x]
             if currentImageChannelIndex == 0:
                 pixels[y, x] = (
@@ -429,3 +427,9 @@ def canny(colorModelTag, currentImageChannelIndex, pixels, imgSize,
     # scipy.misc.imsave('cannynewout.jpg', gnhR)
     # scipy.misc.imsave('cannynewout.jpg', gnhG)
     # scipy.misc.imsave('cannynewout.jpg', gnhB)
+
+def sobel(colorModelTag, currentImageChannelIndex, pixels, imgSize,
+        tempPixels, amplifier=1.0, threshold=10):
+    roberts(colorModelTag, currentImageChannelIndex, pixels, imgSize,
+        tempPixels, amplifier=amplifier*2, threshold=10)
+
