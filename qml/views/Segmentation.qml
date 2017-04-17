@@ -105,6 +105,16 @@ Item {
                             secondPage.updateProcessingImage()
                         }
                     }
+                    Button {
+                        text: qsTr("Canny")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            segmentationController.segCanny(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, amplifier.text, threshold.text)
+                            secondPage.enabled = true
+                            secondPage.updateProcessingImage()
+                        }
+                    }
                     // Button {
                     //     text: qsTr("Skeleton")
                     //     width: parent.width
