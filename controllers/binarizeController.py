@@ -45,7 +45,7 @@ class BinarizeController(QObject):
         img.save('{}/temp/processingImage.png'.format(self.appDir))
         imageComparison.calculateImageDifference(colorModelTag, logFile)
 
-    @pyqtSlot(str, int, bool, int)
+    @pyqtSlot(str, int, bool, float)
     def histThresholdBinarize(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
             otsu_k):
         """

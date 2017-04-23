@@ -65,7 +65,7 @@ Item {
                         }
                         TextField {
                             id: global_threshold_k
-                            text: qsTr("116")
+                            text: qsTr("38")
                             Layout.fillWidth: true
                             validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
                             inputMethodHints: Qt.ImhDigitsOnly

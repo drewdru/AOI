@@ -95,24 +95,48 @@ Item {
                     }
                 }
             }
-            Button {
-                text: qsTr("Mean filter")
-                width: parent.width
-                onClicked: {
-                    secondPage.enabled = false
-                    filtersController.meanFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
-                    secondPage.enabled = true
-                    secondPage.updateProcessingImage()
+            RowLayout {
+                Button {
+                    text: qsTr("Mean filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.meanFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
+                }
+                Button {
+                    text: qsTr("Recursive mean filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.meanFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
                 }
             }
-            Button {
-                text: qsTr("Median filter")
-                width: parent.width
-                onClicked: {
-                    secondPage.enabled = false
-                    filtersController.medianFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
-                    secondPage.enabled = true
-                    secondPage.updateProcessingImage()
+            RowLayout {
+                Button {
+                    text: qsTr("Median filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.medianFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
+                }
+                Button {
+                    text: qsTr("Fast median filter")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        filtersController.medianFilter(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, filterWidth.text, filterHeight.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
                 }
             }
             Button {

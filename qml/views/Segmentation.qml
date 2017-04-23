@@ -59,74 +59,7 @@ Item {
             MorphologySettings {
                 id: morphSet
             }
-            GroupBox {
-                title: 'Segmentation'
-                Layout.fillWidth: true
-                ColumnLayout {
-                    RowLayout {
-                        Label {
-                            text: qsTr("Amplifier:\t")
-                        }
-                        TextField {
-                            id: amplifier
-                            text: qsTr("1.0")
-                            Layout.fillWidth: true
-                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
-                            inputMethodHints: Qt.ImhDigitsOnly
-                            background: Rectangle {
-                                radius: 2
-                                border.color: "#333"
-                                border.width: 1
-                            }
-                        }
-                        Label {
-                            text: qsTr("Threshold:\t")
-                        }
-                        TextField {
-                            id: threshold
-                            text: qsTr("10")
-                            Layout.fillWidth: true
-                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
-                            inputMethodHints: Qt.ImhDigitsOnly
-                            background: Rectangle {
-                                radius: 2
-                                border.color: "#333"
-                                border.width: 1
-                            }
-                        }
-                    }
-                    Button {
-                        text: qsTr("Roberts")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            segmentationController.segRoberts(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, amplifier.text, threshold.text)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
-                        }
-                    }
-                    Button {
-                        text: qsTr("Canny")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            segmentationController.segCanny(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, amplifier.text, threshold.text)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
-                        }
-                    }
-                    Button {
-                        text: qsTr("Sobel")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            segmentationController.segSobel(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, amplifier.text, threshold.text)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
-                        }
-                    }
-                }
-            }
+            
         }
     }
 }
