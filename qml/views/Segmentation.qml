@@ -56,10 +56,106 @@ Item {
             ColorModelSelector {
                 id: colorModelSelector
             }
-            MorphologySettings {
-                id: morphSet
+            // MorphologySettings {
+            //     id: morphSet
+            // }
+            GetImagePixelDialog {
+                visible: false
+                id: getImagePixelDialog
             }
-            
+            Button {
+                text: qsTr("Get pixel position")
+                width: parent.width
+                onClicked: {
+                //     morphologyController.createMaskList(mask_widh.text, mask_height.text)
+                //     maskDialog.open()
+                    getImagePixelDialog.open()
+                }
+            }
+            GroupBox {
+                title: 'Efficient Graph-Based Image Segmentation'
+                Layout.fillWidth: true
+                ColumnLayout {
+                    RowLayout {
+                        Label {
+                            text: qsTr("sigma:")
+                        }
+                        TextField {
+                            id: sigma
+                            text: qsTr("0.5")
+                            Layout.fillWidth: true
+                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("Neighborhood size:")
+                        }
+                        TextField {
+                            id: neighborhood
+                            text: qsTr("4")
+                            Layout.fillWidth: true
+                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("K:")
+                        }
+                        TextField {
+                            id: k
+                            text: qsTr("500")
+                            Layout.fillWidth: true
+                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("min_comp_size:")
+                        }
+                        TextField {
+                            id: min_comp_size
+                            text: qsTr("50")
+                            Layout.fillWidth: true
+                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    Button {
+                        text: qsTr("Segmentate")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            segmentationController.EfficientGraphBasedImageSegmentation(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, sigma.text, neighborhood.text, k.text, min_comp_size.text)
+                            secondPage.enabled = true
+                            secondPage.updateProcessingImage()
+                        }
+                    }
+                }                
+            }
         }
     }
 }

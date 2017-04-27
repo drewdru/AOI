@@ -25,3 +25,17 @@ class ImageService(QObject):
         except Exception as err:
             return None
 
+    def getImagePath(self, isOriginalImage):
+        """ Open image for processing
+
+            @param isOriginalImage: The value for choose original or processing Image
+        """
+        outImagePath = '{}/temp/processingImage.png'.format(self.appDir)
+        try:
+            if isOriginalImage:
+                return outImagePath, '{}/temp/inImage.png'.format(self.appDir)
+            else:
+                return outImagePath, outImagePath
+        except Exception as err:
+            return None
+

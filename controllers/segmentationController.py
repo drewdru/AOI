@@ -12,7 +12,7 @@ import math
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, histogramService, imageService, imageComparison
-from imageSegmentation import segmentation
+from imageSegmentation.graphSegmentation import egbis
 from imageFilters import filters
 from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot, QVariant #, QVariantList
@@ -45,3 +45,58 @@ class SegmentationController(QObject):
     @pyqtSlot(int, int, bool)
     def updateCellMaskList(self, y, x, value):
         self.maskList[x][y] = value
+
+    @pyqtSlot(str, int, bool, float, float, float, float)
+    def EfficientGraphBasedImageSegmentation(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
+            sigma, neighborhood, k, min_comp_size):
+        """
+            morphDilation
+        """
+        outImagePath, imgPath = self.imageService.getImagePath(isOriginalImage)
+        if imgPath is None:
+            return
+        methodTimer = time.time()
+        if colorModelTag == 'RGB':
+            methodTimer = time.time()
+            egbis.segmentateRun(sigma, neighborhood, k, min_comp_size,
+                imgPath, outImagePath)
+            methodTimer = time.time() - methodTimer
+            img = self.imageService.openImage(False)
+            if img is None:
+                return
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        if colorModelTag == 'YUV':
+            img = self.imageService.openImage(isOriginalImage)
+            if img is None:
+                return
+            colorModel.rgbToYuv(img.load(), img.size)
+            img.save(imgPath)
+            methodTimer = time.time()
+            egbis.segmentateRun(sigma, neighborhood, k, min_comp_size,
+                imgPath, outImagePath)
+            methodTimer = time.time() - methodTimer
+            img = self.imageService.openImage(outImagePath)
+            if img is None:
+                return
+            self.histogramService.saveHistogram(img=img, model=colorModelTag)
+            colorModel.yuvToRgb(img.load(), img.size)
+        if colorModelTag == 'HSL':
+            img = self.imageService.openImage(imgPath)
+            if img is None:
+                return
+            data = numpy.asarray(img, dtype="float")
+            data = colorModel.rgbToHsl(data)
+            methodTimer = time.time()
+            egbis.segmentateRun(sigma, neighborhood, k, min_comp_size,
+                imgPath, outImagePath)
+            methodTimer = time.time() - methodTimer
+            self.histogramService.saveHistogram(data=data, model=colorModelTag)
+            timerTemp = time.time()
+            data = colorModel.hslToRgb(data)
+            img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
+            methodTimer = time.time() - timerTemp + methodTimer
+        logFile = '{}/temp/log/morphDilation.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        img.save('{}/temp/processingImage.png'.format(self.appDir))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)
