@@ -148,25 +148,25 @@ def generate_image(forest, width, height):
 
     return img.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
 
-def segmentateRun(sigma, neighbor, k, min_size, imgPath, outImagePath):
-    image_file = Image.open(imgPath)
+def segmentateRun(sigma, neighbor, k, min_size, image_file, outImagePath):
+    # image_file = Image.open(imgPath)
     size = image_file.size
-    print ('Image info: ', image_file.format, size, image_file.mode)
+    # print('Image info: ', image_file.format, size, image_file.mode)
     grid = gaussian_grid(sigma)
 
-    if image_file.mode == 'RGB':
-        image_file.load()
-        r, g, b = image_file.split()
+    # if image_file.mode == 'RGB':
+        # image_file.load()
+    r, g, b = image_file.split()
 
-        r = filter_image(r, grid)
-        g = filter_image(g, grid)
-        b = filter_image(b, grid)
+    r = filter_image(r, grid)
+    g = filter_image(g, grid)
+    b = filter_image(b, grid)
 
-        smooth = (r, g, b)
-        diff = diff_rgb
-    else:
-        smooth = filter_image(image_file, grid)
-        diff = diff_grey
+    smooth = (r, g, b)
+    diff = diff_rgb
+    # else:
+    #     smooth = filter_image(image_file, grid)
+    #     diff = diff_grey
 
     graph = build_graph(smooth, size[1], size[0], diff, neighbor == 8)
     forest = segment_graph(graph, size[0]*size[1], k, min_size, threshold)

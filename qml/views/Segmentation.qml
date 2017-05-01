@@ -156,6 +156,16 @@ Item {
                     }
                 }                
             }
+            Button {
+                text: qsTr("Detect road lane")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
         }
     }
 }
