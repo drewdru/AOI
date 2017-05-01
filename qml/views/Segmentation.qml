@@ -157,6 +157,26 @@ Item {
                 }                
             }
             Button {
+                text: qsTr("Gabor Segmentate")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    segmentationController.GaborSegmentation(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
+            Button {
+                text: qsTr("K-Means")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    segmentationController.KMeans(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
+            Button {
                 text: qsTr("Detect road lane")
                 width: parent.width
                 onClicked: {

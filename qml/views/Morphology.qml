@@ -201,6 +201,16 @@ Item {
                             secondPage.updateProcessingImage()
                         }
                     }
+                    Button {
+                        text: qsTr("Gabor find edge")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            segmentationController.GaborEdge(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            secondPage.enabled = true
+                            secondPage.updateProcessingImage()
+                        }
+                    }
                 }
             }
         }
