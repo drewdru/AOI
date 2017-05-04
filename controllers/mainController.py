@@ -112,12 +112,43 @@ class MainController(QObject):
                     methodPSNR = textLine.replace('PSNR: ', '')
                 if 'RMS: ' in textLine:
                     methodRMS = textLine.replace('RMS: ', '')
+                if 'Segments count: ' in textLine:
+                    segmentCount = textLine.replace('Segments count: ', '')
+                if 'Sum of similar: ' in textLine:
+                    sumOfSimilar = textLine.replace('Sum of similar: ', '')
+                if 'Sum of coinciding: ' in textLine:
+                    sumOfCoinciding = textLine.replace('Sum of coinciding: ', '')
+                if 'Area: ' in textLine:
+                    methodArea = textLine.replace('Area: ', '')
+                if 'Perimetr: ' in textLine:
+                    methodPerimetr = textLine.replace('Perimetr: ', '')
+                if 'Center of mass: ' in textLine:
+                    methodCenterOfMass = textLine.replace('Center of mass: ', '')
+                if 'Compactness: ' in textLine:
+                    methodCompactness = textLine.replace('Compactness: ', '')
         responseText = '<h1>{}</h1><h2>Timer(seconds):</h2>{}'.format(
             max_file.replace('.log', ''),
             methodTime)
-        responseText = '{}<h2>MSE:</h2>{}'.format(responseText, methodMSE)
-        responseText = '{}<h2>PSNR:</h2>{}'.format(responseText, methodPSNR)
-        responseText = '{}<h2>RMS:</h2>{}'.format(responseText, methodRMS)
+        if methodMSE:
+            responseText = '{}<h2>MSE:</h2>{}'.format(responseText, methodMSE)
+        if methodPSNR:
+            responseText = '{}<h2>PSNR:</h2>{}'.format(responseText, methodPSNR)
+        if methodRMS:
+            responseText = '{}<h2>RMS:</h2>{}'.format(responseText, methodRMS)
+        if segmentCount:
+            responseText = '{}<h2>Segments count:</h2>{}'.format(responseText, segmentCount)
+        if sumOfSimilar:
+            responseText = '{}<h2>Sum of similar:</h2>{}'.format(responseText, sumOfSimilar)
+        if sumOfCoinciding:
+            responseText = '{}<h2>Sum of coinciding:</h2>{}'.format(responseText, sumOfCoinciding)
+        if methodArea:
+            responseText = '{}<h2>Area:</h2>{}'.format(responseText, methodArea)
+        if methodPerimetr:
+            responseText = '{}<h2>Perimetr:</h2>{}'.format(responseText, methodPerimetr)
+        if methodCenterOfMass:
+            responseText = '{}<h2>Center of mass:</h2>{}'.format(responseText, methodCenterOfMass)
+        if methodCompactness:
+            responseText = '{}<h2>Compactness:</h2>{}'.format(responseText, methodCompactness)
         if callback.isCallable():
             callback.call([QJSValue(responseText)])
 

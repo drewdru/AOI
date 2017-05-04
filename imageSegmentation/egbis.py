@@ -9,6 +9,7 @@ from numpy import sqrt
 # from smooth_filter import gaussian_grid, filter_image
 from scipy.signal import convolve2d
 from numpy import *
+from PIL import ImageFilter
 
 class Node:
     def __init__(self, parent, rank=0, size=1):
@@ -135,20 +136,24 @@ def diff_grey(img, x1, y1, x2, y2):
 def threshold(size, const):
     return (const / size)
 
-def generate_image(forest, width, height):
+def generate_image(forest, width, height, pixMouse=None):
     random_color = lambda: (int(randint(0, 255)), int(randint(0, 255)), int(randint(0, 255)))
     colors = [random_color() for i in range(width*height)]
 
     img = Image.new('RGB', (width, height))
     im = img.load()
+    segNum = -1
+    if pixMouse is not None:
+        segNum = forest.find(pixMouse[0] * width + pixMouse[1])
     for y in range(height):
         for x in range(width):
             comp = forest.find(y * width + x)
-            im[x, y] = colors[comp]
+            if pixMouse is None or segNum == comp:
+                im[x, y] = colors[comp]
 
     return img.transpose(Image.ROTATE_270).transpose(Image.FLIP_LEFT_RIGHT)
 
-def segmentateRun(sigma, neighbor, k, min_size, image_file, outImagePath):
+def segmentateRun(sigma, neighbor, k, min_size, image_file, outImagePath, pixMouse):
     # image_file = Image.open(imgPath)
     size = image_file.size
     # print('Image info: ', image_file.format, size, image_file.mode)
@@ -171,10 +176,14 @@ def segmentateRun(sigma, neighbor, k, min_size, image_file, outImagePath):
     graph = build_graph(smooth, size[1], size[0], diff, neighbor == 8)
     forest = segment_graph(graph, size[0]*size[1], k, min_size, threshold)
 
-    image = generate_image(forest, size[1], size[0])
+    image = generate_image(forest, size[1], size[0], pixMouse)
     image.save(outImagePath)
 
-    print ('Number of components: %d' % forest.num_sets)
+    # get image area, perimeter and Center of mass
+    data1 = asarray(image, dtype="float")
+    imgTestFilters = image.filter(ImageFilter.FIND_EDGES)
+    data2 = asarray(imgTestFilters, dtype="float")
+    return data1, data2, forest.num_sets, forest
 
 if __name__ == '__main__':
     if len(sys.argv) != 7:
@@ -216,4 +225,4 @@ if __name__ == '__main__':
         image = generate_image(forest, size[1], size[0])
         image.save(sys.argv[6])
 
-        print ('Number of components: %d' % forest.num_sets)
+        # print ('Number of components: %d' % forest.num_sets)

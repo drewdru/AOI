@@ -59,19 +59,19 @@ Item {
             // MorphologySettings {
             //     id: morphSet
             // }
-            GetImagePixelDialog {
-                visible: false
-                id: getImagePixelDialog
-            }
-            Button {
-                text: qsTr("Get pixel position")
-                width: parent.width
-                onClicked: {
-                //     morphologyController.createMaskList(mask_widh.text, mask_height.text)
-                //     maskDialog.open()
-                    getImagePixelDialog.open()
-                }
-            }
+            // GetImagePixelDialog {
+            //     visible: false
+            //     id: getImagePixelDialog
+            // }
+            // Button {
+            //     text: qsTr("Get pixel position")
+            //     width: parent.width
+            //     onClicked: {
+            //     //     morphologyController.createMaskList(mask_widh.text, mask_height.text)
+            //     //     maskDialog.open()
+            //         getImagePixelDialog.open()
+            //     }
+            // }
             GroupBox {
                 title: 'Efficient Graph-Based Image Segmentation'
                 Layout.fillWidth: true
@@ -144,12 +144,178 @@ Item {
                             }
                         }
                     }
+                    GetImagePixelDialog {
+                        visible: false
+                        id: segEGBISwithPixelDialog
+                        onAccepted: {
+                            xsegEGBIS.text = segEGBISwithPixelDialog.xPix
+                            ysegEGBIS.text = segEGBISwithPixelDialog.yPix
+                        }
+                    }
+                    Button {
+                        text: qsTr("get segment position")
+                        width: parent.width
+                        onClicked: {
+                            segEGBISwithPixelDialog.open()
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("Position:")
+                        }
+                        Label {
+                            id: xsegEGBIS
+                            text: qsTr("")
+                        }
+                        Label {
+                            id: ysegEGBIS
+                            text: qsTr("")
+                        }
+                        Button {
+                            text: qsTr("Clear")
+                            width: parent.width
+                            onClicked: {
+                                xsegEGBIS.text = ''
+                                ysegEGBIS.text = ''
+                            }
+                        }
+                    }
                     Button {
                         text: qsTr("Segmentate")
                         width: parent.width
                         onClicked: {
                             secondPage.enabled = false
-                            segmentationController.EfficientGraphBasedImageSegmentation(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, sigma.text, neighborhood.text, k.text, min_comp_size.text)
+                            segmentationController.EfficientGraphBasedImageSegmentation(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, sigma.text, neighborhood.text, k.text, min_comp_size.text, xsegEGBIS.text, ysegEGBIS.text)
+                            secondPage.enabled = true
+                            secondPage.updateProcessingImage()
+                        }
+                    }
+                }                
+            }
+            Button {
+                text: qsTr("Compare ⇅")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    segmentationController.CompareEGBISandSPHC(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, sigma.text, neighborhood.text, k.text, min_comp_size.text, xsegEGBIS.text, ysegEGBIS.text, numSegments.text, sigmaSPHC.text, segmentsToMerge.text, distance_limit.text, xsegSPHC.text, xsegSPHC.text)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }            
+            GroupBox {
+                title: 'Superpixel Hierarchical Clustering'
+                Layout.fillWidth: true
+                ColumnLayout {
+                    RowLayout {
+                        Label {
+                            text: qsTr("Number of segments:")
+                        }
+                        TextField {
+                            id: numSegments
+                            text: qsTr("1000")
+                            Layout.fillWidth: true
+                            validator: IntValidator{}
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("Sigma:")
+                        }
+                        TextField {
+                            id: sigmaSPHC
+                            text: qsTr("2")
+                            Layout.fillWidth: true
+                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("Number of superpixels to merge:")
+                        }
+                        TextField {
+                            id: segmentsToMerge
+                            text: qsTr("500")
+                            Layout.fillWidth: true
+                            validator: IntValidator{}
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("Distance limit:")
+                        }
+                        TextField {
+                            id: distance_limit
+                            text: qsTr("0.5")
+                            Layout.fillWidth: true
+                            validator: DoubleValidator{locale: DoubleValidator.StandardNotation}
+                            inputMethodHints: Qt.ImhDigitsOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                    }
+                    GetImagePixelDialog {
+                        visible: false
+                        id: segSPHCwithPixelDialog
+                        onAccepted: {
+                            xsegSPHC.text = segSPHCwithPixelDialog.xPix
+                            ysegSPHC.text = segSPHCwithPixelDialog.yPix
+                        }
+                    }
+                    Button {
+                        text: qsTr("get segment position")
+                        width: parent.width
+                        onClicked: {
+                            segSPHCwithPixelDialog.open()
+                        }
+                    }
+                    RowLayout {
+                        Label {
+                            text: qsTr("Position:")
+                        }
+                        Label {
+                            id: xsegSPHC
+                            text: qsTr("")
+                        }
+                        Label {
+                            id: ysegSPHC
+                            text: qsTr("")
+                        }
+                        Button {
+                            text: qsTr("Clear")
+                            width: parent.width
+                            onClicked: {
+                                xsegSPHC.text = ''
+                                ysegSPHC.text = ''
+                            }
+                        }
+                    }
+                    Button {
+                        text: qsTr("Segmentate")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            segmentationController.segSPHC(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, numSegments.text, sigmaSPHC.text, segmentsToMerge.text, distance_limit.text, xsegSPHC.text, xsegSPHC.text)
                             secondPage.enabled = true
                             secondPage.updateProcessingImage()
                         }
