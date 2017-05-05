@@ -332,14 +332,31 @@ Item {
                     secondPage.updateProcessingImage()
                 }
             }
-            Button {
-                text: qsTr("K-Means")
-                width: parent.width
-                onClicked: {
-                    secondPage.enabled = false
-                    segmentationController.KMeans(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
-                    secondPage.enabled = true
-                    secondPage.updateProcessingImage()
+            RowLayout {
+                Label {
+                    text: qsTr("Count of clusters:")
+                }
+                TextField {
+                    id: countOfClusters
+                    text: qsTr("2")
+                    Layout.fillWidth: true
+                    validator: IntValidator{}
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                    background: Rectangle {
+                        radius: 2
+                        border.color: "#333"
+                        border.width: 1
+                    }
+                }
+                Button {
+                    text: qsTr("K-Means")
+                    width: parent.width
+                    onClicked: {
+                        secondPage.enabled = false
+                        segmentationController.KMeans(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, countOfClusters.text)
+                        secondPage.enabled = true
+                        secondPage.updateProcessingImage()
+                    }
                 }
             }
             Button {

@@ -102,6 +102,8 @@ class MainController(QObject):
                     max_file = fname
 
         methodTime = methodMSE = methodPSNR = methodRMS = 0
+        segmentCount = sumOfSimilar = sumOfCoinciding = methodArea = 0
+        methodPerimetr = methodCenterOfMass = methodCompactness = 0
         with open('{}/{}'.format(max_dir, max_file), 'r') as fileStream:
             for textLine in fileStream.readlines():
                 if 'Timer: ' in textLine:

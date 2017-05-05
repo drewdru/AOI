@@ -9,77 +9,100 @@ from pylab import *
 #import cv2
 import random
 from scipy.spatial import distance
+import imageio
+import numpy as np
+from scipy.sparse import *
+from sklearn.cluster import KMeans
+from PyQt5.QtCore import QCoreApplication
 
 
-def doKMeans(imgPath, outImagePath):
-    km = 0 # Number of times the algorithm is iterated....
-    #..... this value will be updated later as go to the next iteration
-    nc = 2  # Number of clusters to be used.... 
-    # .....this is basically the k value as per the formula used in the algorithm
-    I = array(Image.open(imgPath).convert('L')) # read the input image
+def doKMeans(imgPath, outImagePath, clastersCount = 2):
+    if clastersCount == 2:
+        km = 0 # Number of times the algorithm is iterated....
+        #..... this value will be updated later as go to the next iteration
+        nc = 2  # Number of clusters to be used.... 
+        # .....this is basically the k value as per the formula used in the algorithm
+        I = array(Image.open(imgPath).convert('L')) # read the input image
 
-    cp = [] # Array containing the pixel intensity of all k clusters
-    cp1 = list(range(nc)) # initializing a new array for comparision
-    check = list(range(1,nc+1)) # initializing an array to store the difference
-    '''
-    for i in range(0,nc):
-        cp.append(randint(0,256)) # choose random centroids
-    '''
-    cp = [25,210]
-    while count_nonzero(check) > 0 : # choose number of iterations
-        # these nested arrays are the collection of indices and intensities for all the clusters
-        kx = [[] for _ in list(range(nc))] # to store the x index
-        ky = [[] for _ in list(range(nc))] # to store the y index
-        kp = [[] for _ in list(range(nc))] # to store the pixels
-        # calculating the distance between each pixel and centroids
-        for i in range(0,len(I[:,0])):
-            for j in range(0,len(I[0,:])):
-                tcomp = [] # temp array for comparision
-                for k in range(0,nc):
-                    tcomp.append(abs(I[i,j]-cp[k])) #(cx[k],cy[k])
-                    c = argmin(tcomp) # The centroid to which the pixel belongs
-                    kx[c].append(i) # note x index
-                    ky[c].append(j) # note y index
-                    kp[c].append(I[i,j]) # note the pixel intensity
-        
-        #== Mean Calculation for each cluster =======#
-        for i in range(nc):
-            cp1[i] = (mean(kp[i])) # Mean for each cluster
-            check[i] = (abs(cp[i]-cp1[i])) # Compare the new set with the previous set
-        cp2 = cp
-        cp = cp1 # updating the mean values
-        
-        km+=1 # Keeping a coutn if the number of iterations
-    print ('Number of iterations = {}\n'.format(km))
-    #==========Output the cluster==============#
-    cluster = []
-    for i in range(0,nc):
-        cluster.append(len(kp[i])) # choosing the cluster with max pixels
-    ind = cluster.index(min(cluster))
-    zipk = zip(kx[ind],ky[ind],kp[ind]) # retriving the indices of the chosen pixels
-    I = 255 * numpy.ones(shape = shape(I))
-    for k,l,m in zipk:
-        I[k,l] = 0
-    figure()
-    plt.imshow(I,cmap=cm.gray)
-    title('Output Image of  K-means Algorithm')
-    # show()
-    img = Image.fromarray(numpy.asarray(numpy.clip(I, 0, 255), dtype="uint8"))
-    img.save(outImagePath)
-    #------------F score calculation--------------
-    tp,tn,fp,fn = (0.0,0.0,0.0,0.0) # initializing the true/false positives/negatives
-    J = array(Image.open(outImagePath).convert('L'))
-    for i in range(len(I[:,0])):    
-        for j in range(len(I[0,:])):    
-            if ((I[i,j]>200) & (J[i,j]>200)): # implementing true negative
-                tn+=1
-            elif((I[i,j]==0) & (J[i,j]==0)): # implementing true positive
-                tp+=1
-            elif((I[i,j]>200) & (J[i,j]==0)): # implementing false negative
-                fn+=1
-            elif((I[i,j]==0) & (J[i,j]>200)): # implementing false positive
-                fp+=1
-    sen = tp/(tp+fn) # Sensitivity
-    fot = fp/(fp+tn) # Fall Out 
-    fsc = (2*tp)/((2*tp)+fp+fn) # F-score
-    print ("Finished quantitative evaluation \nSensitivity = {}\nFall-out = {}\nF-score = {}\n".format(sen,fot,fsc))
+        cp = [] # Array containing the pixel intensity of all k clusters
+        cp1 = list(range(nc)) # initializing a new array for comparision
+        check = list(range(1,nc+1)) # initializing an array to store the difference
+        '''
+        for i in range(0,nc):
+            cp.append(randint(0,256)) # choose random centroids
+        '''
+        cp = [25,210]
+        while count_nonzero(check) > 0 : # choose number of iterations
+            # these nested arrays are the collection of indices and intensities for all the clusters
+            kx = [[] for _ in list(range(nc))] # to store the x index
+            ky = [[] for _ in list(range(nc))] # to store the y index
+            kp = [[] for _ in list(range(nc))] # to store the pixels
+            # calculating the distance between each pixel and centroids
+            for i in range(0,len(I[:,0])):
+                for j in range(0,len(I[0,:])):
+                    tcomp = [] # temp array for comparision
+                    for k in range(0,nc):
+                        tcomp.append(abs(I[i,j]-cp[k])) #(cx[k],cy[k])
+                        c = argmin(tcomp) # The centroid to which the pixel belongs
+                        kx[c].append(i) # note x index
+                        ky[c].append(j) # note y index
+                        kp[c].append(I[i,j]) # note the pixel intensity
+            
+            #== Mean Calculation for each cluster =======#
+            for i in range(nc):
+                cp1[i] = (mean(kp[i])) # Mean for each cluster
+                check[i] = (abs(cp[i]-cp1[i])) # Compare the new set with the previous set
+            cp2 = cp
+            cp = cp1 # updating the mean values
+            
+            km+=1 # Keeping a coutn if the number of iterations
+        print ('Number of iterations = {}\n'.format(km))
+        #==========Output the cluster==============#
+        cluster = []
+        for i in range(0,nc):
+            cluster.append(len(kp[i])) # choosing the cluster with max pixels
+        ind = cluster.index(min(cluster))
+        zipk = zip(kx[ind],ky[ind],kp[ind]) # retriving the indices of the chosen pixels
+        I = 255 * numpy.ones(shape = shape(I))
+        for k,l,m in zipk:
+            I[k,l] = 0
+        figure()
+        plt.imshow(I,cmap=cm.gray)
+        title('Output Image of  K-means Algorithm')
+        # show()
+        img = Image.fromarray(numpy.asarray(numpy.clip(I, 0, 255), dtype="uint8"))
+        img.save(outImagePath)
+        #------------F score calculation--------------
+        tp,tn,fp,fn = (0.0,0.0,0.0,0.0) # initializing the true/false positives/negatives
+        J = array(Image.open(outImagePath).convert('L'))
+        for i in range(len(I[:,0])):    
+            for j in range(len(I[0,:])):    
+                if ((I[i,j]>200) & (J[i,j]>200)): # implementing true negative
+                    tn+=1
+                elif((I[i,j]==0) & (J[i,j]==0)): # implementing true positive
+                    tp+=1
+                elif((I[i,j]>200) & (J[i,j]==0)): # implementing false negative
+                    fn+=1
+                elif((I[i,j]==0) & (J[i,j]>200)): # implementing false positive
+                    fp+=1
+        sen = tp/(tp+fn) # Sensitivity
+        fot = fp/(fp+tn) # Fall Out 
+        fsc = (2*tp)/((2*tp)+fp+fn) # F-score
+        print ("Finished quantitative evaluation \nSensitivity = {}\nFall-out = {}\nF-score = {}\n".format(sen,fot,fsc))
+
+    else:
+        im = imageio.imread(imgPath)
+        n, m, _ = im.shape
+        X = [im[i][j] for i in range(n) for j in range(m)]
+        X = csr_matrix(np.array(X))
+        # for k in range(3, 10):
+        # print (k,)
+        QCoreApplication.processEvents()
+        labeler = KMeans(clastersCount)
+        QCoreApplication.processEvents()
+        labeler.fit(X)
+        for i in range(n):
+            QCoreApplication.processEvents()
+            for j in range(m):
+                im[i][j] = labeler.cluster_centers_[labeler.labels_[i*m+j]]
+        imageio.imsave(outImagePath, im)

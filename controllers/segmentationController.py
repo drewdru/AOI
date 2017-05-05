@@ -200,8 +200,8 @@ class SegmentationController(QObject):
         # img.save('{}/temp/processingImage.png'.format(self.appDir))
         imageComparison.calculateImageDifference(colorModelTag, logFile)
 
-    @pyqtSlot(str, int, bool)
-    def KMeans(self, colorModelTag, currentImageChannelIndex, isOriginalImage):
+    @pyqtSlot(str, int, bool, int)
+    def KMeans(self, colorModelTag, currentImageChannelIndex, isOriginalImage, countOfClusters):
         """
             GaborSegmentation
         """
@@ -214,7 +214,7 @@ class SegmentationController(QObject):
         methodTimer = time.time()
         if colorModelTag == 'RGB':
             methodTimer = time.time()
-            kMeans.doKMeans(imgPath, outImagePath)
+            kMeans.doKMeans(imgPath, outImagePath, countOfClusters)
             methodTimer = time.time() - methodTimer
             img = self.imageService.openImage(False)
             if img is None:
@@ -223,7 +223,7 @@ class SegmentationController(QObject):
         if colorModelTag == 'YUV':
             colorModel.rgbToYuv(img.load(), img.size)
             methodTimer = time.time()
-            kMeans.doKMeans(imgPath, outImagePath)
+            kMeans.doKMeans(imgPath, outImagePath, countOfClusters)
             methodTimer = time.time() - methodTimer
             img = self.imageService.openImage(False)
             if img is None:
@@ -235,7 +235,7 @@ class SegmentationController(QObject):
             data = numpy.asarray(img, dtype="float")
             data = colorModel.rgbToHsl(data)
             methodTimer = time.time()
-            kMeans.doKMeans(imgPath, outImagePath)
+            kMeans.doKMeans(imgPath, outImagePath, countOfClusters)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
             timerTemp = time.time()

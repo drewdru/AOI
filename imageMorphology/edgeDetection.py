@@ -134,7 +134,7 @@ def roberts(colorModelTag, currentImageChannelIndex, pixels, imgSize,
 
 
 def canny(colorModelTag, currentImageChannelIndex, pixels, imgSize,
-        G, amplifier=1.0, threshold=(10, 250)):
+        G, amplifier=1.0, threshold=(10, 250), maskMode=0):
     sigma = 2.2
 
     gradxR = []
@@ -144,12 +144,27 @@ def canny(colorModelTag, currentImageChannelIndex, pixels, imgSize,
     gradxB = []
     gradyB = []
 
-    sobel_x = [[-1,0,1],
-            [-2,0,2],
-            [-1,0,1]]
-    sobel_y = [[-1,-2,-1],
-            [0,0,0],
-            [1,2,1]]
+    if maskMode == 0:
+        sobel_x = [[-1, 0, 1],
+            [-2, 0, 2],
+            [-1, 0, 1]]
+        sobel_y = [[-1, -2, -1],
+            [0, 0, 0],
+            [1, 2, 1]]
+    elif maskMode == 1:
+        sobel_x = [[0, -1, -2],
+            [1, 0, -1],
+            [2, 1, 0]]
+        sobel_y = [[-2, -1, 0],
+            [-1, 0, 1],
+            [0, 1, 2]]
+    else:
+        sobel_x = [[-1, 0, 1],
+            [-2, 0, 2],
+            [-1, 0, 1]]
+        sobel_y = [[-1, -2, -1],
+            [0, 0, 0],
+            [1, 2, 1]]
 
     width = imgSize[1]
     height = imgSize[0]

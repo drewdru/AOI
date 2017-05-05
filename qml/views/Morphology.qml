@@ -191,14 +191,31 @@ Item {
                             secondPage.updateProcessingImage()
                         }
                     }
-                    Button {
-                        text: qsTr("Laplacian")
-                        width: parent.width
-                        onClicked: {
-                            secondPage.enabled = false
-                            morphologyController.segLaplacian(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, amplifier.text, threshold.text)
-                            secondPage.enabled = true
-                            secondPage.updateProcessingImage()
+                    RowLayout {
+                        Label {
+                            text: qsTr("Mask mode:\t")
+                        }
+                        TextField {
+                            id: maskMode
+                            text: qsTr("0")
+                            Layout.fillWidth: true
+                            validator: IntValidator{}
+                            inputMethodHints: Qt.ImhFormattedNumbersOnly
+                            background: Rectangle {
+                                radius: 2
+                                border.color: "#333"
+                                border.width: 1
+                            }
+                        }
+                        Button {
+                            text: qsTr("Laplacian")
+                            width: parent.width
+                            onClicked: {
+                                secondPage.enabled = false
+                                morphologyController.segLaplacian(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked, amplifier.text, threshold.text, maskMode.text)
+                                secondPage.enabled = true
+                                secondPage.updateProcessingImage()
+                            }
                         }
                     }
                     Button {

@@ -335,9 +335,9 @@ class MorphologyController(QObject):
         img.save('{}/temp/processingImage.png'.format(self.appDir))
         imageComparison.calculateImageDifference(colorModelTag, logFile)
 
-    @pyqtSlot(str, int, bool, float, float)
+    @pyqtSlot(str, int, bool, float, float, int)
     def segLaplacian(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
-            amplifier, threshold):
+            amplifier, threshold, maskMode):
         """
             Laplacian
         """
@@ -353,7 +353,7 @@ class MorphologyController(QObject):
             filters.gaussianBlur(colorModelTag, currentImageChannelIndex, gaussianImg.load(),
                 gaussianImg.size, (gaussianFilterSize, gaussianFilterSize))
             edgeDetection.canny(colorModelTag, currentImageChannelIndex, img.load(), img.size,
-                gaussianImg.load(), amplifier, threshold)
+                gaussianImg.load(), amplifier, threshold, maskMode=maskMode)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
         if colorModelTag == 'YUV':
@@ -364,7 +364,7 @@ class MorphologyController(QObject):
             filters.gaussianBlur(colorModelTag, currentImageChannelIndex, gaussianImg.load(),
                 gaussianImg.size, (gaussianFilterSize, gaussianFilterSize))
             edgeDetection.canny(colorModelTag, currentImageChannelIndex, img.load(), img.size,
-                gaussianImg.load(), amplifier, threshold)
+                gaussianImg.load(), amplifier, threshold, maskMode=maskMode)
             methodTimer = time.time() - methodTimer
             self.histogramService.saveHistogram(img=img, model=colorModelTag)
             timerTemp = time.time()
@@ -379,7 +379,7 @@ class MorphologyController(QObject):
             filters.gaussianBlur(colorModelTag, currentImageChannelIndex, gaussianData,
                 gaussianData.shape, (gaussianFilterSize, gaussianFilterSize))
             edgeDetection.canny(colorModelTag, currentImageChannelIndex, gaussianData,
-                gaussianData.shape, gaussianData, amplifier, threshold)
+                gaussianData.shape, gaussianData, amplifier, threshold, maskMode=maskMode)
             methodTimer = time.time() - methodTimer
             # data = numpy.copy(dataTemp)
             self.histogramService.saveHistogram(data=data, model=colorModelTag)
