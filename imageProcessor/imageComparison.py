@@ -78,8 +78,8 @@ def calculateSegmentationCriterias(logFile, data1, data2, segmentCount, isReturn
     # get image area, perimeter and Center of mass
     area = 0
     perimetr = 0
-    pointXsum = 0
     pointYsum = 0
+    pointXsum = 0
     size = data1.shape
 
     for i in range(size[0]):
@@ -93,14 +93,65 @@ def calculateSegmentationCriterias(logFile, data1, data2, segmentCount, isReturn
     centerOfMass = (pointXsum/area, pointYsum/area)
     compactness = (perimetr**2)/area
 
+    # img1 = Image.fromarray(numpy.asarray(numpy.clip(data1, 0, 255), dtype="uint8"))
+    # img2 = Image.fromarray(numpy.asarray(numpy.clip(data2, 0, 255), dtype="uint8"))
+    # # img1.show()
+    # img2.show()
+    edgeList = []
+    for i in range(size[0]):
+        for j in range(size[1]):
+            if any(data1[i, j] != 0):
+                edgeList.append((i,j))
+    chainCode8 = ''
+    for i in range(len(edgeList)):
+        if i == 0:
+            continue;
+        point1 = edgeList[i - 1]
+        point2 = edgeList[i]
+        x1 = point1[0]
+        y1 = point1[1]
+        x2 = point2[0]
+        y2 = point2[1]
+        while x1 != x2 or y1 != y2:
+            if x1 < x2:
+                x1 += 1
+                if y1 < y2:
+                    chainCode8 += '5'
+                    y1 += 1
+                elif y1 > y2:
+                    y1 -= 1
+                    chainCode8 += '3'
+                else:
+                    chainCode8 += '4'
+            elif x1 > x2:
+                x1 -= 1
+                if y1 < y2:
+                    y1 += 1
+                    chainCode8 += '7'
+                elif y1 > y2:
+                    y1 -= 1
+                    chainCode8 += '1'
+                else:
+                    chainCode8 += '0'
+            else:
+                if y1 > y2:
+                    y1 -= 1
+                    chainCode8 += '2'
+                elif y1 < y2:
+                    y1 += 1
+                    chainCode8 += '6'
+
+    with open(logFile.replace('.log', 'ChainCode.txt').replace('log/', ''), 'w') as text_file:
+        text_file.write(chainCode8)
+
     if isReturn:
         return area, perimetr, centerOfMass, compactness, segmentCount
-    with open(logFile, "a+") as text_file:
-        text_file.write("Area: {}\n".format(area))
-        text_file.write("Perimetr: {}\n".format(perimetr))
-        text_file.write("Center of mass: {}\n".format(centerOfMass))
-        text_file.write("Compactness: {}\n".format(compactness))
-        text_file.write("Segments count: {}\n".format(segmentCount))
+    with open(logFile, 'a+') as text_file:
+        text_file.write('Area: {}\n'.format(area))
+        text_file.write('Perimetr: {}\n'.format(perimetr))
+        text_file.write('Center of mass: {}\n'.format(centerOfMass))
+        text_file.write('Compactness: {}\n'.format(compactness))
+        text_file.write('Segments count: {}\n'.format(segmentCount))
 
 def calculateSegmentationDifferences(logFile, data1EGBIS, data2EGBIS, segmentCountEGBIS, forest,
         data1SPHC, data2SPHC, segmentCountSPHC, segm_dict):
@@ -137,18 +188,19 @@ def calculateSegmentationDifferences(logFile, data1EGBIS, data2EGBIS, segmentCou
         calculateSegmentationCriterias(logFile, data1SPHC, data2SPHC,
             segmentCountSPHC, isReturn=True)
 
-    with open(logFile, "a+") as text_file:
-        text_file.write("Area: EGBIS: {} SPHC: {}\n"\
+    with open(logFile, 'a+') as text_file:
+        text_file.write('Area: EGBIS: {} SPHC: {}\n'\
             .format(areaEGBIS, areaSPHC))
-        text_file.write("Perimetr: EGBIS: {} SPHC: {}\n"\
+        text_file.write('Perimetr: EGBIS: {} SPHC: {}\n'\
             .format(perimetrEGBIS, perimetrSPHC))
-        text_file.write("Center of mass: EGBIS: {} SPHC: {}\n"\
+        text_file.write('Center of mass: EGBIS: {} SPHC: {}\n'\
             .format(centerOfMassEGBIS, centerOfMassSPHC))
-        text_file.write("Compactness: EGBIS: {} SPHC: {}\n"\
+        text_file.write('Compactness: EGBIS: {} SPHC: {}\n'\
             .format(compactnessEGBIS, compactnessSPHC))
-        text_file.write("Segments count: EGBIS: {} SPHC: {}\n"\
+        text_file.write('Segments count: EGBIS: {} SPHC: {}\n'\
             .format(segmentCountEGBIS, segmentCountSPHC))
-        text_file.write("Sum of similar: {}\n"\
+        text_file.write('Sum of similar: {}\n'\
             .format(sumOfSimilar))
-        text_file.write("Sum of coinciding: {}\n"\
+        text_file.write('Sum of coinciding: {}\n'\
             .format(sumOfCoinciding))
+
