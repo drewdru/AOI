@@ -13,7 +13,7 @@ sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, histogramService, imageService, imageComparison
 from imageSegmentation import egbis, gabor, gaborSegment, kMeans, sphc
-#from roadLaneDetection import detectRoadLane
+from roadLaneFinding import detectRoadLane
 from imageFilters import filters
 from PyQt5.QtCore import QCoreApplication, QDir 
 from PyQt5.QtCore import QObject, pyqtSlot, QVariant #, QVariantList
@@ -376,5 +376,7 @@ class SegmentationController(QObject):
 
     @pyqtSlot(str, int, bool)
     def detectRoadLane(self, colorModelTag, currentImageChannelIndex, isOriginalImage):
-        #detectRoadLane.detectLane()
-        pass
+        outImagePath, imgPath = self.imageService.getImagePath(isOriginalImage)
+        if imgPath is None:
+            return
+        detectRoadLane.doFindLane(imgPath, outImagePath)
