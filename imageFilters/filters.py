@@ -71,7 +71,6 @@ def medianFilter(colorModelTag, currentImageChannelIndex, pixels, imgSize, filte
             for apertureCoordinate in apertureLine:
                 pixelPosX, pixelPosY = apertureCoordinate
                 red, green, blue = pixels[pixelPosX, pixelPosY]
-
                 redList.append(red)
                 greenList.append(green)
                 blueList.append(blue)

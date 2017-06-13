@@ -197,6 +197,7 @@ Rectangle {
         onShowBinarizeDrawer: rootWindow.viewDrawer('binarizeDrawer')
         onShowMorphologyDrawer: rootWindow.viewDrawer('morphologyDrawer')
         onShowSegmentationDrawer: rootWindow.viewDrawer('segmentationDrawer')
+        onUpdateProcessingImage: rootWindow.updateProcessingImage()
     }
     Shortcut {
         sequence: "Ctrl+W"

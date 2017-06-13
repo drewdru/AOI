@@ -140,7 +140,7 @@ Item {
                 }
             }
             Button {
-                text: qsTr("Gaussian blur")
+                text: qsTr("Gaussian filter")
                 width: parent.width
                 onClicked: {
                     secondPage.enabled = false
@@ -166,7 +166,7 @@ Item {
                     }
                 }
                 Button {
-                    text: qsTr("Laplacian blur")
+                    text: qsTr("Laplacian filter")
                     width: parent.width
                     onClicked: {
                         secondPage.enabled = false

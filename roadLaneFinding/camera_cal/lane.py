@@ -160,6 +160,7 @@ def find_lanes(image, trans, Minv):
     cv2.fillPoly(color_warp, np.int_([pts]), (0, 255, 0))
     # Warp the blank back to original image space using inverse perspective matrix (Minv)
     newwarp = cv2.warpPerspective(color_warp, Minv, (trans.shape[1], trans.shape[0])) 
+    calculateComparisons(newwarp)
     # Combine the result with the original image
     result = cv2.addWeighted(image, 1, newwarp, 0.3, 0)
 
@@ -173,6 +174,53 @@ def find_lanes(image, trans, Minv):
     #cv2.putText(result,location_string,(400,100), font, 1,(255,255,255),2,cv2.LINE_AA)
 
     return out_img, result, left_fitx, right_fitx, ploty, radi, offset
+
+def calculateComparisons(data1):
+    # get reference road
+    img = Image.open('./temp/inImage (6th copy).png')
+    img = img.convert(mode='RGB')
+    reference_data = np.asarray(img, dtype="float")
+    # print(reference_data)
+    reference_data[reference_data[:] != 255] = 0
+    # print(reference_data)
+    # reference_data[np.all(reference_data != 255, axis=1)]
+    # reference_data = [0 if reference[:, 0] < 255 for reference in reference_data]
+    # reference_data = [0 if reference < 255 for reference in reference_data]
+    # img = Image.fromarray(np.asarray(np.clip(reference_data, 0, 255), dtype="uint8"))
+    # img.show()
+    data0 = reference_data
+
+
+    # data1[data1 == 0] = 255
+    # np.save('./reference_lane', data1)
+    # data0 = np.load('./reference_lane.npy')
+    # img = Image.fromarray(np.asarray(np.clip(data0, 0, 255), dtype="uint8"))
+    # img.show()
+    # get image area, perimeter and Center of mass
+    area = 0
+    pointYsum = 0
+    pointXsum = 0
+    size = data1.shape
+    # img = Image.fromarray(np.asarray(np.clip(data1, 0, 255), dtype="uint8"))
+    # img.show()
+    originArea = 0
+    for i in range(size[0]):
+        for j in range(size[1]):
+            if any(data1[i, j] != 0):
+                area += 1
+                pointXsum += i
+                pointYsum += j
+            if any(data0[i, j] != 0):
+                originArea += 1
+    perimetr = np.sum(data1[:,1:] != data1[:,:-1]) + np.sum(data1[1:,:] != data1[:-1,:])
+    centerOfMass = (pointXsum/area, pointYsum/area)
+    compactness = (perimetr**2)/area
+    similar = 100 * np.sum(data1 == data0)/originArea - 5.732
+
+    # similar = 100 * np.sum(np.logical_and((data1 != 0).any(), (data0 != 0).any()))/originArea - 5.732
+    print('area: {}, perimetr: {}, centerOfMass: {}, compactness: {}, similar: {}%'.format(
+        area, perimetr, centerOfMass, compactness, similar
+    ))
 
 def plot(out_img, result, left_fitx, right_fitx, ploty, radi, offset):
     f, (ax1, ax2) = plt.subplots(1,2, figsize=(15,15))
@@ -194,9 +242,20 @@ def plot(out_img, result, left_fitx, right_fitx, ploty, radi, offset):
 #--------------------------------------------------------------------
 #PROCESS FUNCTION
 def process_image(image, path='./test_result/test0.jpg'):
+    img = Image.fromarray(np.asarray(np.clip(image, 0, 255), dtype="uint8"))
+    # img.show()
+
     undist = undistort(image)
+    # img = Image.fromarray(np.asarray(np.clip(undist, 0, 255), dtype="uint8"))
+    # img.show()
     proc = process(undist)
+    # img = Image.fromarray(np.asarray(np.clip(proc, 0, 255), dtype="uint8"))
+    # img.show()
     trans, Minv = transform(proc)
+    # img = Image.fromarray(np.asarray(np.clip(trans, 0, 255), dtype="uint8"))
+    # img.show()
+    # img = Image.fromarray(np.asarray(np.clip(Minv, 0, 255), dtype="uint8"))
+    # img.show()
     out_img, result, left_fitx, right_fitx, ploty, radi, offset = find_lanes(image, trans, Minv)
     #plot(out_img, result, left_fitx, right_fitx, ploty, radi, offset)
     #img = Image.fromarray(out_img, 'RGB')
@@ -205,5 +264,11 @@ def process_image(image, path='./test_result/test0.jpg'):
     #img.show()
     #print(image)
     img.save(path)
+
+
+    # img = Image.fromarray(np.asarray(np.clip(out_img, 0, 255), dtype="uint8"))
+    # img.show()
+    # img = Image.fromarray(np.asarray(np.clip(result, 0, 255), dtype="uint8"))
+    # img.show()
     
     return result

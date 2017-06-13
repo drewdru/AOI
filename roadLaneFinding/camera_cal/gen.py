@@ -221,9 +221,6 @@ def preprocess():
 #preprocess()
 
 
-
-
-
 #transform images
 #--------------------------------------------------------
 

@@ -29,7 +29,7 @@ if __name__ == '__main__':
     appView = QQuickView()
     appView.setMinimumHeight(640)
     appView.setMinimumWidth(1024)
-    appView.setTitle('Lab1')
+    appView.setTitle('roadLaneFinding')
 
     engine = appView.engine()
     engine.quit.connect(myApp.quit)

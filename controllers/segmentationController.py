@@ -146,7 +146,7 @@ class SegmentationController(QObject):
             data = colorModel.hslToRgb(data)
             img = Image.fromarray(numpy.asarray(numpy.clip(data, 0, 255), dtype="uint8"))
             methodTimer = time.time() - timerTemp + methodTimer
-        logFile = '{}/temp/log/morphDilation.log'.format(self.appDir)
+        logFile = '{}/temp/log/LaplacianFindEdge.log'.format(self.appDir)
         with open(logFile, "a+") as text_file:
             text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
         # img.save('{}/temp/processingImage.png'.format(self.appDir))
@@ -379,4 +379,12 @@ class SegmentationController(QObject):
         outImagePath, imgPath = self.imageService.getImagePath(isOriginalImage)
         if imgPath is None:
             return
+        methodTimer = time.time()
         detectRoadLane.doFindLane(imgPath, outImagePath)
+        methodTimer = time.time() - methodTimer
+        img = self.imageService.openImage(False)
+        self.histogramService.saveHistogram(img=img, model=colorModelTag)
+        logFile = '{}/temp/log/detectRoadLane.log'.format(self.appDir)
+        with open(logFile, "a+") as text_file:
+            text_file.write("Timer: {}: {}\n".format(colorModelTag, methodTimer))
+        imageComparison.calculateImageDifference(colorModelTag, logFile)

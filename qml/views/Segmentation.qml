@@ -53,6 +53,99 @@ Item {
                 checked: true
                 text: qsTr("Use original image")
             }
+            Button {
+                text: qsTr("Detect road lane")
+                width: parent.width
+                onClicked: {
+                    secondPage.enabled = false
+                    segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                    secondPage.enabled = true
+                    secondPage.updateProcessingImage()
+                }
+            }
+            GroupBox {
+                title: 'Step by step'
+                Layout.fillWidth: true
+                ColumnLayout {
+                    Button {
+                        id: stepToGray
+                        text: qsTr("To gray")
+                        width: parent.width
+                        onClicked: {
+                            secondPage.enabled = false
+                            // segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            secondPage.enabled = true
+                            // secondPage.updateProcessingImage()
+                            stepPerspectTransf.enabled = true
+                        }
+                    }
+                    Button {
+                        id: stepPerspectTransf
+                        text: qsTr("Perspective transform")
+                        width: parent.width
+                        enabled: false
+                        onClicked: {
+                            stepPerspectTransf.enabled = false
+                            // segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            // secondPage.enabled = true
+                            // secondPage.updateProcessingImage()
+                            stepOtsu.enabled = true
+                        }
+                    }
+                    Button {
+                        id: stepOtsu
+                        text: qsTr("Otsu")
+                        width: parent.width
+                        enabled: false
+                        onClicked: {
+                            stepOtsu.enabled = false
+                            // segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            // secondPage.enabled = true
+                            // secondPage.updateProcessingImage()
+                            stepCanny.enabled = true
+                        }
+                    }
+                    Button {
+                        id: stepCanny
+                        text: qsTr("Canny")
+                        width: parent.width
+                        enabled: false
+                        onClicked: {
+                            stepCanny.enabled = false
+                            // segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            // secondPage.enabled = true
+                            // secondPage.updateProcessingImage()
+                            stepHough.enabled = true
+                        }
+                    }
+                    Button {
+                        id: stepHough
+                        text: qsTr("Hough Transform")
+                        width: parent.width
+                        enabled: false
+                        onClicked: {
+                            stepHough.enabled = false
+                            // segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            // secondPage.enabled = true
+                            // secondPage.updateProcessingImage()
+                            stepDetect.enabled = true
+                        }
+                    }
+                    Button {
+                        id: stepDetect
+                        text: qsTr("Detect lane")
+                        width: parent.width
+                        enabled: false
+                        onClicked: {
+                            stepDetect.enabled = false
+                            // segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
+                            // secondPage.enabled = true
+                            // secondPage.updateProcessingImage()
+                        }
+                    }
+                }
+            }
+
             ColorModelSelector {
                 id: colorModelSelector
             }
@@ -357,16 +450,6 @@ Item {
                         secondPage.enabled = true
                         secondPage.updateProcessingImage()
                     }
-                }
-            }
-            Button {
-                text: qsTr("Detect road lane")
-                width: parent.width
-                onClicked: {
-                    secondPage.enabled = false
-                    segmentationController.detectRoadLane(colorModelSelector.colorModelTag, colorModelSelector.currentImageChannelIndex, isOriginalImage.checked)
-                    secondPage.enabled = true
-                    secondPage.updateProcessingImage()
                 }
             }
         }
