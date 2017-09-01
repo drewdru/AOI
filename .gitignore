@@ -25,3 +25,12 @@ temp/
 inImage (copy).png
 inImage.png
 processingImage.png
+
+roadLaneDetection/imgs/
+roadLaneFinding (copy)/
+roadLaneFinding/camera_cal_corners/
+roadLaneFinding/other_images/
+roadLaneFinding/test_image_afternoon/
+roadLaneFinding/test_images (copy)/
+roadLaneFinding/test_images/
+
