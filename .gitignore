@@ -3,11 +3,13 @@ __pycache__/
 *.py[cod]
 *.pyc
 *$py.class
-
+**/*.DS_Store
+roadLaneFinding/.DS_Store
 # Distribution / packaging
 env/
 
 .vscode/
+roadLaneFinding/test_result/
 *.npy
 hist?.png
 qt_temp.*
