@@ -20,11 +20,11 @@ from PIL import Image
 
 class NoiseGeneratorController(QObject):
     """ Controller for color corrector view """
-    def __init__(self):
+    def __init__(self, appDir=None):
         QObject.__init__(self)
-        self.appDir = QDir.currentPath()
-        self.histogramService = histogramService.HistogramService()
-        self.imageService = imageService.ImageService()
+        self.appDir = QDir.currentPath() if appDir is None else appDir
+        self.histogramService = histogramService.HistogramService(self.appDir)
+        self.imageService = imageService.ImageService(self.appDir)
 
     @pyqtSlot(str, int, int, int, bool)
     def addImpulsNoise(self, colorModelTag, currentImageChannelIndex, impulseNoise,

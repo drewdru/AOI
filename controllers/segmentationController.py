@@ -22,11 +22,11 @@ from PIL import Image, ImageChops
 
 class SegmentationController(QObject):
     """ Controller for binarize view """
-    def __init__(self):
+    def __init__(self, appDir=None):
         QObject.__init__(self)
-        self.appDir = QDir.currentPath()
-        self.histogramService = histogramService.HistogramService()
-        self.imageService = imageService.ImageService()
+        self.appDir = QDir.currentPath() if appDir is None else appDir
+        self.histogramService = histogramService.HistogramService(self.appDir)
+        self.imageService = imageService.ImageService(self.appDir)
 
         self.maskList = []
         self.createMaskList(3, 3)

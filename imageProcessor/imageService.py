@@ -7,9 +7,9 @@ from PyQt5.QtCore import QCoreApplication, QObject, QDir
 from PIL import Image
 
 class ImageService(QObject):
-    def __init__(self):
+    def __init__(self, appDir=None):
         QObject.__init__(self)
-        self.appDir = QDir.currentPath()
+        self.appDir = QDir.currentPath() if appDir is None else appDir
 
     def openImage(self, isOriginalImage):
         """ Open image for processing

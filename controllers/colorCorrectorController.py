@@ -19,11 +19,11 @@ from PIL import Image
 
 class ColorCorrectorController(QObject):
     """ Controller for color corrector view """
-    def __init__(self):
+    def __init__(self, appDir=None):
         QObject.__init__(self)
-        self.appDir = QDir.currentPath()
-        self.histogramService = histogramService.HistogramService()
-        self.imageService = imageService.ImageService()
+        self.appDir = QDir.currentPath() if appDir is None else appDir
+        self.histogramService = histogramService.HistogramService(self.appDir)
+        self.imageService = imageService.ImageService(self.appDir)
 
     def hexToRgb(self, value):
         """Return (red, green, blue) for the color given as #rrggbb"""

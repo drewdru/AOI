@@ -7,9 +7,9 @@ from imageProcessor import colorModel, colorHistogram
 from PyQt5.QtCore import QCoreApplication, QObject, QDir
 
 class HistogramService(QObject):
-    def __init__(self):
-        self.appDir = QDir.currentPath()
-        self.appDir = os.getcwd()
+    def __init__(self, appDir=None):
+        QObject.__init__(self)
+        self.appDir = QDir.currentPath() if appDir is None else appDir
 
     def savePltHist(self, histogram, title, name, color):
         QCoreApplication.processEvents()

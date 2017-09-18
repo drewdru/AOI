@@ -177,7 +177,7 @@ def find_lanes(image, trans, Minv):
 
 def calculateComparisons(data1):
     # get reference road
-    img = Image.open('./temp/inImage (6th copy).png')
+    img = Image.open('./temp/inImage.png')
     img = img.convert(mode='RGB')
     reference_data = np.asarray(img, dtype="float")
     # print(reference_data)

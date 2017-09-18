@@ -15,10 +15,10 @@ from PIL import Image
 
 class MainController(QObject):
     """ Controller for main view """
-    def __init__(self):
+    def __init__(self, appDir=None):
         QObject.__init__(self)
+        self.appDir = QDir.currentPath() if appDir is None else appDir
         self.callback = []
-        self.appDir = QDir.currentPath()
 
     def dump(self):
         """ Return to callbacks """

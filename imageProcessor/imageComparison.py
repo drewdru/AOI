@@ -19,8 +19,8 @@ from PyQt5.QtCore import QObject, pyqtSlot
 from PyQt5.QtQml import QJSValue
 from PIL import Image
 
-def getImages():
-    imageServices = imageService.ImageService()
+def getImages(appDir):
+    imageServices = imageService.ImageService(appDir)
     imgOriginal = imageServices.openImage(True)
     imgProcessed = imageServices.openImage(False)
     if imgOriginal is None or imgProcessed is None:
@@ -30,39 +30,40 @@ def getImages():
     imgProcessed = numpy.asarray(imgProcessed, dtype="float")
     return imgOriginal, imgProcessed
 
-def calculateMSE():
+def calculateMSE(appDir):
     """
         Calculate PSNR
     """
-    imgOriginal, imgProcessed = getImages()
+    imgOriginal, imgProcessed = getImages(appDir)
     if imgOriginal is None: 0
 
     mse = numpy.mean((imgOriginal - imgProcessed) ** 2)
     return mse
 
-def calculatePSNR():
+def calculatePSNR(appDir):
     """
         Calculate PSNR
     """
-    mse = calculateMSE()
+    mse = calculateMSE(appDir)
     if mse == 0:
         return (100, 0)
     PIXEL_MAX = 255.0
     psnr = 20 * math.log10(PIXEL_MAX / math.sqrt(mse))
     return (mse, psnr)
 
-def rmsDifference():
+def rmsDifference(appDir):
     """
         Calculate root mean square difference of two images
     """
-    imgOriginal, imgProcessed = getImages()
+    imgOriginal, imgProcessed = getImages(appDir)
     if imgOriginal is None: 0
     return numpy.sqrt(numpy.mean(numpy.square(imgOriginal - imgProcessed)))
 
 
 def calculateImageDifference(colorModelTag, logFile):
-    mse, psnr = calculatePSNR()
-    rms = rmsDifference()
+    appDir = logFile.split('/temp/')[0]
+    mse, psnr = calculatePSNR(appDir)
+    rms = rmsDifference(appDir)
 
     with open(logFile, "a+") as text_file:
         if colorModelTag is not None:

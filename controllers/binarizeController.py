@@ -8,7 +8,6 @@ import numpy
 import matplotlib.pyplot as plt
 import random
 import time
-sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 from imageProcessor import colorModel, histogramService, imageService, imageComparison
 from imageBinarize import globalThresholding, localThresholding
@@ -19,11 +18,11 @@ from PIL import Image, ImageChops
 
 class BinarizeController(QObject):
     """ Controller for binarize view """
-    def __init__(self):
+    def __init__(self, appDir=None):
         QObject.__init__(self)
-        self.appDir = QDir.currentPath()
-        self.histogramService = histogramService.HistogramService()
-        self.imageService = imageService.ImageService()
+        self.appDir = QDir.currentPath() if appDir is None else appDir
+        self.histogramService = histogramService.HistogramService(self.appDir)
+        self.imageService = imageService.ImageService(self.appDir)
 
     @pyqtSlot(str, int, bool, int)
     def otsuBinarize(self, colorModelTag, currentImageChannelIndex, isOriginalImage,
